@@ -1,1 +1,130 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'app/styles/theme-colors'as theme;
+@use '@angular/material'as mat;
+
+@include mat.core();
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  @include mat.all-component-themes(theme.$light-theme);
+  @include mat.system-level-colors(theme.$light-theme);
+  @include mat.system-level-typography(theme.$light-theme);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  scroll-behavior: smooth;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: theme.$background_color;
+  color: theme.$text_color;
+  font-family: Roboto, "Poppins", sans-serif;
+}
+
+::selection {
+  background-color: theme.$green_dark;
+  color: theme.$white;
+}
+
+.ps-nav-separator {
+  width: 2px;
+  height: 30px;
+  background: theme.$separator;
+  margin: 0 1.4rem;
+}
+
+.active {
+  color: theme.$success;
+}
+
+.inactive {
+  color: theme.$red_light;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column-reverse;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.custom-snackbar {
+  .mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    border-radius: 0.8rem !important;
+  }
+
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: theme.$white !important;
+  }
+}
+
+.snackbar-success {
+  .mdc-snackbar__surface {
+    background-color: theme.$green_main !important;
+  }
+
+  .mdc-snackbar__label {
+    color: theme.$white !important;
+  }
+}
+
+.snackbar-error {
+  .mdc-snackbar__surface {
+    background-color: theme.$red_light !important;
+  }
+
+  .mdc-snackbar__label {
+    color: theme.$white !important;
+  }
+}
+
+.modal {
+  @media screen and (max-width: 768px) {
+    mat-dialog-container {
+      max-width: 100dvw;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<mat-toolbar class="navbar">
+  <div class="container-section">
+    <app-logo></app-logo>
+    <ng-container *ngIf="!isMobile">
+      <span class="ps-nav-separator"></span>
+      <span class="text-default">Integração com TOTVS</span>
+    </ng-container>
+  </div>
+  <span class="spacer"></span>
+  <ng-container *ngIf="isLoggedIn">
+    <div class="flex row justify-between items-center lg:p-4 md:p-0">
+      <button mat-button color="primary" (click)="navigateToBackup()">Backups</button>
+      <button mat-button color="primary" (click)="navigateToClients()">Cadastros</button>
+      <button class="user-button" mat-button [matMenuTriggerFor]="userMenu">
+        <span class="button-text text-default">{{ userName || 'Usuário' }}</span>
+        <span class="button-icon">
+          <mat-icon>arrow_drop_down</mat-icon>
+        </span>
+      </button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!isLoggedIn">
+    <div class="p-4 md:p-0">
+      <button mat-flat-button color="primary" (click)="navigateToLogin()">Login</button>
+    </div>
+  </ng-container>
+</mat-toolbar>
+
+<mat-menu #userMenu="matMenu">
+  <button mat-menu-item (click)="navigateToProfile()">
+    <span>Perfil</span>
+  </button>
+  <button mat-menu-item class="logout" (click)="logout()">
+    <span>Sair</span>
+  </button>
+</mat-menu>

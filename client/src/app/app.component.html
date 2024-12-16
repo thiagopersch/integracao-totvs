@@ -1,1 +1,5 @@
-<router-outlet name="primary"></router-outlet>
+<app-loading></app-loading>
+<app-navbar *ngIf="(isLoggedIn$ | async)"></app-navbar>
+<main>
+  <router-outlet />
+</main>
