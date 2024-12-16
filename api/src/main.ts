@@ -8,7 +8,7 @@ async function bootstrap() {
     origin:
       process.env.APP_ENV === 'production'
         ? process.env.URL_CLIENT
-        : 'http://localhost:3000', //Dev
+        : 'http://localhost:4200', //Dev
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
