@@ -1,0 +1,19 @@
+<ng-container *ngIf="users && users.length > 0; else noData">
+  <app-table
+    [fields]="users"
+    [columnDefinitions]="columnDefinitions"
+    [dataSourceMat]="dataSource"
+    [addFn]="addNewUser"
+    [editFn]="editUser"
+    [deleteFn]="deleteUser"
+    tooltipText="Ativa/Desativa o usuário"
+    [toggleFn]="toggleStatus"
+  ></app-table>
+</ng-container>
+
+<ng-template #noData>
+  <app-not-found
+    [ctaLabel]="'Adicionar Novo Usuário'"
+    [addFn]="addNewUser"
+  ></app-not-found>
+</ng-template>

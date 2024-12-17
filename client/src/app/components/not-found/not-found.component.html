@@ -1,0 +1,13 @@
+<div class="p-20 md:p-2 flex flex-col items-center justify-center">
+  <div class="text-center">
+    <span class="font-bold text-4xl">Nenhum registro encontrado!</span>
+    <div class="flex flex-col gap-1 mt-3 mb-10">
+      <p class="text-base italic text-gray-500">Sua lista está vazia no momento.</p>
+      <p class="text-base italic text-gray-500">Clique no botão abaixo para adicionar o primeiro registro e começar a
+        organizar suas informações.</p>
+    </div>
+  </div>
+  <div class="mt-3 flex justify-center items-center">
+    <button mat-flat-button color="primary" (click)="addFn()">{{ctaLabel}}</button>
+  </div>
+</div>

@@ -29,11 +29,32 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        change_password: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
   async findOne(id: string) {
-    return this.prisma.user.findUnique({ where: { id } });
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        change_password: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
   async update(id: string, data: UpdateUserDto) {

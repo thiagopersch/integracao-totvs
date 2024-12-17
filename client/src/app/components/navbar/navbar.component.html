@@ -1,14 +1,16 @@
 <mat-toolbar class="navbar">
   <div class="container-section">
-    <app-logo></app-logo>
+    <div class="logo-container">
+      <app-logo class="logo"></app-logo>
+    </div>
     <ng-container *ngIf="!isMobile">
       <span class="ps-nav-separator"></span>
-      <span class="text-default">Integração com TOTVS</span>
+      <span class="text-base text-zinc-500 italic">Integração com TOTVS</span>
     </ng-container>
   </div>
   <span class="spacer"></span>
   <ng-container *ngIf="isLoggedIn">
-    <div class="flex row justify-between items-center lg:p-4 md:p-0">
+    <div class="flex row justify-between items-center p-4 md:p-0">
       <button mat-button color="primary" (click)="navigateToBackup()">Backups</button>
       <button mat-button color="primary" (click)="navigateToClients()">Cadastros</button>
       <button class="user-button" mat-button [matMenuTriggerFor]="userMenu">

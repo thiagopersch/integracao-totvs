@@ -27,9 +27,9 @@ html {
 }
 
 body {
-  background-color: theme.$background_color;
-  color: theme.$text_color;
   font-family: Roboto, "Poppins", sans-serif;
+  background-color: theme.$background_color;
+  color: theme.$text_color !important;
 }
 
 ::selection {
@@ -38,10 +38,10 @@ body {
 }
 
 .ps-nav-separator {
-  width: 2px;
-  height: 30px;
+  width: 0.05rem;
+  height: 2rem;
   background: theme.$separator;
-  margin: 0 1.4rem;
+  margin: 1.4rem;
 }
 
 .active {
@@ -49,7 +49,7 @@ body {
 }
 
 .inactive {
-  color: theme.$red_light;
+  color: theme.$red_main;
 }
 
 .spacer {
@@ -91,6 +91,10 @@ mat-form-field {
   width: 100%;
 }
 
+.mat-mdc-card {
+  background-color: theme.$background_card !important;
+}
+
 .custom-snackbar {
   .mat-mdc-snack-bar-container .mdc-snackbar__surface {
     border-radius: 0.8rem !important;
@@ -127,4 +131,9 @@ mat-form-field {
       max-width: 100dvw;
     }
   }
+}
+
+.mp {
+  margin: 1rem;
+  padding: 1rem;
 }
