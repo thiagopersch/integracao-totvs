@@ -1,0 +1,56 @@
+services:
+  totvs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: totvs-app
+    restart: always
+    ports:
+      - '3333:3333'
+
+    volumes:
+      - .:/app # Mapeia o diretório local para o contêiner
+      - /app/node_modules # Evita conflitos entre dependências locais e do contêiner
+
+    environment:
+      POSTGRES_HOST: totvs-backend
+      POSTGRES_PORT: 5432
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: totvs
+      POSTGRES_DATABASE: totvs
+      NODE_ENV: development
+    depends_on:
+      - totvs-backend
+
+    command: yarn dev
+
+    networks:
+      - totvs-network
+
+  totvs-backend:
+    image: postgres:latest
+    command: [ 'postgres', '-c', 'log_statement=all' ]
+    container_name: totvs-backend
+    restart: always
+    healthcheck:
+      test: [ 'CMD', 'pg_isready', '-U', 'postgres', '-d', 'postgres' ]
+      interval: 5s
+      retries: 10
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: totvs
+      POSTGRES_DB: totvs
+
+    ports:
+      - '5432:5432'
+
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+
+    networks:
+      - totvs-network
+
+networks:
+  totvs-network:
+    driver: bridge

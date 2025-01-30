@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model dataserver {
+  id               String    @id @default(uuid())
+  code             String
+  name             String
+  name_alternative String?
+  created_at       DateTime  @default(now()) @db.Timestamptz()
+  updated_at       DateTime  @updatedAt @db.Timestamptz()
+  deleted_at       DateTime? @db.Timestamptz()
+}
+
+model user {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  password        String
+  change_password Boolean   @default(true)
+  status          Boolean   @default(true)
+  created_at      DateTime  @default(now()) @db.Timestamptz()
+  updated_at      DateTime  @updatedAt @db.Timestamptz()
+  deleted_at      DateTime? @db.Timestamptz()
+}
+
+model client {
+  id          String    @id @default(uuid())
+  image       String?
+  name        String
+  link_crm    String
+  site        String?
+  student_qtd String?
+  status      Boolean   @default(true)
+  created_at  DateTime  @default(now()) @db.Timestamptz()
+  updated_at  DateTime  @updatedAt @db.Timestamptz()
+  deleted_at  DateTime? @db.Timestamptz()
+  tbc         tbc[]
+  filters     filters[]
+}
+
+model tbc {
+  id                      String    @id @default(uuid())
+  client_id               String
+  client                  client    @relation(fields: [client_id], references: [id])
+  name                    String
+  link                    String
+  user                    String
+  password                String
+  not_required_license    Boolean   @default(true)
+  coligate_context        Int
+  branch_context          Int
+  level_education_context Int
+  cod_system_context      String
+  user_context            String
+  status                  Boolean   @default(true)
+  created_at              DateTime  @default(now()) @db.Timestamptz()
+  updated_at              DateTime  @updatedAt @db.Timestamptz()
+  deleted_at              DateTime? @db.Timestamptz()
+  filters                 filters[]
+  backups                 backups[]
+}
+
+model filters {
+  id         String    @id @default(uuid())
+  tbc_id     String
+  tbc        tbc       @relation(fields: [tbc_id], references: [id])
+  client_id  String
+  client     client    @relation(fields: [client_id], references: [id])
+  filter     String
+  status     Boolean   @default(true)
+  created_at DateTime  @default(now()) @db.Timestamptz()
+  updated_at DateTime  @updatedAt @db.Timestamptz()
+  deleted_at DateTime? @db.Timestamptz()
+  backups    backups[]
+}
+
+model backups {
+  id               String    @id @default(uuid())
+  tbc_id           String
+  tbc              tbc       @relation(fields: [tbc_id], references: [id])
+  filter_id        String
+  filter           filters   @relation(fields: [filter_id], references: [id])
+  branch_sentence  String
+  cod_system       String
+  code_sentence    String
+  name_sentece     String
+  content_sentence String
+  created_at       DateTime  @default(now()) @db.Timestamptz()
+  updated_at       DateTime  @updatedAt @db.Timestamptz()
+  deleted_at       DateTime? @db.Timestamptz()
+}
+
+model sentence_categories {
+  id         String      @id @default(uuid())
+  code       String
+  name       String
+  status     Boolean     @default(true)
+  created_at DateTime    @default(now()) @db.Timestamptz()
+  updated_at DateTime    @updatedAt @db.Timestamptz()
+  deleted_at DateTime?   @db.Timestamptz()
+  sentences  sentences[]
+}
+
+model sentences {
+  id                     String              @id @default(uuid())
+  sentence_categories_id String
+  sentence_categories    sentence_categories @relation(fields: [sentence_categories_id], references: [id])
+  code                   String
+  cod_system             String
+  name                   String
+  status                 Boolean             @default(true)
+  created_at             DateTime            @default(now()) @db.Timestamptz()
+  updated_at             DateTime            @updatedAt @db.Timestamptz()
+  deleted_at             DateTime?           @db.Timestamptz()
+}
