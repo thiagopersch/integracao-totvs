@@ -1,10 +1,11 @@
 import * as S from '@/app/(administrative)/styles';
+import useUsers from '@/hooks/administrative/registers/users/useUsers';
+import { User } from '@/types/user';
 import {
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import {
-  Alert,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -12,15 +13,19 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material';
-import useUsers from '../hook/useUsers';
+import { useEffect } from 'react';
 
-export default function UserForm() {
+type UserFormProps = {
+  user?: User | null;
+};
+
+export default function UserForm({ user }: UserFormProps) {
   const {
     errors,
     showPassword,
     isSubmitting,
     control,
-    errorMessage,
+    reset,
     handleClickShowPassword,
     handleMouseDownPassword,
     handleSubmit,
@@ -28,18 +33,22 @@ export default function UserForm() {
     Controller,
   } = useUsers();
 
+  useEffect(() => {
+    if (user) {
+      reset(user);
+    } else {
+      reset({
+        name: '',
+        email: '',
+        password: '',
+        change_password: true,
+        status: true,
+      });
+    }
+  }, [user, reset]);
+
   return (
     <S.Form onSubmit={handleSubmit}>
-      {errorMessage && (
-        <Alert
-          variant="standard"
-          color="error"
-          severity="error"
-          sx={{ mb: 2, fontWeight: 'bold' }}
-        >
-          {errorMessage}
-        </Alert>
-      )}
       <S.InputSentences>
         <FormGroup>
           <Controller

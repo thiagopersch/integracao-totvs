@@ -19,15 +19,15 @@ export class AuthService {
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      throw new UnauthorizedException('Invalid credentials!');
+      throw new UnauthorizedException('Senha inválida!');
     }
 
     if (!user) {
-      throw new UnauthorizedException('Not authorized!');
+      throw new UnauthorizedException('Não autorizado!');
     }
 
     if (!user?.email && !user?.password) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException('Usuário inválido!');
     }
     return user;
   }

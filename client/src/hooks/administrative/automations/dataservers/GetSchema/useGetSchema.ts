@@ -1,4 +1,4 @@
-import getSchema from '@/requests/queries/totvs/getSchema';
+import getSchema from '@/lib/api/totvs/getSchema';
 import { dataservers } from '@/utils/dataservers';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectChangeEvent } from '@mui/material';

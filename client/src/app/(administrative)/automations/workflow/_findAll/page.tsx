@@ -1,9 +1,9 @@
 'use client';
 
-import useWorkflow from '@/app/administrative/automations/workflow/hook/useWorkflow';
-import * as S from '@/app/administrative/styles';
+import * as S from '@/app/(administrative)/styles';
 import withAuth from '@/app/withAuth';
 import Table from '@/components/Table';
+import useWorkflow from '@/hooks/administrative/automations/workflow/useWorkflow';
 import {
   CheckCircle,
   Close,

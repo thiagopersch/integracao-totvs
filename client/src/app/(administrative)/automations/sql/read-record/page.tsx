@@ -1,21 +1,21 @@
 'use client';
 
-import * as S from '@/app/administrative/styles';
+import * as S from '@/app/(administrative)/styles';
 import Loading from '@/app/loading';
 import withAuth from '@/app/withAuth';
-import readRecord from '@/requests/queries/totvs/readRecord';
+import readRecord from '@/lib/api/totvs/readRecord';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Editor from '@monaco-editor/react';
 import {
-    Search as SearchIcon,
-    Visibility,
-    VisibilityOff,
+  Search as SearchIcon,
+  Visibility,
+  VisibilityOff,
 } from '@mui/icons-material';
 import {
-    IconButton,
-    InputAdornment,
-    TextField,
-    Typography,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';

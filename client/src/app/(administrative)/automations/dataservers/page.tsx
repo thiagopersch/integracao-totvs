@@ -1,6 +1,6 @@
 'use client';
 
-import GetSchemaPage from '@/app/administrative/automations/dataservers/get-schema/page';
+import GetSchemaPage from '@/app/(administrative)/automations/dataservers/get-schema/page';
 import CustomTabs from '@/components/Tabs/Tab';
 import { Box } from '@mui/material';
 
@@ -13,7 +13,7 @@ const Dataservers = () => {
   ];
 
   return (
-    <Box className="bg-white min-h-full min-w-screen m-10 md:m-2">
+    <Box className="min-h-full min-w-screen lg:m-4 lg:p-4 md:m-2 md:p-2">
       <CustomTabs tabs={tabs} />
     </Box>
   );

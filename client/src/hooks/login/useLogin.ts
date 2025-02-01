@@ -1,5 +1,5 @@
 import { useAuth } from '@/app/AuthContext';
-import { login } from '@/requests/queries/auth';
+import { login } from '@/lib/api/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

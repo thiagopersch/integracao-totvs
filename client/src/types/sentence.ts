@@ -1,4 +1,4 @@
-type PerformSentenceProps = {
+type PerformSentenceProps = Partial<{
   codColigada: string;
   codSistema: string;
   codSentenca: string;
@@ -7,4 +7,4 @@ type PerformSentenceProps = {
   username: string;
   password: string;
   tbc: string;
-};
+}>;

@@ -8,16 +8,23 @@ import Disabled from '@/components/Situations/Disabled';
 import Table from '@/components/Table';
 import { Delete, Edit } from '@mui/icons-material';
 import { GridColDef } from '@mui/x-data-grid';
+import useUsers from '../../../../hooks/administrative/registers/users/useUsers';
 import UserForm from './_userForm';
-import useUsers from './hook/useUsers';
 
 const Users = () => {
-  const { rows, isModalOpen, apiRef, setIsModalOpen, handleExpandedTable } =
-    useUsers();
+  const {
+    users,
+    isModalOpen,
+    apiRef,
+    editingUser,
+    setIsModalOpen,
+    handleExpandedTable,
+    handleAdd,
+    handleEdit,
+    handleDelete,
+  } = useUsers();
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Nome', width: 250, flex: 1 },
-    { field: 'email', headerName: 'Email', width: 250, flex: 1 },
     {
       field: 'status',
       headerName: 'Status',
@@ -30,6 +37,8 @@ const Users = () => {
           <Disabled>Desativado</Disabled>
         ),
     },
+    { field: 'name', headerName: 'Nome', width: 250, flex: 1 },
+    { field: 'email', headerName: 'Email', width: 250, flex: 1 },
     {
       field: 'change_password',
       headerName: 'Permitido alterar senha no primeiro login',
@@ -52,7 +61,7 @@ const Users = () => {
       field: 'actions',
       headerName: 'Ações',
       width: 250,
-      renderCell: (user) => (
+      renderCell: (params) => (
         <MenuActionsDataGrid
           actions={[
             {
@@ -60,7 +69,7 @@ const Users = () => {
               icon: <Edit />,
               tooltip: 'Editar',
               onClick: () => {
-                handleAdd();
+                handleEdit(params.row.id);
               },
             },
             {
@@ -69,7 +78,7 @@ const Users = () => {
               tooltip: 'Excluir',
               color: 'error.main',
               onClick: () => {
-                console.log(user.id);
+                handleDelete(params.row.id);
               },
             },
           ]}
@@ -78,43 +87,34 @@ const Users = () => {
     },
   ];
 
-  const handleAdd = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleColumns = () => {
-    handleExpandedTable;
-  };
-
   return (
     <S.Wrapper>
       <S.Title variant="h4" color="grey.800" gutterBottom>
         Usuários
       </S.Title>
       <Table
-        rows={rows}
+        rows={users || []}
         columns={columns}
         isLoading={false}
         onClick={handleExpandedTable}
         density="standard"
         apiRef={apiRef}
-        autoHeight
         sortingField="name"
         label="Adicionar"
         buttons={['add', 'columns', 'export']}
         buttonActions={{
           add: handleAdd,
-          columns: handleColumns,
+          columns: handleExpandedTable,
         }}
       />
       <CustomModal
-        title="Cadastrar usuário"
+        title={editingUser ? 'Editar usuário' : 'Cadastrar usuário'}
         disableBackdropClick
         showCloseButton
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >
-        <UserForm />
+        <UserForm user={editingUser} />
       </CustomModal>
     </S.Wrapper>
   );

@@ -1,14 +1,14 @@
 import ToastContent from '@/components/ToastContent';
-import { User, UserForm } from '@/model/user';
 import createApi from '@/services/api';
 import useMutation from '@/services/useMutation';
+import { User } from '@/types/user';
 import { Session } from 'next-auth';
 import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 export function useAddUserMutation(session?: Session | null) {
   const addUser = useCallback(
-    async (values: UserForm) => {
+    async (values: User) => {
       const api = createApi(session);
       const requestData = { ...values, id: values.id ? values.id : undefined };
 
@@ -23,10 +23,7 @@ export function useAddUserMutation(session?: Session | null) {
 
   return useMutation('add-user', addUser, {
     linkedQueries: {
-      'get-users': (
-        old: { users: UserForm[] } | undefined,
-        newUser: UserForm,
-      ) => {
+      'get-users': (old: { users: User[] } | undefined, newUser: User) => {
         if (!old || !old.users) {
           return [{ ...newUser, id: uuidv4(), disabled: true }];
         }
@@ -49,7 +46,7 @@ export function useAddUserMutation(session?: Session | null) {
         }
       },
     },
-    renderLoading: function render(newUser: UserForm) {
+    renderLoading: function render(newUser: User) {
       return (
         <ToastContent showSpinner>
           Salvando usuário {newUser.name}...

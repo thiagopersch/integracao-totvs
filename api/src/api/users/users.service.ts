@@ -16,7 +16,7 @@ export class UsersService {
     });
 
     if (existUser) {
-      throw new AppError('User already exists');
+      throw new AppError('Já existe um usuário com este email.', 400);
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -29,11 +29,34 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: false,
+        change_password: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
   async findOne(id: string) {
-    return this.prisma.user.findUnique({ where: { id } });
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: false,
+        change_password: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
   async update(id: string, data: UpdateUserDto) {
@@ -53,7 +76,7 @@ export class UsersService {
     });
 
     if (!existUser) {
-      throw new AppError('User not found.', 404);
+      throw new AppError('Usuário não encontrado.', 404);
     }
 
     const updatedUser = await this.prisma.user.update({
@@ -71,7 +94,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new AppError('User not found.', 404);
+      throw new AppError('Usuário não encontrado.', 404);
     }
 
     return this.prisma.user.update({

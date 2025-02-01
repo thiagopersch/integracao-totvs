@@ -1,7 +1,7 @@
 'use client';
 
-import * as S from '@/app/administrative/styles';
-import performSentence from '@/requests/queries/sentence/executeSentence';
+import * as S from '@/app/(administrative)/styles';
+import performSentence from '@/lib/api/sentence/executeSentence';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   IconButton,

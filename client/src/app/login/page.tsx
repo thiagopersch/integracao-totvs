@@ -1,13 +1,13 @@
 'use client';
 
 import * as S from '@/app/login/styles';
+import useLogin from '@/hooks/login/useLogin';
 import { theme } from '@/styles/theme';
 import {
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import { Alert, IconButton, InputAdornment, TextField } from '@mui/material';
-import useLogin from './hook/useLogin';
 
 const LoginPage = () => {
   const {

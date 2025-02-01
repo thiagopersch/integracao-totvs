@@ -1,26 +1,26 @@
 'use client';
 
-import * as S from '@/app/administrative/styles';
+import * as S from '@/app/(administrative)/styles';
 import withAuth from '@/app/withAuth';
 import Table from '@/components/Table';
-import useGetSchema from '@/hooks/admin/GetSchema/useGetSchema';
+import useGetSchema from '@/hooks/administrative/automations/dataservers/GetSchema/useGetSchema';
 import {
-    Search as SearchIcon,
-    Tune as TuneIcon,
-    Visibility as VisibilityIcon,
-    VisibilityOff as VisibilityOffIcon,
+  Search as SearchIcon,
+  Tune as TuneIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import {
-    Autocomplete,
-    Box,
-    FormControl,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
+  Autocomplete,
+  Box,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
@@ -73,7 +73,7 @@ const GetSchemaPage = () => {
                       (option) => option.code === field.value,
                     ) || null
                   }
-                  onChange={(event, newValue) => {
+                  onChange={(_event, newValue) => {
                     if (newValue) {
                       field.onChange(newValue.code);
                       setSearchTerm(newValue.name);
@@ -81,7 +81,7 @@ const GetSchemaPage = () => {
                       field.onChange('');
                     }
                   }}
-                  onInputChange={(event, newInputValue) =>
+                  onInputChange={(_event, newInputValue) =>
                     setSearchTerm(newInputValue)
                   }
                   renderOption={(props, option) => (

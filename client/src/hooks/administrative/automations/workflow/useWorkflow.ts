@@ -1,4 +1,4 @@
-import readView from '@/requests/queries/totvs/readView';
+import readView from '@/lib/api/totvs/readView';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useGridApiRef } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';

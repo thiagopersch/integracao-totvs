@@ -65,6 +65,11 @@ const Routes: Route[] = [
           },
         ],
       },
+      {
+        id: 'validator',
+        path: '/validator',
+        name: 'Validador de Código JavaScript',
+      }
     ],
   },
   {

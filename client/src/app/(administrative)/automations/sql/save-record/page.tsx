@@ -1,9 +1,9 @@
 'use client';
 
-import * as S from '@/app/administrative/styles';
+import * as S from '@/app/(administrative)/styles';
 import Loading from '@/app/loading';
 import withAuth from '@/app/withAuth';
-import { saveRecord } from '@/requests/queries/totvs/saveRecord';
+import { saveRecord } from '@/lib/api/totvs/saveRecord';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Editor } from '@monaco-editor/react';
 import {

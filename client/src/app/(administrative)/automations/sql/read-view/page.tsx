@@ -1,23 +1,23 @@
 'use client';
 
-import * as S from '@/app/administrative/styles';
+import * as S from '@/app/(administrative)/styles';
 import withAuth from '@/app/withAuth';
 import ContainerTable from '@/components/ContainerTable';
 import NoRow from '@/components/Table/NoRow';
-import readView from '@/requests/queries/totvs/readView';
+import readView from '@/lib/api/totvs/readView';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-    Search as SearchIcon,
-    Storage as StorageIcon,
-    Visibility as VisibilityIcon,
-    VisibilityOff as VisibilityOffIcon,
+  Search as SearchIcon,
+  Storage as StorageIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import {
-    IconButton,
-    InputAdornment,
-    TextField,
-    Tooltip,
-    Typography,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -223,20 +223,6 @@ const ReadViewPage = () => {
             disabled={isSubmitting}
             helperText={errors.contexto?.message}
             error={errors.contexto !== undefined}
-            required
-            fullWidth
-          />
-          <TextField
-            type="text"
-            id="dataServerName"
-            label="Dataserver"
-            variant="filled"
-            {...register('dataServerName')}
-            helperText={errors.dataServerName?.message}
-            error={errors.dataServerName !== undefined}
-            aria-readonly={true}
-            hidden
-            disabled
             required
             fullWidth
           />

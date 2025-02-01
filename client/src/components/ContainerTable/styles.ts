@@ -1,8 +1,6 @@
-import styled, { css } from 'styled-components';
+import { Box, styled } from '@mui/material';
 
-export const Wrapper = styled.div`
-  ${({ theme }) => css`
-    height: 100%;
-    width: 100%;
-  `}
+export const Wrapper = styled(Box)`
+  height: 100%;
+  width: 100%;
 `;

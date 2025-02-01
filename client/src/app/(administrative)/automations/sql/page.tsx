@@ -1,9 +1,9 @@
 'use client';
 
-import ReadRecord from '@/app/administrative/automations/sql/read-record/page';
-import ReadView from '@/app/administrative/automations/sql/read-view/page';
-import SaveRecord from '@/app/administrative/automations/sql/save-record/page';
-import ExecuteSentece from '@/app/administrative/automations/sql/sentence/execute/page';
+import ReadRecord from '@/app/(administrative)/automations/sql/read-record/page';
+import ReadView from '@/app/(administrative)/automations/sql/read-view/page';
+import SaveRecord from '@/app/(administrative)/automations/sql/save-record/page';
+import ExecuteSentece from '@/app/(administrative)/automations/sql/sentence/execute/page';
 import CustomTabs from '@/components/Tabs/Tab';
 import { Box } from '@mui/material';
 
@@ -28,7 +28,7 @@ const SQL = () => {
   ];
 
   return (
-    <Box className="bg-white min-h-full min-w-screen m-10 md:m-2">
+    <Box className="min-h-full min-w-screen lg:m-4 lg:p-4 md:m-2 md:p-2">
       <CustomTabs tabs={tabs} />
     </Box>
   );

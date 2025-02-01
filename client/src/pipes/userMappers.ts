@@ -1,4 +1,4 @@
-import { FormattedUsers, User } from '@/model/user';
+import { FormattedUsers, User } from '@/types/user';
 import dayjs from 'dayjs';
 
 export const userMappers = (user: User): FormattedUsers => ({
