@@ -1,0 +1,54 @@
+<mat-toolbar class="navbar">
+  <div class="container-section">
+    <app-image></app-image>
+    @if (!isMobile) {
+      <span class="ps-nav-separator"></span>
+      <span class="text-default">Integração com TOTVS</span>
+    }
+  </div>
+  <span class="spacer"></span>
+  <div class="container-menus">
+    @if (isLoggedIn) {
+      <button
+        mat-button
+        color="primary"
+        [class.active]="currentRoute === 'automations'"
+        (click)="navigateToAutomations()"
+      >
+        Automações
+      </button>
+      <button
+        mat-button
+        color="primary"
+        [class.active]="currentRoute === 'registers'"
+        (click)="navigateToRegisters()"
+      >
+        Cadastros
+      </button>
+      <button
+        class="user-button"
+        mat-stroked-button
+        [matMenuTriggerFor]="userMenu"
+      >
+        <span class="button-text">{{ userName || 'Usuário' }}</span>
+        <span class="button-icon">
+          <mat-icon>arrow_drop_down</mat-icon>
+        </span>
+      </button>
+    } @else {
+      <button mat-flat-button color="primary" (click)="navigateToLogin()">
+        Login
+      </button>
+    }
+  </div>
+</mat-toolbar>
+
+<mat-menu #userMenu="matMenu">
+  <button mat-menu-item (click)="navigateToProfile()">
+    <span>Perfil</span>
+  </button>
+  <button mat-menu-item color="warn" class="logout" (click)="logout()">
+    <mat-icon color="warn">logout</mat-icon>
+    <span>Sair</span>
+  </button>
+</mat-menu>

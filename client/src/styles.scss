@@ -1,0 +1,169 @@
+@use 'app/styles/theme'as theme;
+@use '@angular/material'as mat;
+
+@include mat.core();
+
+:root {
+  @include mat.core-theme(theme.$light-theme);
+  @include mat.core-color(theme.$light-theme);
+  @include mat.button-theme(theme.$light-theme);
+  @include mat.all-component-themes(theme.$light-theme);
+  @include mat.system-level-colors(theme.$light-theme);
+  @include mat.system-level-typography(theme.$light-theme);
+  @include mat.all-component-typographies(theme.$light-theme);
+  @include mat.color-variants-backwards-compatibility(theme.$light-theme);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: theme.$greenMain;
+  color: theme.$textColor;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: theme.$backgroundColor;
+  color: theme.$textColor;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.ps-nav-separator {
+  width: 2px;
+  height: 30px;
+  background: theme.$separator;
+  margin: 0 1.4rem;
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text-default {
+  color: theme.$textColor;
+  font-size: 1rem;
+}
+
+.active {
+  color: theme.$success;
+}
+
+.inactive {
+  color: theme.$redMain;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-label {
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+}
+
+.custom-snackbar {
+  .mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    border-radius: 0.8rem !important;
+  }
+
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: theme.$white !important;
+  }
+}
+
+.snackbar-success {
+  .mdc-snackbar__surface {
+    background-color: theme.$greenMain !important;
+  }
+
+  .mdc-snackbar__label {
+    color: theme.$white !important;
+  }
+}
+
+.snackbar-error {
+  .mdc-snackbar__surface {
+    background-color: theme.$redLight !important;
+  }
+
+  .mdc-snackbar__label {
+    color: theme.$white !important;
+  }
+}
+
+.modal {
+  @media screen and (max-width: 768px) {
+    mat-dialog-container {
+      max-width: 100dvw;
+    }
+  }
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column-reverse;
+  }
+}
+
+.status-active {
+  color: theme.$success;
+}
+
+.status-inactive {
+  color: theme.$redMain;
+}
+
+.spacings {
+  margin: 2rem;
+}

@@ -30,6 +30,7 @@ export class UsersService {
 
   async findAll() {
     return this.prisma.user.findMany({
+      where: { deleted_at: null },
       select: {
         id: true,
         name: true,
@@ -40,6 +41,7 @@ export class UsersService {
         created_at: true,
         updated_at: true,
       },
+      orderBy: [{ name: 'asc' }, { status: 'asc' }],
     });
   }
 

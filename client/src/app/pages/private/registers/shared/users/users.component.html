@@ -1,0 +1,16 @@
+@if ((users && users.length > 0) || rendering) {
+  <app-table
+    [fields]="users"
+    [dataSourceMat]="dataSourceMat"
+    [columnDefinitions]="columnDefinitions"
+    [addFn]="handleCreate"
+    [editFn]="handleEdit"
+    [deleteFn]="handleDelete"
+    [actions]="actions"
+  ></app-table>
+} @else {
+  <app-not-found-register
+    [ctaLabel]="'Adicionar'"
+    [addRegisterFn]="handleCreate"
+  ></app-not-found-register>
+}
