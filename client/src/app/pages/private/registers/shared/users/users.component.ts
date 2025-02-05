@@ -24,7 +24,6 @@ import { UsersService } from './users.service';
 })
 export class UsersComponent implements OnInit {
   users: Users[] = [];
-  rendering: boolean = true;
   dataSourceMat = new MatTableDataSource<Users>(this.users);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -55,8 +54,12 @@ export class UsersComponent implements OnInit {
   columnDefinitions = [
     { key: 'status', header: 'Situação', type: 'boolean' },
     { key: 'name', header: 'Nome', type: 'string' },
-    { key: 'email', header: 'Email', type: 'string' },
-    { key: 'change_password', header: 'Alterar senha', type: 'boolean' },
+    { key: 'email', header: 'E-mail', type: 'string' },
+    {
+      key: 'change_password',
+      header: 'Alterar senha no próximo login?',
+      type: 'boolean',
+    },
     { key: 'updated_at', header: 'Última Atualização', type: 'datetime' },
   ];
 
@@ -79,7 +82,6 @@ export class UsersComponent implements OnInit {
         this.dataSourceMat.data = this.users;
         this.dataSourceMat.paginator = this.paginator;
         this.dataSourceMat.sort = this.sort;
-        this.rendering = false;
       },
       error: () => {
         this.toast.openError(MESSAGES.LOADING_ERROR);
@@ -104,14 +106,14 @@ export class UsersComponent implements OnInit {
     });
   };
 
-  handleEdit = (user: Users) => {
+  handleEdit = (users: Users) => {
     const modal = this.modalService.openModal(
       `modal-${Math.random()}`,
       UserFormComponent,
-      `Editando o Usuário ${user.name}`,
+      `Editando o Usuário: ${users.name}`,
       true,
       true,
-      { user },
+      { users },
     );
 
     modal.afterClosed().subscribe((user: Users) => {
@@ -121,17 +123,17 @@ export class UsersComponent implements OnInit {
     });
   };
 
-  handleDelete = (user: Users) => {
+  handleDelete = (users: Users) => {
     const modal = this.confirmService.openConfirm(
       'Atenção',
-      'Deseja realmente excluir o usuário?',
+      `Deseja realmente excluir o usuário ${users.name}?`,
       'Confirmar',
       'Cancelar',
     );
     modal.afterClosed().subscribe((result) => {
       if (result) {
         this.loading.show();
-        this.userService.deleteUser(user.id).subscribe({
+        this.userService.deleteUser(users).subscribe({
           next: () => {
             this.toast.openSuccess(MESSAGES.DELETE_SUCCESS);
           },

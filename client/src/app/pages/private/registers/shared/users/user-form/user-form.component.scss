@@ -1,0 +1,16 @@
+.align-toggle {
+  display: flex;
+  gap: 2rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.align-btn-input-password {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}

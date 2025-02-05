@@ -1,5 +1,22 @@
+@use '../../styles/theme.scss'as theme;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.center {
+  text-align: center;
+}
+
 .p-10 {
-  padding: 10rem;
+  padding: 5rem;
 
   @media screen and (max-width: 768px) {
     padding: 2rem;
@@ -8,10 +25,17 @@
 
 .mt-3 {
   margin-top: 3rem;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 1rem;
+  }
 }
 
-.p-xsmall {
-  font-size: x-small;
+.subtitle {
+  font-size: 1rem;
+  margin-top: 1rem;
+  font-style: italic;
+  color: theme.$primaryGreySystem;
 }
 
 .bold {

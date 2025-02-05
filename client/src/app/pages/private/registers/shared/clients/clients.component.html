@@ -1,1 +1,16 @@
-<p>clients works!</p>
+@if (clients && clients.length > 0) {
+<app-table
+  [fields]="clients"
+  [dataSourceMat]="dataSourceMat"
+  [columnDefinitions]="columnDefinitions"
+  [addFn]="handleCreate"
+  [editFn]="handleUpdate"
+  [deleteFn]="handleDelete"
+  [actions]="actions"
+></app-table>
+} @else {
+<app-not-found-register
+  [ctaLabel]="'Adicionar'"
+  [addRegisterFn]="handleCreate"
+></app-not-found-register>
+}

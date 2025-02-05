@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LoadingComponent } from './components/loading/loading.component';
@@ -13,7 +13,7 @@ import { AuthService } from './services/auth/auth.service';
   styleUrl: './app.component.scss',
   imports: [RouterOutlet, LoadingComponent, NavbarComponent, CommonModule],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   isLoggedIn$!: Observable<boolean>;
 
   constructor(

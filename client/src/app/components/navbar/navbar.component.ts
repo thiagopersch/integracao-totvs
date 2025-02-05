@@ -1,5 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   HostListener,
   Inject,
@@ -9,6 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'app/services/auth/auth.service';
@@ -27,6 +29,7 @@ import { ImageComponent } from './image/image.component';
     MatIconModule,
     CommonModule,
     ImageComponent,
+    MatSidenavModule,
   ],
 })
 export class NavbarComponent implements OnInit {
@@ -40,6 +43,7 @@ export class NavbarComponent implements OnInit {
     private router: Router,
     private loading: LoadingService,
     private authService: AuthService,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: any,
   ) {}
 

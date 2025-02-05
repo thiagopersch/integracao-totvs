@@ -19,12 +19,12 @@ export class UsersService {
     return this.http.get<Users>(`${this.api}/${id}`);
   }
 
-  createUser(user: Users): Observable<any> {
-    return this.http.post(this.api, user);
+  createUser(user: Users): Observable<Users> {
+    return this.http.post<Users>(this.api, user);
   }
 
   updateUser(userId: string, userData: Partial<Users>): Observable<Users> {
-    return this.http.put<Users>(`${this.api}/${userId}`, userData);
+    return this.http.patch<Users>(`${this.api}/${userId}`, userData);
   }
 
   updatedStatus(id: string, status: boolean): Observable<Users> {
@@ -32,7 +32,7 @@ export class UsersService {
     return this.http.put<Users>(`${this.api}/${id}`, statusData);
   }
 
-  deleteUser(userId: string): Observable<any> {
-    return this.http.delete(`${this.api}/${userId}`);
+  deleteUser(users: Users): Observable<Users> {
+    return this.http.delete<Users>(`${this.api}/${users.id}`);
   }
 }

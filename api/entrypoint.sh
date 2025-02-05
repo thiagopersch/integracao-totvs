@@ -18,9 +18,11 @@ sleep 5
 # Executa as migrações do Prisma
 if [ "$NODE_ENV" = "production" ]; then
   echo "Executando as migrações do Prisma em produção..."
+  npx prisma generate
   npx prisma migrate deploy --name init
 else
   echo "Executando as migrações do Prisma em desenvolvimento..."
+  npx prisma generate
   npx prisma migrate dev --name init
 fi
 

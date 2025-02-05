@@ -1,0 +1,66 @@
+<form
+  [formGroup]="clientForm"
+  (ngSubmit)="handleSubmit()"
+  class="form-field-group"
+>
+  <app-column>
+    <mat-slide-toggle formControlName="status" color="primary">{{
+      this.clientForm.get('status')?.value ? 'Ativado' : 'Desativado'
+    }}</mat-slide-toggle>
+  </app-column>
+
+  <app-column>
+    <mat-form-field appearance="fill">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" maxlength="255" required />
+      <mat-error
+        *ngIf="
+          clientForm.get('name')?.invalid && clientForm.get('name')?.touched
+        "
+        >{{ getErrorMessage('name') }}</mat-error
+      >
+    </mat-form-field>
+  </app-column>
+
+  <app-column>
+    <mat-form-field appearance="fill">
+      <mat-label>Link do CRM</mat-label>
+      <input
+        type="url"
+        matInput
+        formControlName="link_crm"
+        maxlength="255"
+        required
+      />
+      <mat-error
+        *ngIf="
+          clientForm.get('link_crm')?.invalid &&
+          clientForm.get('link_crm')?.touched
+        "
+        >{{ getErrorMessage('link_crm') }}</mat-error
+      >
+    </mat-form-field>
+  </app-column>
+
+  <mat-divider></mat-divider>
+  <app-actions>
+    <div class="button-group">
+      <button
+        type="button"
+        mat-stroked-button
+        color="warn"
+        (click)="handleBack()"
+      >
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="clientForm.invalid"
+      >
+        Cadastrar
+      </button>
+    </div>
+  </app-actions>
+</form>

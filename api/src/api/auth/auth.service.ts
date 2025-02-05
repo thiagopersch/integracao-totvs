@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { user } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
@@ -16,23 +20,23 @@ export class AuthService {
       where: { email },
     });
 
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado!');
+    }
+
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
       throw new UnauthorizedException('Senha inválida!');
     }
 
-    if (!user) {
-      throw new UnauthorizedException('Não autorizado!');
-    }
-
     if (!user?.email && !user?.password) {
-      throw new UnauthorizedException('Usuário inválido!');
+      throw new UnauthorizedException('Não autorizado!');
     }
     return user;
   }
 
-  async login(user: any) {
+  async login(user: user) {
     const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
