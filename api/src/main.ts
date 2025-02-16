@@ -13,7 +13,6 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-  app.setGlobalPrefix('api');
   await app.listen(port);
   console.log(`🚀 Initialized server in port: ${port}`);
 }

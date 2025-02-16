@@ -13,7 +13,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateUserDto) {
-    const existUser = await this.prisma.user.findUnique({
+    const existUser = await this.prisma.users.findUnique({
       where: { email: data.email },
       select: { email: true },
     });
@@ -25,7 +25,7 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const { id, ...rest } = data;
 
-    const user = await this.prisma.user.create({
+    const user = await this.prisma.users.create({
       data: { ...rest, password: hashedPassword },
     });
 
@@ -33,7 +33,7 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.prisma.user.findMany({
+    return this.prisma.users.findMany({
       where: { deleted_at: null },
       select: {
         id: true,
@@ -50,7 +50,7 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    return this.prisma.user.findUnique({
+    return this.prisma.users.findUnique({
       where: { id },
       select: {
         id: true,
@@ -77,7 +77,7 @@ export class UsersService {
       delete updateData.password;
     }
 
-    const existUser = await this.prisma.user.findUnique({
+    const existUser = await this.prisma.users.findUnique({
       where: { id },
       select: { id: true },
     });
@@ -86,7 +86,7 @@ export class UsersService {
       throw new NotFoundException('Usuário não encontrado.');
     }
 
-    const updatedUser = await this.prisma.user.update({
+    const updatedUser = await this.prisma.users.update({
       where: { id: user.id },
       data: updateData,
     });
@@ -95,7 +95,7 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.users.findUnique({
       where: { id },
       select: { id: true },
     });
@@ -104,7 +104,7 @@ export class UsersService {
       throw new NotFoundException('Usuário não encontrado.');
     }
 
-    return this.prisma.user.update({
+    return this.prisma.users.update({
       where: { id },
       data: { deleted_at: new Date() },
     });

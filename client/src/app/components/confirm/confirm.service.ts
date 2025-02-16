@@ -30,21 +30,22 @@ export class ConfirmService {
     const isMobile = window.innerWidth <= 768;
 
     return this.dialog.open<ConfirmComponent>(ConfirmComponent, {
-      minWidth: isMobile ? '95dvw' : '30dvw',
-      maxWidth: isMobile ? '95dvw' : '30dvw',
-      role: 'dialog',
+      maxWidth: '100%',
+      width: 'auto',
+      height: 'auto',
+      minHeight: 'auto',
+      maxHeight: '100dvh',
       autoFocus: false,
-      disableClose: disableClose,
-      panelClass: customClassContainer ? customClassContainer : 'modal',
+      panelClass: 'dialog',
       data: {
         title,
         message,
         btnOkText,
         btnCancelText,
         reverseBtn,
-        disableClose,
         customClassContainer,
       },
+      disableClose,
     });
   }
 }

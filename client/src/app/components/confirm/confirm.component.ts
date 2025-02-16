@@ -22,5 +22,4 @@ import { ActionsComponent } from '../actions/actions.component';
 export class ConfirmComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
-  ngOnInit() {}
 }
