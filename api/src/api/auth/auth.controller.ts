@@ -17,10 +17,17 @@ export class AuthController {
     response.cookie('token', access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 3600000, // 1 hora
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { user: user.name, token: access_token };
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+      token: access_token,
+    };
   }
 }

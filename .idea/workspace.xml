@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="77fad6cd-3ad7-46ea-bf2d-370d59a509c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/api/.prettierrc" beforeDir="false" afterPath="$PROJECT_DIR$/api/.prettierrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/api/entrypoint.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/prisma/migrations/migration_lock.toml" beforeDir="false" afterPath="$PROJECT_DIR$/api/prisma/migrations/migration_lock.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/api/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/api/auth/auth.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/api/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/api/auth/auth.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/api/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/api/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/api/auth/jwt.strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/api/auth/jwt.strategy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/api/client/client.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/api/client/client.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/api/users/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/api/users/users.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/@types/next-auth.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/@types/next-auth.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/dataservers/get-schema/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/dataservers/get-schema/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/dataservers/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/dataservers/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/read-record/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/read-record/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/read-record/schema/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/read-record/schema/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/read-view/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/read-view/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/read-view/schema/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/read-view/schema/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/save-record/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/save-record/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/save-record/schema/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/save-record/schema/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/sentence/execute/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/sentence/execute/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/sql/sentence/execute/schema/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/sql/sentence/execute/schema/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/validator/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/validator/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/workflow/_findAll/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/workflow/_findAll/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/automations/workflow/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/automations/workflow/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/home/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/registers/tbc/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/registers/tbc/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/registers/users/_userForm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/registers/users/_userForm/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/registers/users/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/registers/users/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(administrative)/styles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(private)/administrative/styles.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/AuthContext.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(public)/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/login/styles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/(public)/login/styles.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/themeProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/themeProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/withAuth.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/withAuth.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/auth/nextAuthOptions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/auth/nextAuthOptions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ContentAuth/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ContentAuth/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Navbar/DrawerList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Navbar/DrawerList/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Navbar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Navbar/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/config/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/config/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/administrative/registers/users/useUsers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/administrative/registers/users/useUsers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/login/useLogin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/login/useLogin.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/lib/api/auth/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/lib/api/registers/users.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/lib/api/registers/users.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/providers/sessionProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/providers/sessionProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/services/session.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/session.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/services/unstable-api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/unstable-api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/yarn.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myAllFileTypesSelected" value="true" />
+    <option name="mySelectedFileTypes">
+      <set />
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2t3j7sA9sw5TCFoNE8rod2bf4rB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "code.cleanup.on.save": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/tiago-persch/Projetos pessoais/integracao-totvs/client",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/home/tiago-persch/Projetos pessoais/integracao-totvs/client/node_modules/prettier",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors",
+    "ts.external.directory.path": "/home/tiago-persch/Projetos pessoais/integracao-totvs/client/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
+        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
+        <entry key="com.intellij.reactbuddy.storybook" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/client" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/client/src/app/(public)" />
+      <recent name="$PROJECT_DIR$/client/src/app/(private)" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.157" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="77fad6cd-3ad7-46ea-bf2d-370d59a509c8" name="Changes" comment="" />
+      <created>1739587487171</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739587487171</updated>
+      <workItem from="1739587488391" duration="348000" />
+      <workItem from="1739623979878" duration="10000" />
+      <workItem from="1739660920612" duration="5380000" />
+      <workItem from="1739668618514" duration="9931000" />
+      <workItem from="1739726163090" duration="11873000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="nginx.conf" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

@@ -49,7 +49,5 @@ export const FetchSession = async (
 
   const params = { ...restParams } as any;
 
-  const response = await api.post('/auth/login', { params });
-
-  return response;
+  return await api.post('/auth/login', { params });
 };

@@ -1,6 +1,5 @@
 'use client';
 
-import { useAuth } from '@/app/AuthContext';
 import { updatedRoutes } from '@/config/routes';
 import { theme } from '@/styles/theme';
 import {
@@ -27,9 +26,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import DrawerList from './DrawerList';
+import { signOut, useSession } from 'next-auth/react';
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { data: session } = useSession();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -38,6 +38,8 @@ const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const open = Boolean(anchorEl);
   const openSubMenu = Boolean(subMenuEl);
+
+  const isAuthenticated = !!session?.user;
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpenDrawer(newOpen);
@@ -57,12 +59,17 @@ const Navbar = () => {
     setCurrentSubMenu(category);
   };
 
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push('/login');
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color='default'>
+      <AppBar position="static" color="default">
         <Toolbar>
           <Box sx={{ mr: '1rem' }}>
-            <Link href="/" passHref>
+            <Link href="/">
               <Image
                 src="/rubeus.svg"
                 width={48}
@@ -71,13 +78,18 @@ const Navbar = () => {
               />
             </Link>
           </Box>
-          <Typography variant="body1" color='textSecondary' component="span" sx={{ flexGrow: 1, fontStyle: 'italic' }}>
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            component="span"
+            sx={{ flexGrow: 1, fontStyle: 'italic' }}
+          >
             Integração Rubeus
           </Typography>
           {!isMobile && (
             <>
               {updatedRoutes.map((route) => (
-                <Box key={route.id} sx={{mx: 1}}>
+                <Box key={route.id} sx={{ mx: 1 }}>
                   <Button
                     id={`${route.id}-button`}
                     aria-controls={open ? `${route.id}-menu` : undefined}
@@ -117,9 +129,9 @@ const Navbar = () => {
                     color="primary"
                     variant="outlined"
                     onClick={(event) => setAnchorEl(event.currentTarget)}
-                    endIcon={!anchorEl ? <ArrowDropDown /> : <ArrowDropUp/>}
+                    endIcon={!anchorEl ? <ArrowDropDown /> : <ArrowDropUp />}
                   >
-                    {user || 'Usuário'}
+                    {session?.user?.name || 'Usuário'}
                   </Button>
                   <Menu
                     anchorEl={anchorEl}
@@ -149,7 +161,7 @@ const Navbar = () => {
                       <Person /> Perfil
                     </MenuItem>
                     <MenuItem
-                      onClick={logout}
+                      onClick={handleLogout}
                       sx={{
                         display: 'flex',
                         gap: '1rem',
@@ -163,7 +175,11 @@ const Navbar = () => {
                   </Menu>
                 </>
               ) : (
-                <Button color="primary" variant="outlined" onClick={() => router.push('/login')}>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => router.push('/login')}
+                >
                   Login
                 </Button>
               )}

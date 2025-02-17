@@ -1,6 +1,11 @@
 'use client';
 
-import UserService from '@/lib/api/registers/users';
+import {
+  addUser,
+  deleteUser,
+  getUserById,
+  listUsers,
+} from '@/lib/api/registers/users';
 import { User } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useGridApiRef } from '@mui/x-data-grid';
@@ -21,13 +26,13 @@ export default function useUsers(session?: Session) {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const apiRef = useGridApiRef();
 
-  const userService = new UserService(session);
   const queryClient = useQueryClient();
 
-  const { data: users, refetch } = useQuery({
+  const { data: userResponse, refetch } = useQuery({
     queryKey: ['listUsers'],
-    queryFn: () => userService.listUsers(),
+    queryFn: () => listUsers(),
   });
+  const users = userResponse || [];
 
   const {
     register,
@@ -49,7 +54,7 @@ export default function useUsers(session?: Session) {
   });
 
   const addUserMutation = useMutation({
-    mutationFn: (userData: User) => userService.addUser(userData),
+    mutationFn: (userData: User) => addUser(userData),
     onSuccess: (newUser) => {
       toast.success('Usuário salvo com sucesso!');
       queryClient.setQueryData(
@@ -72,7 +77,7 @@ export default function useUsers(session?: Session) {
   });
 
   const deleteUserMutation = useMutation({
-    mutationFn: (id: string) => userService.deleteUser(id),
+    mutationFn: (id: string) => deleteUser(id),
     onSuccess: (_, id) => {
       toast.success('Usuário excluído com sucesso!');
       queryClient.setQueryData(
@@ -106,7 +111,7 @@ export default function useUsers(session?: Session) {
   const handleEdit = useCallback(
     async (id: string) => {
       try {
-        const user = await userService.getUserById(id);
+        const user = await getUserById(id);
         if (user) {
           setEditingUser(user);
           setIsModalOpen(true);
@@ -115,7 +120,7 @@ export default function useUsers(session?: Session) {
         toast.error(`Falha ao editar usuário: ${error.message}`);
       }
     },
-    [reset, userService],
+    [reset],
   );
 
   const handleDelete = useCallback(

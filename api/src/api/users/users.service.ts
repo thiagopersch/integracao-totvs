@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import AppError from 'src/utils/appError';
 import { CreateUserDto } from './dto/create-users.dto';
 import { UpdateUserDto } from './dto/update-users.dto';
 
@@ -16,16 +19,24 @@ export class UsersService {
     });
 
     if (existUser) {
-      throw new AppError('Já existe um usuário com este email.', 400);
+      throw new UnauthorizedException('Já existe um usuário com este email.');
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    const user = await this.prisma.user.create({
+    return this.prisma.user.create({
       data: { ...data, password: hashedPassword },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: false,
+        change_password: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+      },
     });
-
-    return user;
   }
 
   async findAll() {
@@ -76,15 +87,13 @@ export class UsersService {
     });
 
     if (!existUser) {
-      throw new AppError('Usuário não encontrado.', 404);
+      throw new NotFoundException('Usuário não encontrado.');
     }
 
-    const updatedUser = await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { id: user.id },
       data: updateData,
     });
-
-    return updatedUser;
   }
 
   async remove(id: string) {
@@ -94,7 +103,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new AppError('Usuário não encontrado.', 404);
+      throw new NotFoundException('Usuário não encontrado.');
     }
 
     return this.prisma.user.update({

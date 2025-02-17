@@ -1,4 +1,16 @@
 services:
+  nginx:
+    image: nginx:latest
+    container_name: totvs-nginx
+    ports:
+      - '3330:3330'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - totvs-app
+    networks:
+      - totvs-network
+
   totvs-app:
     build:
       context: .
@@ -9,8 +21,8 @@ services:
       - '3333:3333'
 
     volumes:
-      - .:/app # Mapeia o diretório local para o contêiner
-      - /app/node_modules # Evita conflitos entre dependências locais e do contêiner
+      - .:/app
+      - /app/node_modules
 
     environment:
       POSTGRES_HOST: totvs-backend

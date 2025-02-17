@@ -1,4 +1,4 @@
-import { updatedRoutes } from '@/config/routes'; // Certifique-se de que o caminho está correto
+import { updatedRoutes } from '@/config/routes';
 import { Code, ExpandLess, ExpandMore, Storage } from '@mui/icons-material';
 import {
   Box,

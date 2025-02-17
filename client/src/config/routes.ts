@@ -69,7 +69,7 @@ const Routes: Route[] = [
         id: 'validator',
         path: '/validator',
         name: 'Validador de Código JavaScript',
-      }
+      },
     ],
   },
   {
@@ -93,7 +93,7 @@ const Routes: Route[] = [
 
 function buildRoutesWithPrefix(routes: Route[], parentPrefix = ''): Route[] {
   return routes.map((route) => {
-    const fullPath = parentPrefix ? `${parentPrefix}${route.path}` : route.path;
+    const fullPath = `${parentPrefix}${route.path}`;
 
     return {
       ...route,
@@ -105,6 +105,6 @@ function buildRoutesWithPrefix(routes: Route[], parentPrefix = ''): Route[] {
   });
 }
 
-const updatedRoutes = buildRoutesWithPrefix(Routes);
+const updatedRoutes = buildRoutesWithPrefix(Routes, '/administrative');
 
 export { updatedRoutes };

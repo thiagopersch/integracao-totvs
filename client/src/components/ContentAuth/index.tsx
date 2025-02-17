@@ -1,12 +1,12 @@
-import { useAuth } from '@/app/AuthContext';
 import Navbar from '../Navbar';
+import { useSession } from 'next-auth/react';
 
 const ContentAuth = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
+  const { data: session } = useSession();
 
   return (
     <>
-      {isAuthenticated && <Navbar />}
+      {session?.user && <Navbar />}
       {children}
     </>
   );

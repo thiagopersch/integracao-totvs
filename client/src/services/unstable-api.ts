@@ -29,8 +29,9 @@ if (!isServer) {
 }
 
 export const createUnstableApi = (session?: Session | null) => {
-  const authorization = session?.token ? `Bearer ${session.token}` : undefined;
-  unstable__api.defaults.headers.common.Authorization = authorization;
+  unstable__api.defaults.headers.common.Authorization = session?.token
+    ? `Bearer ${session.token}`
+    : undefined;
 
   return unstable__api;
 };
