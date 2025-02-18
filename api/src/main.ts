@@ -13,7 +13,7 @@ async function bootstrap() {
     origin:
       process.env.APP_ENV === 'production'
         ? process.env.URL_CLIENT
-        : process.env.URL_CLIENT, //Dev
+        : 'http://localhost:3001', //Dev
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     exposedHeaders: ['Set-Cookie'],

@@ -19,10 +19,10 @@ export const listUsers = async (
     const api = createApi();
     const response = await api.get<{
       success: boolean;
-      data: User[];
       message?: string;
+      data: User[];
     }>('/users', { params: filters });
-
+    
     if (!response.data.success || !response.data.data) {
       throw new Error(response.data.message || 'Failed to fetch users');
     }
