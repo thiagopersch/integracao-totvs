@@ -1,6 +1,7 @@
 'use client';
 
 import * as S from '@/app/(private)/administrative/styles';
+import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
 import MenuActionsDataGrid from '@/components/MenuActionsDataGrid';
 import Actived from '@/components/Situations/Actived';
@@ -17,18 +18,20 @@ const Users = () => {
     isModalOpen,
     apiRef,
     editingUser,
+    isLoading,
     setIsModalOpen,
     handleExpandedTable,
     handleAdd,
     handleEdit,
     handleDelete,
+    deleteDialog,
   } = useUsers();
 
   const columns: GridColDef[] = [
     {
       field: 'status',
       headerName: 'Status',
-      width: 250,
+      width: 100,
       flex: 1,
       renderCell: (params) =>
         params.value === true ? (
@@ -41,8 +44,8 @@ const Users = () => {
     { field: 'email', headerName: 'Email', width: 250, flex: 1 },
     {
       field: 'change_password',
-      headerName: 'Permitido alterar senha no primeiro login',
-      width: 250,
+      headerName: 'Alterar senha no proximo login?',
+      width: 100,
       flex: 1,
       renderCell: (params) =>
         params.value === true ? (
@@ -54,7 +57,7 @@ const Users = () => {
     {
       field: 'formattedUpdatedAt',
       headerName: 'Atualizado em',
-      width: 250,
+      width: 100,
       flex: 1,
     },
     {
@@ -89,13 +92,13 @@ const Users = () => {
 
   return (
     <S.Wrapper>
-      <S.Title variant="h4" color="grey.800" gutterBottom>
+      <S.Title variant="h4" color="grey.700" gutterBottom>
         Usuários
       </S.Title>
       <Table
         rows={users}
         columns={columns}
-        isLoading={false}
+        isLoading={isLoading}
         onClick={handleExpandedTable}
         density="standard"
         apiRef={apiRef}
@@ -116,6 +119,17 @@ const Users = () => {
       >
         <UserForm user={editingUser} />
       </CustomModal>
+      <ConfirmationDialog
+        open={deleteDialog.open}
+        title={deleteDialog.title || 'Confirmar exclusão'}
+        message={
+          deleteDialog.message || 'Tem certeza que deseja excluir este item?'
+        }
+        onConfirm={deleteDialog.onConfirm}
+        onClose={deleteDialog.onClose}
+        confirmText={deleteDialog.confirmText}
+        cancelText={deleteDialog.cancelText}
+      />
     </S.Wrapper>
   );
 };

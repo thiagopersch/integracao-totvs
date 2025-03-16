@@ -1,7 +1,8 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './utils/HttpExceptionFilter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
+import { HttpExceptionFilter } from './utils/HttpExceptionFilter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,11 +10,15 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, // Transforma os dados recebidos no tipo do DTO
+      whitelist: true, // Remove propriedades não definidas no DTO
+      forbidNonWhitelisted: true, // Rejeita requisições com propriedades extras
+    }),
+  );
   app.enableCors({
-    origin:
-      process.env.APP_ENV === 'production'
-        ? process.env.URL_CLIENT
-        : 'http://localhost:3001', //Dev
+    origin: process.env.URL_CLIENT,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     exposedHeaders: ['Set-Cookie'],

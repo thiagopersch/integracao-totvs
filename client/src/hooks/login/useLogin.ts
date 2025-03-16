@@ -24,7 +24,7 @@ export default function useLogin() {
     resolver: zodResolver(schema),
     defaultValues: {
       email: 'administrador@gmail.com',
-      password: '#mpresaPC10',
+      password: '@mpresaPC10',
     },
   });
 

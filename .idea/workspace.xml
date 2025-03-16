@@ -5,7 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77fad6cd-3ad7-46ea-bf2d-370d59a509c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/totvs.1t2WBg/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bd35fedc-c042-48d1-898e-cca6975a05fe/storage_v2/_src_/database/totvs.1t2WBg/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(public)/login/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/(public)/login/styles.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/auth/nextAuthOptions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/auth/nextAuthOptions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/administrative/registers/users/useUsers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/administrative/registers/users/useUsers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/login/useLogin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/login/useLogin.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +63,7 @@
     "com.codeium.enabled": "true",
     "git-widget-placeholder": "feature/migracao__react",
     "ignore_missing_gitignore": "true",
-    "last_opened_file_path": "/home/tiago-persch/Projetos pessoais/church-system/client",
+    "last_opened_file_path": "/home/tiago-persch/Projetos pessoais/integracao-totvs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -57,8 +72,8 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "/home/tiago-persch/Projetos pessoais/integracao-totvs/client/node_modules/prettier",
-    "settings.editor.selected.configurable": "web-ide.project.structure",
-    "ts.external.directory.path": "/home/tiago-persch/Projetos pessoais/integracao-totvs/api/node_modules/typescript/lib",
+    "settings.editor.selected.configurable": "preferences.fileTypes",
+    "ts.external.directory.path": "/home/tiago-persch/Projetos pessoais/integracao-totvs/client/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -90,7 +105,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-WS-243.24978.60" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.26053.12" />
       </set>
     </attachedChunks>
   </component>
@@ -116,6 +131,8 @@
       <workItem from="1739886471681" duration="3000" />
       <workItem from="1739919586623" duration="2000" />
       <workItem from="1739920371111" duration="19000" />
+      <workItem from="1742081732529" duration="438000" />
+      <workItem from="1742082180081" duration="1268000" />
     </task>
     <servers />
   </component>

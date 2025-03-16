@@ -1,19 +1,9 @@
-import createApi from '@/services/api';
-import { FormattedUsers, User } from '@/types/user';
+import createApi from '@/lib/services/api';
 import { userMappers } from '@/pipes/userMappers';
-
-type ListUsersFilters = Partial<{
-  id: string;
-  name: string;
-  email: string;
-  change_password: boolean;
-  status: boolean;
-  created_at: string;
-  updated_at: string;
-}>;
+import { FormattedUsers, User } from '@/types/user';
 
 export const listUsers = async (
-  filters: ListUsersFilters = {},
+  filters: Partial<User> = {},
 ): Promise<FormattedUsers[]> => {
   try {
     const api = createApi();
@@ -22,7 +12,7 @@ export const listUsers = async (
       message?: string;
       data: User[];
     }>('/users', { params: filters });
-    
+
     if (!response.data.success || !response.data.data) {
       throw new Error(response.data.message || 'Failed to fetch users');
     }
@@ -57,17 +47,10 @@ export const getUserById = async (id: string): Promise<User> => {
 export const addUser = async (userData: User): Promise<User> => {
   try {
     const api = createApi();
-    const requestData = {
-      ...userData,
-      id: userData.id ? userData.id : undefined,
-    };
-
-    const response = userData.id
-      ? await api.patch<{ success: boolean; data: User }>(
-          `/users/${userData.id}`,
-          requestData,
-        )
-      : await api.post<{ success: boolean; data: User }>('/users', requestData);
+    const response = await api.post<{ success: boolean; data: User }>(
+      '/users',
+      userData,
+    );
 
     if (!response.data.success || !response.data.data) {
       throw new Error('Failed to save user');
@@ -76,6 +59,25 @@ export const addUser = async (userData: User): Promise<User> => {
     return response.data.data;
   } catch (error) {
     console.error('Error saving user:', error);
+    throw error;
+  }
+};
+
+export const updateUser = async (id: string, userData: User): Promise<User> => {
+  try {
+    const api = createApi();
+    const response = await api.patch<{ success: boolean; data: User }>(
+      `/users/${id}`,
+      userData,
+    );
+
+    if (!response.data.success || !response.data.data) {
+      throw new Error('Failed to update user');
+    }
+
+    return response.data.data;
+  } catch (error) {
+    console.error(`Error updating user ${id}:`, error);
     throw error;
   }
 };

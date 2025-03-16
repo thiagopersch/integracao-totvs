@@ -2,7 +2,6 @@
 
 import * as S from '@/app/(private)/administrative/styles';
 import withAuth from '@/app/withAuth';
-import ContainerTable from '@/components/ContainerTable';
 import NoRow from '@/components/Table/NoRow';
 import readView from '@/lib/api/totvs/readView';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -241,27 +240,25 @@ const ReadViewPage = () => {
         </S.Actions>
       </S.Form>
       {rows && isSubmitted && (
-        <ContainerTable>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            loading={isLoading}
-            autoHeight
-            pageSizeOptions={[10, 50, 100]}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 10 },
-              },
-              sorting: {
-                sortModel: [{ field: 'year', sort: 'asc' }],
-              },
-            }}
-            slots={{
-              noRowsOverlay: NoRow,
-            }}
-            sx={{ '--DataGrid-overlayHeight': '18.75rem' }}
-          />
-        </ContainerTable>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          loading={isLoading}
+          autoHeight
+          pageSizeOptions={[10, 50, 100]}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+            sorting: {
+              sortModel: [{ field: 'year', sort: 'asc' }],
+            },
+          }}
+          slots={{
+            noRowsOverlay: NoRow,
+          }}
+          sx={{ '--DataGrid-overlayHeight': '18.75rem' }}
+        />
       )}
       {!rows && (
         <Typography

@@ -21,12 +21,12 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import DrawerList from './DrawerList';
-import { signOut, useSession } from 'next-auth/react';
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -61,7 +61,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await signOut({ redirect: false });
-    router.push('/login');
+    router.push('/signIn');
   };
 
   return (

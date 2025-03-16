@@ -56,7 +56,7 @@ export default function UserForm({ user }: UserFormProps) {
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                control={<Checkbox {...field} checked={!!field.value} />}
+                control={<Checkbox {...field} checked={field.value} />}
                 label={field.value ? 'Ativado' : 'Desativado'}
               />
             )}
@@ -68,7 +68,7 @@ export default function UserForm({ user }: UserFormProps) {
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                control={<Checkbox {...field} checked={!!field.value} />}
+                control={<Checkbox {...field} checked={field.value} />}
                 label="Alterar senha no primeiro login?"
               />
             )}
@@ -124,7 +124,6 @@ export default function UserForm({ user }: UserFormProps) {
             ),
           }}
           fullWidth
-          required
         />
       </S.InputSentences>
       <S.Actions>
@@ -135,7 +134,13 @@ export default function UserForm({ user }: UserFormProps) {
           type="submit"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
+          {isSubmitting
+            ? user
+              ? 'Atualizando...'
+              : 'Cadastrando...'
+            : user
+              ? 'Atualizar'
+              : 'Cadastrar'}
         </S.CTA>
       </S.Actions>
     </S.Form>
