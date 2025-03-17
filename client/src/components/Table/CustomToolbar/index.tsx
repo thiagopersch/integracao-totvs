@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@mui/material';
 import {
   GridToolbarContainer,
@@ -21,7 +23,7 @@ const TableToolbar = (props: TableToolbarProps) => {
 
   return (
     <GridToolbarContainer
-      className="flex lg:flex-row md:flex-col m-2 items-center"
+      className="flex flex-row md:flex-col items-center w-full"
       {...rest}
     >
       {/* Condicional para renderizar o botão de "Adicionar" */}
@@ -33,6 +35,7 @@ const TableToolbar = (props: TableToolbarProps) => {
             color="primary"
             size="large"
             onClick={buttonActions['add']} // Ação do botão "Adicionar"
+            className="md:w-full"
           >
             {getLabel('add')} {/* Usando a função getLabel */}
           </Button>
@@ -47,6 +50,7 @@ const TableToolbar = (props: TableToolbarProps) => {
           color="primary"
           size="medium"
           onClick={buttonActions['add']} // Ação do botão "Adicionar"
+          className="md:w-full"
         >
           {getLabel('add')} {/* Usando a função getLabel */}
         </Button>
@@ -59,6 +63,7 @@ const TableToolbar = (props: TableToolbarProps) => {
           color="primary"
           size="medium"
           onClick={buttonActions['columns']} // Ação do botão "Ajustar Colunas"
+          className="md:w-full"
         >
           {getLabel('columns')} {/* Usando a função getLabel */}
         </Button>
@@ -74,7 +79,8 @@ const TableToolbar = (props: TableToolbarProps) => {
             button: {
               color: 'primary',
               size: 'medium',
-              variant: 'outlined',
+              variant: 'text',
+              className: 'md:w-full',
             },
             tooltip: {
               title: 'Exportar',

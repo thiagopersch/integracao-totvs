@@ -1,34 +1,35 @@
+import { schema } from '@/hooks/administrative/registers/client/schema';
 import useCrud from '@/hooks/useCrud';
 import {
-  addUser,
-  deleteUser,
-  getUserById,
-  listUsers,
-  updateUser,
-} from '@/lib/api/registers/users';
-import useUserStore from '@/stores/useUserStore';
-import { User } from '@/types/user';
+  createClient,
+  deleteClient,
+  findAll,
+  findById,
+  updateClient,
+} from '@/lib/api/registers/client';
+import useClientStore from '@/stores/useClientStore';
+import { Client } from '@/types/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useGridApiRef } from '@mui/x-data-grid';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { schema } from './schema';
 
 type Schema = z.infer<typeof schema>;
 
-export default function useUsers() {
+export default function useClient() {
   const apiRef = useGridApiRef();
   const {
     isModalOpen,
-    editingUser,
     showPassword,
     setIsModalOpen,
-    setEditingUser,
     toggleShowPassword,
-  } = useUserStore();
+    setEditingClient,
+    editingClient,
+  } = useClientStore();
+
   const {
-    items: users,
+    items: clients,
     isLoading,
     create,
     handleUpdate,
@@ -38,17 +39,17 @@ export default function useUsers() {
     isUpdating,
     isDeleting,
     deleteDialog,
-  } = useCrud<User, User, User>({
-    queryKey: ['listUsers'],
-    listFn: listUsers,
-    getFn: getUserById,
-    createFn: addUser,
-    updateFn: updateUser,
-    deleteFn: deleteUser,
+  } = useCrud<Client, Client, Client>({
+    queryKey: ['client'],
+    listFn: findAll,
+    getFn: findById,
+    createFn: createClient,
+    updateFn: updateClient,
+    deleteFn: deleteClient,
     deleteConfirmation: {
-      title: 'Atenção - Excluir Usuário',
+      title: 'Atenção - Excluir cliente',
       message:
-        'Você tem certeza que deseja excluir este usuário? Esta ação é irreversível.',
+        'Você tem certeza que deseja excluir este cliente? Esta ação é irreversível.',
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
     },
@@ -65,39 +66,38 @@ export default function useUsers() {
     criteriaMode: 'all',
     resolver: zodResolver(schema),
     defaultValues: {
+      id: '',
       name: '',
-      email: '',
-      password: '',
-      change_password: true,
+      link_crm: '',
+      site: '',
       status: true,
     },
   });
 
   useEffect(() => {
-    if (editingUser) {
+    if (editingClient) {
       reset({
-        id: editingUser.id,
-        name: editingUser.name,
-        email: editingUser.email,
-        password: '',
-        change_password: editingUser.change_password,
-        status: editingUser.status,
+        id: editingClient.id,
+        name: editingClient.name,
+        link_crm: editingClient.link_crm,
+        site: editingClient.site,
+        status: editingClient.status,
       });
     } else {
       reset({
         id: '',
         name: '',
-        email: '',
-        password: '',
-        change_password: true,
+        link_crm: '',
+        site: '',
         status: true,
       });
     }
-  }, [editingUser, reset]);
+  }, [editingClient, reset]);
+
   const handleEdit = async (id: string) => {
-    const user = await fetchById(id);
-    if (user) {
-      setEditingUser(user);
+    const client = await fetchById(id);
+    if (client) {
+      setEditingClient(client);
       setIsModalOpen(true);
     }
   };
@@ -107,25 +107,23 @@ export default function useUsers() {
   };
 
   const onSubmit: SubmitHandler<Schema> = async (data) => {
-    if (editingUser) {
-      const updatedData = {
+    if (editingClient) {
+      const updatedClient = {
         name: data.name,
-        email: data.email,
-        change_password: data.change_password,
+        link_crm: data.link_crm,
+        site: data.site,
         status: data.status,
-        password: data.password || undefined,
       };
-      await handleUpdate(data.id ?? '', updatedData);
+      await handleUpdate(data.id ?? '', updatedClient);
       setIsModalOpen(false);
-      setEditingUser(null);
+      setEditingClient(null);
     } else {
       await create(data);
       reset({
         id: '',
         name: '',
-        email: '',
-        password: '',
-        change_password: true,
+        link_crm: '',
+        site: '',
         status: true,
       });
       setIsModalOpen(false);
@@ -141,20 +139,21 @@ export default function useUsers() {
   };
 
   const handleAdd = () => {
-    setEditingUser(null);
+    setEditingClient(null);
     setIsModalOpen(true);
   };
 
   return {
-    users,
+    clients,
     isModalOpen,
-    editingUser,
+    editingClient,
     apiRef,
     control,
     errors,
     isSubmitting: isSubmitting || isCreating || isUpdating || isDeleting,
     showPassword,
     isLoading,
+    deleteDialog,
     reset,
     Controller,
     setIsModalOpen,
@@ -168,6 +167,5 @@ export default function useUsers() {
       event.preventDefault();
     },
     handleAdd,
-    deleteDialog,
   };
 }

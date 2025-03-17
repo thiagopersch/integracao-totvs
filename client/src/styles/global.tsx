@@ -11,6 +11,7 @@ const GlobalStyles = () => {
           padding: 0,
           boxSizing: 'border-box',
           outline: 'none',
+          fontFamily: theme.typography.fontFamily,
         },
         html: {
           scrollBehavior: 'smooth',

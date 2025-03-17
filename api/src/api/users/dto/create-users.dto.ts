@@ -23,8 +23,8 @@ export class CreateUserDto {
   @MaxLength(30, { message: 'A senha deve ter no máximo 30 caracteres.' })
   password: string;
 
-  @IsBoolean({ message: 'O status deve ser um booleano.' })
+  @IsBoolean({ message: 'O status deve ser um verdadeiro ou falso.' })
   change_password: boolean;
-  @IsBoolean({ message: 'O status deve ser um booleano.' })
+  @IsBoolean({ message: 'O status deve ser um verdadeiro ou falso.' })
   status: boolean;
 }

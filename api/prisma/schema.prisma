@@ -36,18 +36,17 @@ model user {
 }
 
 model client {
-  id          String    @id @default(uuid())
-  image       String?
-  name        String
-  link_crm    String
-  site        String?
-  student_qtd String?
-  status      Boolean   @default(true)
-  created_at  DateTime  @default(now()) @db.Timestamptz()
-  updated_at  DateTime  @updatedAt @db.Timestamptz()
-  deleted_at  DateTime? @db.Timestamptz()
-  tbc         tbc[]
-  filters     filters[]
+  id         String    @id @default(uuid())
+  image      String?
+  name       String
+  link_crm   String    @unique
+  site       String?
+  status     Boolean   @default(true)
+  created_at DateTime  @default(now()) @db.Timestamptz()
+  updated_at DateTime  @updatedAt @db.Timestamptz()
+  deleted_at DateTime? @db.Timestamptz()
+  tbc        tbc[]
+  filters    filters[]
 }
 
 model tbc {

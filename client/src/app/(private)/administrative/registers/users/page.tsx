@@ -3,14 +3,14 @@
 import * as S from '@/app/(private)/administrative/styles';
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
-import MenuActionsDataGrid from '@/components/MenuActionsDataGrid';
 import Actived from '@/components/Situations/Actived';
 import Disabled from '@/components/Situations/Disabled';
 import Table from '@/components/Table';
+import MenuActionsDataGrid from '@/components/Table/MenuActionsDataGrid';
+import useUsers from '@/hooks/administrative/registers/users/useUsers';
+import UserForm from '@/templates/users';
 import { Delete, Edit } from '@mui/icons-material';
 import { GridColDef } from '@mui/x-data-grid';
-import useUsers from '../../../../../hooks/administrative/registers/users/useUsers';
-import UserForm from './_userForm';
 
 const Users = () => {
   const {

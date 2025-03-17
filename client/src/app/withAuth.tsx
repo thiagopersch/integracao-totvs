@@ -1,8 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Loading from './loading';
 
 export default function withAuth(Component: React.FC) {
   return function AuthenticatedComponent() {
@@ -11,11 +12,11 @@ export default function withAuth(Component: React.FC) {
 
     useEffect(() => {
       if (status === 'unauthenticated') {
-        router.push('/login');
+        router.push('/signIn');
       }
     }, [status, router]);
 
-    if (status === 'loading') return <div>Carregando...</div>;
+    if (status === 'loading') return <Loading />;
 
     return session ? <Component /> : null;
   };

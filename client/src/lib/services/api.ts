@@ -25,12 +25,32 @@ const createApi = (session?: Session | null) => {
   api.interceptors.response.use(
     (res) => res,
     async (error) => {
-      if (error.response?.status === 401) {
-        await signOut({
-          callbackUrl: '/signIn',
-          redirect: true,
-        });
-        return undefined;
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (
+          status === 401 ||
+          (data && (data.user === null || data.user === undefined))
+        ) {
+          await signOut({
+            callbackUrl: '/signIn',
+            redirect: true,
+          });
+          return undefined;
+        }
+
+        if (
+          !document.cookie.includes(
+            `${process.env.NEXTAUTH_COOKIE_SESSION_TOKEN}`,
+          ) &&
+          !jwt
+        ) {
+          await signOut({
+            callbackUrl: '/signIn',
+            redirect: true,
+          });
+          return undefined;
+        }
       }
 
       return Promise.reject(error);

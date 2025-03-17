@@ -8,7 +8,6 @@ import {
 import {
   Checkbox,
   FormControlLabel,
-  FormGroup,
   IconButton,
   InputAdornment,
   TextField,
@@ -19,7 +18,7 @@ type UserFormProps = {
   user?: User | null;
 };
 
-export default function UserForm({ user }: UserFormProps) {
+const UserForm = ({ user }: UserFormProps) => {
   const {
     errors,
     showPassword,
@@ -50,30 +49,26 @@ export default function UserForm({ user }: UserFormProps) {
   return (
     <S.Form onSubmit={handleSubmit}>
       <S.InputSentences>
-        <FormGroup>
-          <Controller
-            name="status"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                control={<Checkbox {...field} checked={field.value} />}
-                label={field.value ? 'Ativado' : 'Desativado'}
-              />
-            )}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Controller
-            name="change_password"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                control={<Checkbox {...field} checked={field.value} />}
-                label="Alterar senha no primeiro login?"
-              />
-            )}
-          />
-        </FormGroup>
+        <Controller
+          name="status"
+          control={control}
+          render={({ field }) => (
+            <FormControlLabel
+              control={<Checkbox {...field} checked={field.value} />}
+              label={field.value ? 'Ativado' : 'Desativado'}
+            />
+          )}
+        />
+        <Controller
+          name="change_password"
+          control={control}
+          render={({ field }) => (
+            <FormControlLabel
+              control={<Checkbox {...field} checked={field.value} />}
+              label="Alterar senha no primeiro login?"
+            />
+          )}
+        />
       </S.InputSentences>
       <S.InputSentences>
         <TextField
@@ -145,4 +140,6 @@ export default function UserForm({ user }: UserFormProps) {
       </S.Actions>
     </S.Form>
   );
-}
+};
+
+export default UserForm;

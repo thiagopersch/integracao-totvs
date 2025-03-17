@@ -23,7 +23,8 @@ if [ "$NODE_ENV" = "production" ]; then
 else
   echo "Executando as migrações do Prisma em desenvolvimento..."
   npx prisma generate
-  npx prisma migrate dev --name init
+  npx prisma migrate deploy
+  #npx prisma migrate dev --name init
 fi
 
 # Mantém o contêiner rodando com o servidor

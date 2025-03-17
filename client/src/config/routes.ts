@@ -83,6 +83,11 @@ const Routes: Route[] = [
         name: 'Usuários',
       },
       {
+        id: 'client',
+        path: '/client',
+        name: 'Clientes',
+      },
+      {
         id: 'tbc',
         path: '/tbc',
         name: 'TBC',

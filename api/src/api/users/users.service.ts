@@ -17,9 +17,7 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     try {
-      // Usa uma transação para garantir atomicidade
       return await this.prisma.$transaction(async (tx) => {
-        // Verifica se o email já existe dentro da transação
         const existUser = await tx.user.findUnique({
           where: { email: data.email },
           select: { email: true },
@@ -29,7 +27,6 @@ export class UsersService {
           throw new ConflictException('Já existe um usuário com este email.');
         }
 
-        // Cria o usuário
         return tx.user.create({
           data: {
             ...data,
@@ -50,14 +47,12 @@ export class UsersService {
         });
       });
     } catch (error) {
-      // Trata erros específicos do Prisma
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          // Erro de constraint única (email duplicado)
           throw new ConflictException('Já existe um usuário com este email.');
         }
       }
-      throw error; // Re-lança outros erros para serem tratados pelo NestJS
+      throw error;
     }
   }
 
@@ -95,9 +90,8 @@ export class UsersService {
   }
 
   async update(id: string, data: UpdateUserDto) {
-    const user = await this.findOne(id); // Verifica se o usuário existe
+    const user = await this.findOne(id);
 
-    // Se o email está sendo alterado, verifica se já existe outro usuário com ele
     if (data.email && data.email !== user.email) {
       const existUser = await this.prisma.user.findUnique({
         where: { email: data.email },

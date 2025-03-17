@@ -1,26 +1,14 @@
-import { DataGrid, DataGridProps } from '@mui/x-data-grid';
+'use client';
+
+import TableToolbar from '@/components/Table/CustomToolbar';
+import { generateColumns } from '@/components/Table/GenerateColumns';
+import { TableProps } from '@/components/Table/types';
+import { DataGrid } from '@mui/x-data-grid';
 import ContainerTable from './ContainerTable';
-import TableToolbar from './CustomToolbar';
 import NoRow from './NoRow';
 
-type TableProps = {
-  columns: any[];
-  rows: any[];
-  sortingField: string;
-  href?: string;
-  label: string;
-  isLoading: boolean;
-  rowModesModel?: any;
-  setRowModesModel?: any;
-  setRows?: any;
-  icon?: React.ReactNode;
-  onClick?: () => void;
-  buttons?: string[];
-  buttonActions?: { [key: string]: () => void };
-} & DataGridProps;
-
 const Table = ({
-  columns,
+  columns: columnDefs,
   isLoading,
   rowModesModel,
   rows,
@@ -29,6 +17,7 @@ const Table = ({
   buttons = ['add', 'columns', 'export'],
   label,
   buttonActions = {},
+  actionHandlers = {},
   onClick,
   ...rest
 }: TableProps) => {
@@ -38,6 +27,8 @@ const Table = ({
     if (button === 'export') return 'Exportar';
     return label;
   };
+
+  const columns = generateColumns(columnDefs, actionHandlers);
 
   return (
     <ContainerTable>
@@ -73,9 +64,9 @@ const Table = ({
           ),
         }}
         slotProps={{
-            loadingOverlay: {
-              variant: 'linear-progress',
-              noRowsVariant: 'linear-progress',
+          loadingOverlay: {
+            variant: 'linear-progress',
+            noRowsVariant: 'linear-progress',
           },
         }}
         sx={{ '--DataGrid-overlayHeight': '18.75rem' }}

@@ -84,7 +84,7 @@ const Navbar = () => {
             component="span"
             sx={{ flexGrow: 1, fontStyle: 'italic' }}
           >
-            Integração Rubeus
+            Integração TOTVS
           </Typography>
           {!isMobile && (
             <>
@@ -178,7 +178,7 @@ const Navbar = () => {
                 <Button
                   color="primary"
                   variant="outlined"
-                  onClick={() => router.push('/login')}
+                  onClick={() => router.push('/signIn')}
                 >
                   Login
                 </Button>
