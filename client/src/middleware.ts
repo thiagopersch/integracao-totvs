@@ -2,9 +2,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const sessionToken = request.cookies.get(
-    `${process.env.NEXTAUTH_COOKIE_SESSION_TOKEN}`,
-  )?.value;
+  const sessionToken = request.cookies.get('next-auth.session-token')?.value;
 
   if (request.nextUrl.pathname === '/signIn' && sessionToken) {
     return NextResponse.redirect(new URL('/administrative', request.url));
@@ -22,5 +20,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/administrative/:path*', '/'],
+  matcher: ['/administrative/:path*', '/', '/signIn'],
 };

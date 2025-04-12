@@ -44,6 +44,7 @@ export const Actions = styled(Box)({
   justifyContent: 'flex-end',
   alignItems: 'center',
   marginBottom: '1rem',
+  gap: '2rem',
 });
 
 export const CTA = styled(Button)(({ theme }) => ({

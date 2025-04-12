@@ -44,7 +44,7 @@ const Users = () => {
     { field: 'email', headerName: 'Email', width: 250, flex: 1 },
     {
       field: 'change_password',
-      headerName: 'Alterar senha no proximo login?',
+      headerName: 'Alterar senha no próximo login?',
       width: 100,
       flex: 1,
       renderCell: (params) =>
@@ -111,7 +111,7 @@ const Users = () => {
         }}
       />
       <CustomModal
-        title={editingUser ? 'Editar usuário' : 'Cadastrar usuário'}
+        title={editingUser ? 'Atualizar usuário' : 'Cadastrar usuário'}
         disableBackdropClick
         showCloseButton
         open={isModalOpen}

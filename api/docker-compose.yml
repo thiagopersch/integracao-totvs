@@ -3,13 +3,14 @@ services:
     image: nginx:latest
     container_name: totvs-nginx
     ports:
-      - '3330:3330'
+      - '3330:80'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - totvs-app
     networks:
-      - totvs-network
+      totvs-network:
+        ipv4_address: 172.20.0.3 # Exemplo de IP fixo para o nginx
 
   totvs-app:
     build:
@@ -19,11 +20,9 @@ services:
     restart: always
     ports:
       - '3333:3333'
-
     volumes:
       - .:/app
       - /app/node_modules
-
     environment:
       POSTGRES_HOST: totvs-backend
       POSTGRES_PORT: 5432
@@ -33,11 +32,10 @@ services:
       NODE_ENV: development
     depends_on:
       - totvs-backend
-
     command: yarn dev
-
     networks:
-      - totvs-network
+      totvs-network:
+        ipv4_address: 172.20.0.4 # Exemplo de IP fixo para o backend
 
   totvs-backend:
     image: postgres:latest
@@ -48,21 +46,22 @@ services:
       test: [ 'CMD', 'pg_isready', '-U', 'postgres', '-d', 'postgres' ]
       interval: 5s
       retries: 10
-
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: totvs
       POSTGRES_DB: totvs
-
     ports:
       - '5432:5432'
-
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
-
     networks:
-      - totvs-network
+      totvs-network:
+        ipv4_address: 172.20.0.2 # Exemplo de IP fixo para o banco de dados
 
 networks:
   totvs-network:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24 # Define a sub-rede para a rede

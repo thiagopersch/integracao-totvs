@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import {
   Checkbox,
+  Divider,
   FormControlLabel,
   IconButton,
   InputAdornment,
@@ -121,7 +122,17 @@ const UserForm = ({ user }: UserFormProps) => {
           fullWidth
         />
       </S.InputSentences>
+      <Divider />
       <S.Actions>
+        <S.CTA
+          color="inherit"
+          variant="text"
+          size="large"
+          type="submit"
+          disabled={isSubmitting}
+        >
+          Cancelar
+        </S.CTA>
         <S.CTA
           color="primary"
           variant="contained"

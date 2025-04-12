@@ -46,7 +46,7 @@ export default function useUsers() {
     updateFn: updateUser,
     deleteFn: deleteUser,
     deleteConfirmation: {
-      title: 'Atenção - Excluir Usuário',
+      title: 'Atenção - Exclusão de Usuário',
       message:
         'Você tem certeza que deseja excluir este usuário? Esta ação é irreversível.',
       confirmText: 'Confirmar',
