@@ -1,62 +1,35 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { updatedRoutes } from '@/config/routes';
-import { theme } from '@/styles/theme';
-import {
-  ArrowDropDown,
-  ArrowDropUp,
-  Logout,
-  Menu as MenuIcon,
-  Person,
-} from '@mui/icons-material';
-import {
-  AppBar,
-  Box,
-  Button,
-  Drawer,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { cn } from '@/lib/utils';
+import { ArrowDown, ArrowUp, LogOut, Menu, User, X } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import DrawerList from './DrawerList';
+import { useMediaQuery } from 'react-responsive';
+import { ModeToggle } from '../ModeToggle';
+import SidebarList from './SidebarList';
 
 const Navbar = () => {
   const { data: session } = useSession();
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const router = useRouter();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [subMenuEl, setSubMenuEl] = useState<null | HTMLElement>(null);
+  const [openSidebar, setOpenSidebar] = useState(false);
   const [currentSubMenu, setCurrentSubMenu] = useState<string | null>(null);
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const open = Boolean(anchorEl);
-  const openSubMenu = Boolean(subMenuEl);
 
   const isAuthenticated = !!session?.user;
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpenDrawer(newOpen);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setSubMenuEl(null);
-    setCurrentSubMenu(null);
-  };
-
-  const handleSubMenuClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    category: string,
-  ) => {
-    setSubMenuEl(event.currentTarget);
-    setCurrentSubMenu(category);
+  const toggleSidebar = (newOpen: boolean) => () => {
+    setOpenSidebar(newOpen);
   };
 
   const handleLogout = async () => {
@@ -65,10 +38,11 @@ const Navbar = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="default">
-        <Toolbar>
-          <Box sx={{ mr: '1rem' }}>
+    <>
+      <header className="border-b bg-black relative z-10">
+        <div className="mx-auto flex h-16 max-w-screen-xl items-center px-4">
+          {/* Logo */}
+          <div className="mr-4">
             <Link href="/">
               <Image
                 src="/rubeus.svg"
@@ -77,131 +51,133 @@ const Navbar = () => {
                 alt="logo-rubeus.svg"
               />
             </Link>
-          </Box>
-          <Typography
-            variant="body1"
-            color="textSecondary"
-            component="span"
-            sx={{ flexGrow: 1, fontStyle: 'italic' }}
-          >
+          </div>
+
+          {/* Tagline */}
+          <span className="flex-1 text-sm font-semibold italic text-white">
             Integração TOTVS
-          </Typography>
-          {!isMobile && (
-            <>
+          </span>
+
+          {!isMobile ? (
+            <div className="flex items-center gap-4">
+              {/* Navigation Routes */}
               {updatedRoutes.map((route) => (
-                <Box key={route.id} sx={{ mx: 1 }}>
-                  <Button
-                    id={`${route.id}-button`}
-                    aria-controls={open ? `${route.id}-menu` : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={(event) =>
-                      handleSubMenuClick(event, route.id ?? '')
-                    }
-                    color="primary"
-                    variant="contained"
-                  >
-                    {route.name}
-                  </Button>
-                  <Menu
-                    anchorEl={subMenuEl}
-                    open={openSubMenu && currentSubMenu === route.id}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      'aria-labelledby': `${route.id}-button`,
-                    }}
-                  >
+                <DropdownMenu key={route.id}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="default"
+                      onClick={() => setCurrentSubMenu(route.id ?? '')}
+                    >
+                      {route.name}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
                     {route.children?.map((child) => (
-                      <Link
-                        href={child.path}
-                        style={{ textDecoration: 'none' }}
-                        key={child.path}
-                      >
-                        <MenuItem onClick={handleClose}>{child.name}</MenuItem>
-                      </Link>
+                      <DropdownMenuItem key={child.path} asChild>
+                        <Link
+                          href={child.path}
+                          onClick={() => setCurrentSubMenu(null)}
+                        >
+                          {child.name}
+                        </Link>
+                      </DropdownMenuItem>
                     ))}
-                  </Menu>
-                </Box>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ))}
+
+              {/* User Menu or Login */}
               {isAuthenticated ? (
                 <>
-                  <Button
-                    color="primary"
-                    variant="outlined"
-                    onClick={(event) => setAnchorEl(event.currentTarget)}
-                    endIcon={!anchorEl ? <ArrowDropDown /> : <ArrowDropUp />}
-                  >
-                    {session?.user?.name || 'Usuário'}
-                  </Button>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={() => setAnchorEl(null)}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'center',
-                    }}
-                    sx={{
-                      '& .MuiMenu-paper': {
-                        minWidth: '8dvw',
-                      },
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <MenuItem
-                      onClick={() => router.push('/administrative/profile')}
-                      sx={{
-                        display: 'flex',
-                        gap: '1rem',
-                        alignContent: 'center',
-                        padding: '0.8rem',
-                      }}
-                    >
-                      <Person /> Perfil
-                    </MenuItem>
-                    <MenuItem
-                      onClick={handleLogout}
-                      sx={{
-                        display: 'flex',
-                        gap: '1rem',
-                        alignContent: 'center',
-                        padding: '0.8rem',
-                        color: theme.palette.error.main,
-                      }}
-                    >
-                      <Logout /> Sair
-                    </MenuItem>
-                  </Menu>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                      >
+                        {session?.user?.name || 'Usuário'}
+                        {currentSubMenu ? (
+                          <ArrowUp className="h-4 w-4" />
+                        ) : (
+                          <ArrowDown className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="/administrative/profile"
+                          className="flex items-center gap-2"
+                        >
+                          <User className="h-4 w-4" /> Perfil
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 text-red-600"
+                      >
+                        <LogOut className="h-4 w-4" /> Sair
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <ModeToggle />
                 </>
               ) : (
                 <Button
-                  color="primary"
-                  variant="outlined"
+                  variant="outline"
                   onClick={() => router.push('/signIn')}
                 >
                   Login
                 </Button>
               )}
-            </>
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar(true)}
+              aria-label="Toggle sidebar"
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
           )}
-          {isMobile && (
-            <>
-              <IconButton onClick={toggleDrawer(true)}>
-                <MenuIcon />
-              </IconButton>
-              <Drawer
-                anchor="right"
-                open={openDrawer}
-                onClose={toggleDrawer(false)}
+        </div>
+      </header>
+
+      {/* Sidebar for Mobile */}
+      {isMobile && (
+        <>
+          {openSidebar && (
+            <div
+              className="fixed inset-0 bg-black/50 z-10"
+              onClick={toggleSidebar(false)}
+              aria-hidden="true"
+            />
+          )}
+          <div
+            className={cn(
+              'fixed inset-y-0 right-0 z-20 w-64 bg-white border-r shadow-lg transform transition-transform duration-300',
+              openSidebar ? 'translate-x-0' : 'translate-x-full',
+            )}
+          >
+            <div className="flex items-center justify-between p-4 border-b">
+              <span className="text-sm italic text-gray-500">
+                Integração TOTVS
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleSidebar(false)}
+                aria-label="Close sidebar"
               >
-                <DrawerList open={openDrawer} toggleDrawer={toggleDrawer} />
-              </Drawer>
-            </>
-          )}
-        </Toolbar>
-      </AppBar>
-    </Box>
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+            <SidebarList open={openSidebar} toggleSidebar={toggleSidebar} />
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

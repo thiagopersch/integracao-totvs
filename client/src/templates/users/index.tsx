@@ -1,4 +1,5 @@
 import * as S from '@/app/(private)/administrative/styles';
+import { Button } from '@/components/ui/button';
 import useUsers from '@/hooks/administrative/registers/users/useUsers';
 import { User } from '@/types/user';
 import {
@@ -31,6 +32,7 @@ const UserForm = ({ user }: UserFormProps) => {
     handleSubmit,
     register,
     Controller,
+    setIsModalOpen,
   } = useUsers();
 
   useEffect(() => {
@@ -124,19 +126,17 @@ const UserForm = ({ user }: UserFormProps) => {
       </S.InputSentences>
       <Divider />
       <S.Actions>
-        <S.CTA
-          color="inherit"
-          variant="text"
-          size="large"
-          type="submit"
+        <Button
+          variant="ghost"
+          onClick={() => setIsModalOpen(false)}
+          type="button"
           disabled={isSubmitting}
         >
           Cancelar
-        </S.CTA>
-        <S.CTA
+        </Button>
+        <Button
           color="primary"
-          variant="contained"
-          size="large"
+          variant="default"
           type="submit"
           disabled={isSubmitting}
         >
@@ -147,7 +147,7 @@ const UserForm = ({ user }: UserFormProps) => {
             : user
               ? 'Atualizar'
               : 'Cadastrar'}
-        </S.CTA>
+        </Button>
       </S.Actions>
     </S.Form>
   );

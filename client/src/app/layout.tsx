@@ -2,6 +2,7 @@ import RootProvider from '@/providers/RootProvider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import 'react-toastify/dist/ReactToastify.css';
+import '../styles/globals.css';
 
 const roboto = Roboto({ subsets: ['latin'], weight: '400' });
 
