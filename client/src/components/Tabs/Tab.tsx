@@ -1,6 +1,7 @@
-import { Box, Tab, Tabs } from '@mui/material';
+'use client';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
-import { a11yProps, CustomTabPanel } from './CustomTabs';
 
 type TabItem = {
   label: string;
@@ -12,33 +13,28 @@ type TabsProps = {
 };
 
 export default function CustomTabs({ tabs }: TabsProps) {
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  const [value, setValue] = useState('0');
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          variant="scrollable"
-          scrollButtons="auto"
-          allowScrollButtonsMobile
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          {tabs.map((tab, index) => (
-            <Tab key={index} label={tab.label} {...a11yProps(index)} />
-          ))}
-        </Tabs>
-      </Box>
+    <Tabs value={value} onValueChange={setValue} className="w-full">
+      <TabsList
+        className={`grid grid-cols-2 md:grid-cols-[repeat(auto,minmax(0,1fr))] gap-2 w-full h-full`}
+      >
+        {tabs.map((tab, index) => (
+          <TabsTrigger
+            className="w-full border"
+            key={index}
+            value={index.toString()}
+          >
+            {tab.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
       {tabs.map((tab, index) => (
-        <CustomTabPanel key={index} value={value} index={index}>
-          {tab.content}
-        </CustomTabPanel>
+        <TabsContent key={index} value={index.toString()}>
+          <div className="p-4">{tab.content}</div>
+        </TabsContent>
       ))}
-    </Box>
+    </Tabs>
   );
 }

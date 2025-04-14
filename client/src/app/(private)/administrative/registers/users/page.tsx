@@ -3,8 +3,7 @@
 import * as S from '@/app/(private)/administrative/styles';
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
-import Actived from '@/components/Situations/Actived';
-import Disabled from '@/components/Situations/Disabled';
+import StatusText from '@/components/Situations';
 import Table from '@/components/Table';
 import MenuActionsDataGrid from '@/components/Table/MenuActionsDataGrid';
 import useUsers from '@/hooks/administrative/registers/users/useUsers';
@@ -35,9 +34,9 @@ const Users = () => {
       flex: 1,
       renderCell: (params) =>
         params.value === true ? (
-          <Actived>Ativado</Actived>
+          <StatusText status="active">Ativado</StatusText>
         ) : (
-          <Disabled>Desativado</Disabled>
+          <StatusText status="disabled">Desativado</StatusText>
         ),
     },
     { field: 'name', headerName: 'Nome', width: 250, flex: 1 },
@@ -49,9 +48,9 @@ const Users = () => {
       flex: 1,
       renderCell: (params) =>
         params.value === true ? (
-          <Actived>Sim</Actived>
+          <StatusText status="active">Sim</StatusText>
         ) : (
-          <Disabled>Não</Disabled>
+          <StatusText status="disabled">Não</StatusText>
         ),
     },
     {

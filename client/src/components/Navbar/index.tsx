@@ -9,9 +9,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { updatedRoutes } from '@/config/routes';
 import { cn } from '@/lib/utils';
-import { ArrowDown, ArrowUp, LogOut, Menu, User, X } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  Link as LinkIcon,
+  LogOut,
+  Menu,
+  User,
+  X,
+} from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -44,12 +51,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="mr-4">
             <Link href="/">
-              <Image
-                src="/rubeus.svg"
-                width={48}
-                height={48}
-                alt="logo-rubeus.svg"
-              />
+              <LinkIcon className="h-8 w-8 text-white" />
             </Link>
           </div>
 
@@ -133,7 +135,7 @@ const Navbar = () => {
             </div>
           ) : (
             <Button
-              variant="ghost"
+              variant="default"
               size="icon"
               onClick={toggleSidebar(true)}
               aria-label="Toggle sidebar"
