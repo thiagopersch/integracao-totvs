@@ -129,7 +129,7 @@ const DynamicTable = <T,>({
         {
           accessorKey: 'actions',
           header: '',
-          width: '100px',
+          width: 'auto',
           cell: ({ row }: { row: { original: T } }) => (
             <MenuActions
               actions={actions.map((action) => ({

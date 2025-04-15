@@ -13,7 +13,7 @@ const Column = ({ children, cols = 2 }: ColumnProps) => {
     4: 'grid-cols-4 md:grid-cols-1',
   }[cols];
 
-  return <div className={`grid ${gridCols} gap-3 p-4`}>{children}</div>;
+  return <div className={`grid ${gridCols} gap-1 p-1`}>{children}</div>;
 };
 
 export default Column;

@@ -2,6 +2,7 @@
 
 import Column from '@/components/Columns';
 import CTA from '@/components/CTA';
+import DynamicTable from '@/components/Table';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -12,20 +13,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-} from '@/components/ui/table';
 import Wrapper from '@/components/Wrapper';
 import { useReadView } from '@/hooks/administrative/automations/dataservers/read-view/useReadView';
 import {
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
-import { TableRow } from '@mui/material';
 import { Clipboard, Search } from 'lucide-react';
 import { useRef, useState } from 'react';
 
@@ -42,17 +35,17 @@ const ReadViewPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const columns = [
-    { accessorKey: 'id', header: 'ID', width: '50px' },
-    { accessorKey: 'APLICACAO', header: 'Sistema', width: '100px' },
-    { accessorKey: 'NOMESISTEMA', header: 'Nome Sistema', width: '150px' },
-    { accessorKey: 'CODCOLIGADA', header: 'Coligada', width: '100px' },
-    { accessorKey: 'NOMEFANTASIA', header: 'Nome coligada', width: '150px' },
-    { accessorKey: 'CODSENTENCA', header: 'Codigo', width: '200px' },
-    { accessorKey: 'TITULO', header: 'Nome sentença', width: '400px' },
+    { accessorKey: 'id', header: 'ID', width: 'auto' },
+    { accessorKey: 'APLICACAO', header: 'Sistema', width: 'auto' },
+    { accessorKey: 'NOMESISTEMA', header: 'Nome do sistema', width: 'auto' },
+    { accessorKey: 'CODCOLIGADA', header: 'Coligada', width: 'auto' },
+    { accessorKey: 'NOMEFANTASIA', header: 'Nome da coligada', width: 'auto' },
+    { accessorKey: 'CODSENTENCA', header: 'Código', width: 'auto' },
+    { accessorKey: 'TITULO', header: 'Nome da sentença', width: 'auto' },
     {
       accessorKey: 'SENTENCA',
       header: 'SQL',
-      width: '100px',
+      width: 'auto',
       cell: ({ row }: { row: any }) => {
         const sentenca = row.original?.SENTENCA || '';
         return (
@@ -71,12 +64,12 @@ const ReadViewPage = () => {
     {
       accessorKey: 'DTULTALTERACAO',
       header: 'Data Última Alteração',
-      width: '200px',
+      width: 'auto',
     },
     {
       accessorKey: 'USRULTALTERACAO',
       header: 'Usuário Última Alteração',
-      width: '200px',
+      width: 'auto',
     },
   ];
 
@@ -221,53 +214,11 @@ const ReadViewPage = () => {
 
       {rows && form.formState.isSubmitSuccessful && (
         <div className="mt-6">
-          <Table>
-            <TableHeader className="dark:bg-transparent">
-              <TableRow>
-                {columns.map((column) => (
-                  <TableHead
-                    key={column.accessorKey}
-                    style={{ width: column.width }}
-                  >
-                    {column.header}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {form.formState.isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="text-center">
-                    Carregando...
-                  </TableCell>
-                </TableRow>
-              ) : rows.length > 0 ? (
-                rows.map((row: any) => (
-                  <TableRow key={row.id}>
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.accessorKey}
-                        style={{ width: column.width }}
-                      >
-                        {column.cell
-                          ? column.cell({ row })
-                          : row[column.accessorKey]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="text-center text-zinc-600 dark:text-zinc-100 p-4"
-                  >
-                    Nenhuma informação foi encontrada
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          <DynamicTable
+            columns={columns}
+            rows={rows}
+            isLoading={form.formState.isLoading}
+          />
         </div>
       )}
     </Wrapper>

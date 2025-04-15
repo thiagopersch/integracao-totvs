@@ -24,6 +24,9 @@ export default {
       '2xl': {
         max: '1536px',
       },
+      '3xl': {
+        max: '1920px',
+      },
     },
     extend: {
       colors: {

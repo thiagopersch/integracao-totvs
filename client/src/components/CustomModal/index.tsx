@@ -1,5 +1,11 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, IconButton, Modal, Typography } from '@mui/material';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { X } from 'lucide-react';
 import React, { ReactNode } from 'react';
 
 type CustomModalProps = {
@@ -19,79 +25,46 @@ const CustomModal: React.FC<CustomModalProps> = ({
   onClose,
   children,
 }) => {
-  const handleClose = (
-    _: object,
-    reason: 'backdropClick' | 'escapeKeyDown',
-  ) => {
-    if (reason === 'backdropClick' && disableBackdropClick) return;
-    if (onClose) onClose();
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen && onClose) {
+      onClose();
+    }
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="custom-modal-title"
-      aria-describedby="custom-modal-description"
-      disableEscapeKeyDown={disableBackdropClick}
-    >
-      <Box
-        sx={{
-          position: 'fixed',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2,
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent
+        className="p-4 rounded-lg bg-background shadow-xl"
+        onInteractOutside={(e) => {
+          if (disableBackdropClick) {
+            e.preventDefault();
+          }
+        }}
+        onEscapeKeyDown={(e) => {
+          if (disableBackdropClick) {
+            e.preventDefault();
+          }
         }}
       >
-        <Box
-          sx={{
-            width: '100%',
-            maxWidth: {
-              xs: '100%',
-              sm: '50dvw',
-            },
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            borderRadius: 2,
-            p: 3,
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mb: 2,
-            }}
-          >
-            <Typography
-              id="custom-modal-title"
-              variant="h6"
-              color="primary"
-              sx={{
-                fontWeight: 'bold',
-              }}
+        <DialogHeader className="flex flex-row items-center justify-between mb-4">
+          <DialogTitle className="text-lg font-bold text-primary">
+            {title}
+          </DialogTitle>
+          {showCloseButton && (
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="close"
+              onClick={onClose}
+              className="text-muted-foreground hover:text-foreground"
             >
-              {title}
-            </Typography>
-            {showCloseButton && (
-              <IconButton
-                aria-label="close"
-                onClick={onClose}
-                sx={{
-                  color: (theme) => theme.palette.grey[500],
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            )}
-          </Box>
-          <Box id="custom-modal-description">{children}</Box>
-        </Box>
-      </Box>
-    </Modal>
+              <X className="h-5 w-5" />
+            </Button>
+          )}
+        </DialogHeader>
+        <div>{children}</div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

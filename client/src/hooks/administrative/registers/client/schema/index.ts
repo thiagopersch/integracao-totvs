@@ -6,14 +6,10 @@ export const schema = z.object({
   link_crm: z
     .string({ message: 'Campo obrigatório.' })
     .nonempty({ message: 'Campo obrigatório.' })
-    .url({ message: 'URL inválida.' })
-    .min(1, { message: 'Campo obrigatório.' })
     .url({ message: 'URL inválida.' }),
   site: z
     .string({ message: 'Campo obrigatório.' })
     .nonempty({ message: 'Campo obrigatório.' })
-    .url({ message: 'URL inválida.' })
-    .min(1, { message: 'Campo obrigatório.' })
     .url({ message: 'URL inválida.' }),
-  status: z.boolean().default(true),
+  status: z.boolean(),
 });

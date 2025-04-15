@@ -1,7 +1,18 @@
-import * as S from '@/app/(private)/administrative/styles';
+import Column from '@/components/Columns';
+import CTA from '@/components/CTA';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import useClient from '@/hooks/administrative/registers/client/useClient';
 import { Client } from '@/types/client';
-import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { useEffect } from 'react';
 
 type ClientFormProps = {
@@ -9,91 +20,120 @@ type ClientFormProps = {
 };
 
 const ClientForm = ({ client }: ClientFormProps) => {
-  const {
-    errors,
-    isSubmitting,
-    control,
-    reset,
-    handleSubmit,
-    register,
-    Controller,
-  } = useClient();
+  const { isSubmitting, handleSubmit, form, setIsModalOpen } = useClient();
 
   useEffect(() => {
     if (client) {
-      reset(client);
+      form.reset(client);
     } else {
-      reset({
+      form.reset({
         name: '',
         link_crm: '',
         site: '',
         status: true,
       });
     }
-  }, [client, reset]);
+  }, [client, form.reset]);
 
   return (
-    <S.Form onSubmit={handleSubmit}>
-      <Box>
-        <Controller
-          name="status"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              control={<Checkbox {...field} checked={field.value} />}
-              label={field.value ? 'Ativado' : 'Desativado'}
-            />
-          )}
-        />
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <TextField
-          {...register('name')}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-          type="text"
-          label="Nome"
-          variant="filled"
-          fullWidth
-        />
-        <TextField
-          {...register('link_crm')}
-          error={!!errors.link_crm}
-          helperText={errors.link_crm?.message}
-          type="url"
-          label="Link CRM"
-          variant="filled"
-          fullWidth
-        />
-        <TextField
-          {...register('site')}
-          error={!!errors.site}
-          helperText={errors.site?.message}
-          type="url"
-          label="Website"
-          variant="filled"
-          fullWidth
-        />
-      </Box>
+    <Form {...form}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Column cols={1}>
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem className="flex gap-2 items-center space-x-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>{field.value ? 'Ativado' : 'Desativado'}</FormLabel>
+              </FormItem>
+            )}
+          />
+        </Column>
 
-      <S.Actions>
-        <S.CTA
-          color="primary"
-          variant="contained"
-          size="large"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting
-            ? client
-              ? 'Atualizando...'
-              : 'Cadastrando...'
-            : client
-              ? 'Atualizar'
-              : 'Cadastrar'}
-        </S.CTA>
-      </S.Actions>
-    </S.Form>
+        <div className="space-y-4">
+          <Column cols={1}>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Jhoe Doe" required {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Column>
+
+          <Column cols={2}>
+            <FormField
+              control={form.control}
+              name="link_crm"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Link CRM</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://"
+                      required
+                      type="url"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="site"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Website</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="url"
+                      placeholder="https://"
+                      required
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Column>
+        </div>
+
+        <CTA>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting
+              ? client
+                ? 'Atualizando...'
+                : 'Cadastrando...'
+              : client
+                ? 'Atualizar'
+                : 'Cadastrar'}
+          </Button>
+        </CTA>
+      </form>
+    </Form>
   );
 };
 

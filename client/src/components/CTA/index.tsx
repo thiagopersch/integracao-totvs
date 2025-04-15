@@ -7,18 +7,11 @@ type CTAProps = {
 const CTA = ({ children }: CTAProps) => {
   const childCount = Children.count(children);
   const isSingleChild = childCount === 1;
+  const childrens = !isSingleChild
+    ? 'justify-end items-center'
+    : 'justify-center items-center flex-col-reverse';
 
-  return (
-    <div
-      className={`flex flex-col ${
-        isSingleChild
-          ? 'justify-center items-center'
-          : 'justify-between flex-col-reverse'
-      }`}
-    >
-      {children}
-    </div>
-  );
+  return <div className={`flex flex-row gap-4 ${childrens}`}>{children}</div>;
 };
 
 export default CTA;

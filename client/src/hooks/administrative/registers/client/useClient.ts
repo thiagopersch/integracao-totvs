@@ -10,15 +10,13 @@ import {
 import useClientStore from '@/stores/useClientStore';
 import { Client } from '@/types/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useGridApiRef } from '@mui/x-data-grid';
 import { useEffect } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 type Schema = z.infer<typeof schema>;
 
 export default function useClient() {
-  const apiRef = useGridApiRef();
   const {
     isModalOpen,
     showPassword,
@@ -31,14 +29,14 @@ export default function useClient() {
   const {
     items: clients,
     isLoading,
-    create,
-    handleUpdate,
-    remove,
-    fetchById,
     isCreating,
     isUpdating,
     isDeleting,
     deleteDialog,
+    create,
+    handleUpdate,
+    remove,
+    fetchById,
   } = useCrud<Client, Client, Client>({
     queryKey: ['client'],
     listFn: findAll,
@@ -55,16 +53,10 @@ export default function useClient() {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<Schema>({
+  const form = useForm<Schema>({
+    resolver: zodResolver(schema),
     mode: 'all',
     criteriaMode: 'all',
-    resolver: zodResolver(schema),
     defaultValues: {
       id: '',
       name: '',
@@ -73,6 +65,13 @@ export default function useClient() {
       status: true,
     },
   });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = form;
 
   useEffect(() => {
     if (editingClient) {
@@ -106,7 +105,7 @@ export default function useClient() {
     await remove(id);
   };
 
-  const onSubmit: SubmitHandler<Schema> = async (data) => {
+  const onSubmit = async (data: Schema) => {
     if (editingClient) {
       const updatedClient = {
         name: data.name,
@@ -130,14 +129,6 @@ export default function useClient() {
     }
   };
 
-  const handleExpandedTable = () => {
-    apiRef.current?.autosizeColumns({
-      includeHeaders: true,
-      includeOutliers: true,
-      expand: true,
-    });
-  };
-
   const handleAdd = () => {
     setEditingClient(null);
     setIsModalOpen(true);
@@ -147,21 +138,17 @@ export default function useClient() {
     clients,
     isModalOpen,
     editingClient,
-    apiRef,
+    form,
     control,
     errors,
     isSubmitting: isSubmitting || isCreating || isUpdating || isDeleting,
     showPassword,
     isLoading,
     deleteDialog,
-    reset,
-    Controller,
     setIsModalOpen,
     handleEdit,
     handleDelete,
-    handleExpandedTable,
     handleSubmit: handleSubmit(onSubmit),
-    register,
     handleClickShowPassword: toggleShowPassword,
     handleMouseDownPassword: (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
