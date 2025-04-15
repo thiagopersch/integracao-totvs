@@ -1,13 +1,12 @@
 'use client';
 
-import * as S from '@/app/(public)/signIn/styles';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import useLogin from '@/hooks/login/useLogin';
-import { theme } from '@/styles/theme';
-import {
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from '@mui/icons-material';
-import { Alert, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Eye, EyeOff } from 'lucide-react';
 
 const LoginPage = () => {
   const {
@@ -23,92 +22,77 @@ const LoginPage = () => {
   } = useLogin();
 
   return (
-    <S.Container>
-      <S.CardContainer
-        variant="elevation"
-        elevation={4}
-        sx={{
-          backgroundColor: theme.palette.background.default,
-        }}
-      >
-        <S.Wrapper>
-          <S.Form onSubmit={handleSubmit(onSubmit)}>
-            <S.Title variant="h4" color="primary" gutterBottom>
+    <div className="min-h-screen flex items-center justify-center bg-zinc-900">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <h1 className="text-2xl font-bold text-center text-primary">
               Acessar o sistema
-            </S.Title>
+            </h1>
             {errorMessage && (
-              <Alert color="error" severity="error" sx={{ mb: 2 }}>
-                {errorMessage}
+              <Alert variant="destructive">
+                <AlertDescription>{errorMessage}</AlertDescription>
               </Alert>
             )}
-            <S.InputSentences>
-              <TextField
+            <div className="space-y-2">
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                id="email"
                 type="email"
-                label="E-mail"
-                variant="outlined"
+                placeholder="E-mail"
                 {...register('email')}
-                error={!!errors.email}
-                helperText={errors.email?.message}
                 disabled={isSubmitting}
-                fullWidth
+                className={errors.email ? 'border-red-500' : ''}
                 required
               />
-            </S.InputSentences>
-            <S.InputSentences>
-              <TextField
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                label="Senha"
-                variant="outlined"
-                {...register('password')}
-                error={!!errors.password}
-                helperText={errors.password?.message}
-                disabled={isSubmitting}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                fullWidth
-                required
-              />
-            </S.InputSentences>
-            <S.Actions>
-              <S.CTA
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Senha</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Senha"
+                  {...register('password')}
+                  disabled={isSubmitting}
+                  className={errors.password ? 'border-red-600' : ''}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <div className="flex justify-between gap-4">
+              <Button
                 type="button"
-                color="secondary"
-                variant="outlined"
-                size="large"
+                variant="outline"
+                className="w-full"
+                disabled={isSubmitting}
               >
                 Recuperar senha
-              </S.CTA>
-              <S.CTA
-                color="primary"
-                variant="contained"
-                size="large"
-                type="submit"
-                disabled={isSubmitting}
-              >
+              </Button>
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? 'Entrando...' : 'Entrar'}
-              </S.CTA>
-            </S.Actions>
-          </S.Form>
-        </S.Wrapper>
-      </S.CardContainer>
-    </S.Container>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

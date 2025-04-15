@@ -2,14 +2,12 @@
 
 import * as S from '@/app/(private)/administrative/styles';
 import withAuth from '@/app/withAuth';
-import Table from '@/components/Table';
 import useWorkflow from '@/hooks/administrative/automations/workflow/useWorkflow';
 import {
   CheckCircle,
   Close,
   Search as SearchIcon,
   Storage as StorageIcon,
-  Tune as TuneIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
@@ -178,7 +176,7 @@ const ReadViewPage = () => {
           </S.CTA>
         </S.Actions>
       </S.Form>
-      {rows && (
+      {/* {rows && (
         <Table
           rows={rows}
           columns={columns}
@@ -191,7 +189,7 @@ const ReadViewPage = () => {
           label="Ajustar colunas"
           icon={<TuneIcon />}
         />
-      )}
+      )} */}
       {!rows && (
         <Typography
           sx={{

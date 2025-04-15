@@ -18,7 +18,7 @@ export default function CustomTabs({ tabs }: TabsProps) {
   return (
     <Tabs value={value} onValueChange={setValue} className="w-full">
       <TabsList
-        className={`grid grid-cols-2 md:grid-cols-[repeat(auto,minmax(0,1fr))] gap-2 w-full h-full`}
+        className={`grid grid-cols-4 md:grid-cols-2 gap-2 w-full h-full`}
       >
         {tabs.map((tab, index) => (
           <TabsTrigger

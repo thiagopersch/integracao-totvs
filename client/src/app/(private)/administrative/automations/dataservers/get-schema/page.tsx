@@ -2,11 +2,9 @@
 
 import * as S from '@/app/(private)/administrative/styles';
 import withAuth from '@/app/withAuth';
-import Table from '@/components/Table';
 import useGetSchema from '@/hooks/administrative/automations/dataservers/GetSchema/useGetSchema';
 import {
   Search as SearchIcon,
-  Tune as TuneIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
@@ -240,7 +238,7 @@ const GetSchemaPage = () => {
               </Typography>
             </Typography>
           </Box>
-          <Table
+          {/* <Table
             rows={rows}
             columns={columns}
             isLoading={isSubmitting}
@@ -251,7 +249,7 @@ const GetSchemaPage = () => {
             sortingField="name"
             label="Ajustar colunas"
             icon={<TuneIcon />}
-          />
+          /> */}
         </>
       )}
     </S.Wrapper>

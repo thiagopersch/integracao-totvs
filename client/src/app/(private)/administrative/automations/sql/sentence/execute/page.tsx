@@ -17,10 +17,8 @@ import { z } from 'zod';
 import { schema } from './schema';
 
 import withAuth from '@/app/withAuth';
-import Table from '@/components/Table';
 import {
   Sync as SyncIcon,
-  Tune as TuneIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
@@ -249,7 +247,7 @@ const ExecuteSentece = () => {
           </S.CTA>
         </S.Actions>
       </S.Form>
-      {rows && isSubmitted && (
+      {/* {rows && isSubmitted && (
         <Table
           rows={rows}
           columns={columns}
@@ -262,7 +260,7 @@ const ExecuteSentece = () => {
           label="Ajustar colunas"
           icon={<TuneIcon />}
         />
-      )}
+      )} */}
       {!rows && !isSubmitted && (
         <Typography
           sx={{

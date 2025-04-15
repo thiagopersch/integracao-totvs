@@ -1,12 +1,12 @@
 'use client';
 
-import * as S from '@/app/(private)/administrative/styles';
 import SQL from '@/app/(private)/administrative/automations/sql/page';
+import Wrapper from '@/components/Wrapper';
 
 export default function Administrative() {
   return (
-    <S.Wrapper>
+    <Wrapper>
       <SQL />
-    </S.Wrapper>
+    </Wrapper>
   );
 }

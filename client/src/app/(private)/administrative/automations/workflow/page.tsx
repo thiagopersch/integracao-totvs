@@ -1,7 +1,7 @@
 'use client';
 
 import CustomTabs from '@/components/Tabs/Tab';
-import { Box } from '@mui/material';
+import Wrapper from '@/components/Wrapper';
 import ReadViewPage from './_findAll/page';
 
 const Workflow = () => {
@@ -13,9 +13,9 @@ const Workflow = () => {
   ];
 
   return (
-    <Box className="min-h-full min-w-screen lg:m-4 lg:p-4 md:m-2 md:p-2">
+    <Wrapper>
       <CustomTabs tabs={tabs} />
-    </Box>
+    </Wrapper>
   );
 };
 export default Workflow;

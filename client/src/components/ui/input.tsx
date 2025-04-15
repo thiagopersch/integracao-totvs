@@ -1,22 +1,40 @@
-import * as React from "react"
+import { cn } from '@/lib/utils';
+import * as React from 'react';
 
-import { cn } from "@/lib/utils"
+type InputProps = React.ComponentProps<'input'> & {
+  error?: string | boolean; // Para indicar erro (string para mensagem, boolean para estado)
+  icon?: React.ReactNode; // Propriedade para o ícone
+};
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, error, icon, ...props }, ref) => {
     return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-          className
+      <div className="relative w-full">
+        {icon && (
+          <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+            {icon}
+          </span>
         )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Input.displayName = "Input"
+        <input
+          type={type}
+          className={cn(
+            'flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors',
+            'placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+            'disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+            icon ? 'pl-8' : '', // Adiciona padding à esquerda se houver ícone
+            error
+              ? 'border-red-500 focus-visible:ring-red-500'
+              : 'border-input hover:border-gray-300',
+            className,
+          )}
+          ref={ref}
+          {...props}
+        />
+      </div>
+    );
+  },
+);
 
-export { Input }
+Input.displayName = 'Input';
+
+export { Input };

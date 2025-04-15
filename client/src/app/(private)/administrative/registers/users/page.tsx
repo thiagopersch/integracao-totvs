@@ -1,86 +1,83 @@
 'use client';
 
-import * as S from '@/app/(private)/administrative/styles';
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
 import StatusText from '@/components/Situations';
-import Table from '@/components/Table';
-import MenuActionsDataGrid from '@/components/Table/MenuActionsDataGrid';
+import type { ColumnDef } from '@/components/Table';
+import DynamicTable from '@/components/Table';
+import MenuActions from '@/components/Table/MenuActions';
+import Text from '@/components/Text';
+import Wrapper from '@/components/Wrapper';
 import useUsers from '@/hooks/administrative/registers/users/useUsers';
 import UserForm from '@/templates/users';
-import { Delete, Edit } from '@mui/icons-material';
-import { GridColDef } from '@mui/x-data-grid';
+import { User } from '@/types/user';
+import { Edit, Trash2 } from 'lucide-react';
 
 const Users = () => {
   const {
     users,
     isModalOpen,
-    apiRef,
     editingUser,
-    isLoading,
     setIsModalOpen,
-    handleExpandedTable,
     handleAdd,
     handleEdit,
     handleDelete,
     deleteDialog,
+    isSubmitting,
   } = useUsers();
 
-  const columns: GridColDef[] = [
+  const columns: ColumnDef<User>[] = [
     {
-      field: 'status',
-      headerName: 'Status',
-      width: 100,
-      flex: 1,
-      renderCell: (params) =>
-        params.value === true ? (
+      accessorKey: 'status',
+      header: 'Status',
+      width: 'auto',
+      cell: (params: any) =>
+        params.row.original.status === true ? (
           <StatusText status="active">Ativado</StatusText>
         ) : (
           <StatusText status="disabled">Desativado</StatusText>
         ),
     },
-    { field: 'name', headerName: 'Nome', width: 250, flex: 1 },
-    { field: 'email', headerName: 'Email', width: 250, flex: 1 },
+    { accessorKey: 'name', header: 'Nome', width: '250' },
+    { accessorKey: 'email', header: 'Email', width: '250' },
     {
-      field: 'change_password',
-      headerName: 'Alterar senha no próximo login?',
-      width: 100,
-      flex: 1,
-      renderCell: (params) =>
-        params.value === true ? (
+      accessorKey: 'change_password',
+      header: 'Alterar senha',
+      width: 'auto',
+      cell: (params: any) =>
+        params.row.original.change_password === true ? (
           <StatusText status="active">Sim</StatusText>
         ) : (
           <StatusText status="disabled">Não</StatusText>
         ),
     },
     {
-      field: 'formattedUpdatedAt',
-      headerName: 'Atualizado em',
-      width: 100,
-      flex: 1,
+      accessorKey: 'formattedUpdatedAt',
+      header: 'Atualizado em',
+      width: 'auto',
     },
     {
-      field: 'actions',
-      headerName: 'Ações',
-      width: 250,
-      renderCell: (params) => (
-        <MenuActionsDataGrid
+      accessorKey: 'actions',
+      header: 'Ações',
+      width: 'auto',
+      cell: (params: any) => (
+        <MenuActions
           actions={[
             {
               label: 'Editar',
-              icon: <Edit />,
+              icon: <Edit className="h-4 w-4" />,
               tooltip: 'Editar',
               onClick: () => {
-                handleEdit(params.row.id);
+                handleEdit(params.row.original.id ?? '');
               },
             },
             {
               label: 'Excluir',
-              icon: <Delete />,
+              icon: <Trash2 className="h-4 w-4" />,
               tooltip: 'Excluir',
-              color: 'error.main',
+              color: 'red-500',
               onClick: () => {
-                handleDelete(params.row.id);
+                handleDelete(params.row.original.id ?? '');
               },
             },
           ]}
@@ -90,24 +87,22 @@ const Users = () => {
   ];
 
   return (
-    <S.Wrapper>
-      <S.Title variant="h4" color="grey.700" gutterBottom>
+    <Wrapper>
+      <Text
+        align="left"
+        as="span"
+        size="2xl"
+        weight="bold"
+        color="text-zinc-600"
+        variant="title"
+      >
         Usuários
-      </S.Title>
-      <Table
-        rows={users}
+      </Text>
+      <DynamicTable
         columns={columns}
-        isLoading={isLoading}
-        onClick={handleExpandedTable}
-        density="standard"
-        apiRef={apiRef}
-        sortingField="name"
-        label="Adicionar"
-        buttons={['add', 'columns', 'export']}
-        buttonActions={{
-          add: handleAdd,
-          columns: handleExpandedTable,
-        }}
+        rows={users || []}
+        isLoading={isSubmitting}
+        addAction={handleAdd}
       />
       <CustomModal
         title={editingUser ? 'Atualizar usuário' : 'Cadastrar usuário'}
@@ -129,7 +124,7 @@ const Users = () => {
         confirmText={deleteDialog.confirmText}
         cancelText={deleteDialog.cancelText}
       />
-    </S.Wrapper>
+    </Wrapper>
   );
 };
 

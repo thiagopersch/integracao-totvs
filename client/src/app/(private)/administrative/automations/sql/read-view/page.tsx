@@ -1,281 +1,277 @@
 'use client';
 
-import * as S from '@/app/(private)/administrative/styles';
-import withAuth from '@/app/withAuth';
-import NoRow from '@/components/Table/NoRow';
-import readView from '@/lib/api/totvs/readView';
-import { zodResolver } from '@hookform/resolvers/zod';
+import Column from '@/components/Columns';
+import CTA from '@/components/CTA';
+import { Button } from '@/components/ui/button';
 import {
-  Search as SearchIcon,
-  Storage as StorageIcon,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+} from '@/components/ui/table';
+import Wrapper from '@/components/Wrapper';
+import { useReadView } from '@/hooks/administrative/automations/dataservers/read-view/useReadView';
+import {
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
-import {
-  IconButton,
-  InputAdornment,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import dayjs from 'dayjs';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { schema } from './schema';
-
-type Schema = z.infer<typeof schema> & {
-  rows: any[];
-};
+import { TableRow } from '@mui/material';
+import { Clipboard, Search } from 'lucide-react';
+import { useRef, useState } from 'react';
 
 const ReadViewPage = () => {
+  const {
+    handleClickShowPassword,
+    handleMouseDownPassword,
+    handleReadView,
+    rows,
+    form,
+  } = useReadView();
+
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting, isSubmitted, isLoading },
-  } = useForm<Schema>({
-    criteriaMode: 'all',
-    mode: 'all',
-    resolver: zodResolver(schema),
-    defaultValues: {
-      filtro: `CODSENTENCA LIKE 'RB%'`,
-      contexto:
-        'CODCOLIGADA=1;CODFILIAL=1;CODSISTEMA=S;CODTIPOCURSO=1;CODUSUARIO=rubeus',
-      dataServerName: 'GlbConsSqlData',
-      username: '',
-      password: '',
-      tbc: '',
-      rows: [],
-    },
-  });
-
-  const rows = watch('rows');
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleReadView: SubmitHandler<Schema> = async (formData: Schema) => {
-    const { filtro, contexto, dataServerName, username, password, tbc } =
-      formData;
-
-    try {
-      const result = await readView(
-        dataServerName,
-        filtro,
-        contexto,
-        username,
-        password,
-        tbc,
-      );
-
-      const formattedData = result?.NewDataSet?.GConsSql?.map(
-        (item: any, index: any) => ({
-          id: index,
-          APLICACAO: item.APLICACAO[0],
-          NOMESISTEMA: item.NOMESISTEMA[0],
-          CODCOLIGADA: item.CODCOLIGADA[0],
-          NOMEFANTASIA: item.NOMEFANTASIA[0],
-          CODSENTENCA: item.CODSENTENCA[0],
-          TITULO: item.TITULO,
-          SENTENCA: item.SENTENCA,
-          DTULTALTERACAO: dayjs(item.DTULTALTERACAO[0]).format(
-            'DD/MM/YYYY [às] HH:mm:ss',
-          ),
-          USRULTALTERACAO: item.USRULTALTERACAO[0],
-        }),
-      );
-
-      setValue('rows', formattedData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 50 },
-    { field: 'APLICACAO', headerName: 'Sistema', width: 100 },
-    { field: 'NOMESISTEMA', headerName: 'Nome Sistema', width: 150 },
-    { field: 'CODCOLIGADA', headerName: 'Coligada', width: 100 },
-    { field: 'NOMEFANTASIA', headerName: 'Nome coligada', width: 150 },
-    { field: 'CODSENTENCA', headerName: 'Codigo', width: 200 },
-    { field: 'TITULO', headerName: 'Nome sentença', width: 400 },
+  const columns = [
+    { accessorKey: 'id', header: 'ID', width: '50px' },
+    { accessorKey: 'APLICACAO', header: 'Sistema', width: '100px' },
+    { accessorKey: 'NOMESISTEMA', header: 'Nome Sistema', width: '150px' },
+    { accessorKey: 'CODCOLIGADA', header: 'Coligada', width: '100px' },
+    { accessorKey: 'NOMEFANTASIA', header: 'Nome coligada', width: '150px' },
+    { accessorKey: 'CODSENTENCA', header: 'Codigo', width: '200px' },
+    { accessorKey: 'TITULO', header: 'Nome sentença', width: '400px' },
     {
-      field: 'SENTENCA',
-      headerName: 'SQL',
-      width: 100,
-      renderCell(params) {
+      accessorKey: 'SENTENCA',
+      header: 'SQL',
+      width: '100px',
+      cell: ({ row }: { row: any }) => {
+        const sentenca = row.original?.SENTENCA || '';
         return (
-          <Tooltip
-            title={params.value || 'Clique aqui para copiar o conteúdo'}
-            arrow
-            placement="right-start"
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => sentenca && navigator.clipboard.writeText(sentenca)}
+            title={sentenca || 'Nenhum SQL disponível'}
+            disabled={!sentenca}
           >
-            <IconButton
-              onClick={() => navigator.clipboard.writeText(params.value)}
-              size="small"
-              aria-label="copy"
-              color="primary"
-            >
-              <StorageIcon />
-            </IconButton>
-          </Tooltip>
+            <Clipboard className="h-4 w-4" />
+          </Button>
         );
       },
     },
     {
-      field: 'DTULTALTERACAO',
-      headerName: 'Data Última Alteração',
-      width: 200,
+      accessorKey: 'DTULTALTERACAO',
+      header: 'Data Última Alteração',
+      width: '200px',
     },
     {
-      field: 'USRULTALTERACAO',
-      headerName: 'Usuário Última Alteração',
-      width: 200,
+      accessorKey: 'USRULTALTERACAO',
+      header: 'Usuário Última Alteração',
+      width: '200px',
     },
   ];
 
   return (
-    <S.Wrapper>
-      <S.Form onSubmit={handleSubmit(handleReadView)}>
-        <S.InputSentences>
-          <TextField
-            type="text"
-            id="username"
-            label="Usuário"
-            variant="filled"
-            {...register('username')}
-            disabled={isSubmitting}
-            helperText={errors.username?.message}
-            error={errors.username !== undefined}
-            required
-            fullWidth
-          />
-          <TextField
-            type={showPassword ? 'text' : 'password'}
-            id="password"
-            label="Senha"
-            variant="filled"
-            {...register('password')}
-            disabled={isSubmitting}
-            helperText={errors.password?.message}
-            error={errors.password !== undefined}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
+    <Wrapper>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleReadView)}>
+          <Column cols={3}>
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Usuário</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      placeholder="Digite o usuário"
+                      error={fieldState.error?.message}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={showPassword ? 'text' : 'password'}
+                        disabled={form.formState.isSubmitting}
+                        error={fieldState.error?.message}
+                        placeholder="Digite a senha"
+                        ref={passwordInputRef}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-2 top-1/2 -translate-y-1/2"
+                        onClick={() => {
+                          handleClickShowPassword(passwordInputRef);
+                          setShowPassword(!showPassword);
+                        }}
+                        onMouseDown={(event) => handleMouseDownPassword(event)}
+                      >
+                        {showPassword ? (
+                          <VisibilityOffIcon className="h-4 w-4" />
+                        ) : (
+                          <VisibilityIcon className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tbc"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>TBC</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      placeholder="Digite o TBC"
+                      error={fieldState.error?.message}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Column>
+
+          <Column cols={2}>
+            <FormField
+              control={form.control}
+              name="filtro"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Filtro</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={fieldState.error?.message}
+                      placeholder="Digite o filtro"
+                      required
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contexto"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Contexto</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={fieldState.error?.message}
+                      placeholder="Digite o contexto"
+                      required
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Column>
+          <CTA>
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="mx-auto mt-4"
+              variant="default"
+              size="lg"
+            >
+              <Search className="mr-2 h-4 w-4" />
+              Buscar
+            </Button>
+          </CTA>
+        </form>
+      </Form>
+
+      {rows && form.formState.isSubmitSuccessful && (
+        <div className="mt-6">
+          <Table>
+            <TableHeader className="dark:bg-transparent">
+              <TableRow>
+                {columns.map((column) => (
+                  <TableHead
+                    key={column.accessorKey}
+                    style={{ width: column.width }}
                   >
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            required
-            fullWidth
-          />
-          <TextField
-            type="text"
-            id="tbc"
-            label="TBC"
-            variant="filled"
-            disabled={isSubmitting}
-            helperText={errors.tbc?.message}
-            error={errors.tbc !== undefined}
-            {...register('tbc')}
-            required
-            fullWidth
-          />
-        </S.InputSentences>
-        <S.InputSentences>
-          <TextField
-            type="text"
-            id="filtro"
-            label="Filtro"
-            variant="filled"
-            {...register('filtro')}
-            disabled={isSubmitting}
-            helperText={errors.filtro?.message}
-            error={errors.filtro !== undefined}
-            placeholder="Filtro"
-            required
-            fullWidth
-          />
-          <TextField
-            type="text"
-            id="contexto"
-            label="Contexto"
-            variant="filled"
-            {...register('contexto')}
-            disabled={isSubmitting}
-            helperText={errors.contexto?.message}
-            error={errors.contexto !== undefined}
-            required
-            fullWidth
-          />
-        </S.InputSentences>
-        <S.Actions>
-          <S.CTA
-            color="primary"
-            variant="contained"
-            size="large"
-            type="submit"
-            disabled={isSubmitting}
-            startIcon={<SearchIcon />}
-          >
-            Buscar
-          </S.CTA>
-        </S.Actions>
-      </S.Form>
-      {rows && isSubmitted && (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          loading={isLoading}
-          autoHeight
-          pageSizeOptions={[10, 50, 100]}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-            sorting: {
-              sortModel: [{ field: 'year', sort: 'asc' }],
-            },
-          }}
-          slots={{
-            noRowsOverlay: NoRow,
-          }}
-          sx={{ '--DataGrid-overlayHeight': '18.75rem' }}
-        />
+                    {column.header}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {form.formState.isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="text-center">
+                    Carregando...
+                  </TableCell>
+                </TableRow>
+              ) : rows.length > 0 ? (
+                rows.map((row: any) => (
+                  <TableRow key={row.id}>
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column.accessorKey}
+                        style={{ width: column.width }}
+                      >
+                        {column.cell
+                          ? column.cell({ row })
+                          : row[column.accessorKey]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="text-center text-zinc-600 dark:text-zinc-100 p-4"
+                  >
+                    Nenhuma informação foi encontrada
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       )}
-      {!rows && (
-        <Typography
-          sx={{
-            color: 'red',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignContent: 'center',
-            fontWeight: 'bold',
-          }}
-        >
-          Algo deu errado
-        </Typography>
-      )}
-    </S.Wrapper>
+    </Wrapper>
   );
 };
 
-export default withAuth(ReadViewPage);
+export default ReadViewPage;
