@@ -11,6 +11,7 @@ import useTbcStore from '@/stores/useTbcStore';
 import { Client } from '@/types/client';
 import { TBC } from '@/types/tbc';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -27,6 +28,7 @@ export default function useTbc() {
     showPassword,
     toggleShowPassword,
   } = useTbcStore();
+  const queryClient = useQueryClient();
 
   const {
     items: tbc,
@@ -143,7 +145,7 @@ export default function useTbc() {
         name: data.name,
         link: data.link,
         user: data.user,
-        password: data.password,
+        password: data.password ?? '',
         not_required_license: data.not_required_license,
         cod_system_context: data.cod_system_context,
         coligate_context: data.coligate_context,
@@ -156,7 +158,11 @@ export default function useTbc() {
       setIsModalOpen(false);
       setEditingTbc(null);
     } else {
-      await create(data);
+      await create({
+        ...data,
+        password: data.password ?? '',
+      });
+      await queryClient.invalidateQueries({ queryKey: ['listActiveClients'] });
       form.reset({
         id: '',
         client_id: '',

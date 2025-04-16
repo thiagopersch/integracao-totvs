@@ -21,7 +21,8 @@ export const schema = z.object({
     .string()
     .min(1, { message: 'O nome deve ter no mínimo 1 caracteres.' })
     .max(50, { message: 'Tamanho excedido (50).' })
-    .nonempty({ message: 'Campo obrigatório.' }),
+    .optional(),
+  /* .nonempty({ message: 'Campo obrigatório.' }) */
   not_required_license: z.boolean(),
   coligate_context: z
     .number()
@@ -43,7 +44,7 @@ export const schema = z.object({
   user_context: z
     .string()
     .min(1, { message: 'Campo obrigatório.' })
-    .max(10, { message: 'Tamanho excedido (10).' })
+    .max(50, { message: 'Tamanho excedido (50).' })
     .nonempty({ message: 'Campo obrigatório.' }),
   status: z.boolean(),
 });
