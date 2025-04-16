@@ -100,7 +100,7 @@ export default function useGetSchema() {
         setSelectedTable(firstTable.tableName);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

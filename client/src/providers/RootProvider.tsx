@@ -1,12 +1,13 @@
 'use client';
 
-import Loading from '@/app/loading';
 import ContentAuth from '@/components/ContentAuth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
+import Loading from '@/app/loading';
+import GlobalLoading from '@/components/GlobalLoading';
 import NextAuthSessionProvider from './sessionProvider';
 
 export default function RootProvider({
@@ -14,27 +15,32 @@ export default function RootProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isMounted, setIsMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const queryClient = new QueryClient();
 
   useEffect(() => {
     setIsLoading(false);
+    setIsMounted(true);
   }, []);
+
+  if (!isMounted) {
+    return <Loading />;
+  }
 
   return (
     <NextAuthSessionProvider>
       <QueryClientProvider client={queryClient}>
-        <NextThemesProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-          enableColorScheme
-        >
-          {isLoading ? (
-            <Loading />
-          ) : (
+        <Suspense fallback={<Loading />}>
+          <NextThemesProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            enableColorScheme
+          >
             <ContentAuth>
+              <GlobalLoading />
               {children}
               <ToastContainer
                 position="bottom-center"
@@ -48,8 +54,8 @@ export default function RootProvider({
                 style={{ width: 'auto' }}
               />
             </ContentAuth>
-          )}
-        </NextThemesProvider>
+          </NextThemesProvider>
+        </Suspense>
       </QueryClientProvider>
     </NextAuthSessionProvider>
   );

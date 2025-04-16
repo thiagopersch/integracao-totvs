@@ -7,8 +7,10 @@ const createApi = (session?: Session | null) => {
   const api = axios.create({
     baseURL: process.env.API_URL,
     withCredentials: true,
+    timeout: 60000,
     headers: {
-      authorization: jwt ? `Bearer ${jwt}` : undefined,
+      authorization:
+        jwt && typeof jwt === 'string' ? `Bearer ${jwt}` : undefined,
     },
   });
 
@@ -27,32 +29,19 @@ const createApi = (session?: Session | null) => {
     async (error) => {
       if (error.response) {
         const { status, data } = error.response;
-
-        if (
-          status === 401 ||
-          (data && (data.user === null || data.user === undefined))
-        ) {
+        if (status === 401 && data.message === 'Unauthorized') {
           await signOut({
             callbackUrl: '/signIn',
             redirect: true,
           });
-          return undefined;
+          return;
         }
 
-        if (
-          !document.cookie.includes(
-            `${process.env.NEXTAUTH_COOKIE_SESSION_TOKEN}`,
-          ) &&
-          !jwt
-        ) {
-          await signOut({
-            callbackUrl: '/signIn',
-            redirect: true,
-          });
-          return undefined;
-        }
+        console.error('API Error:', error.response);
+        return Promise.reject(
+          new Error('Ocorreu um erro na requisição. Tente novamente.'),
+        );
       }
-
       return Promise.reject(error);
     },
   );

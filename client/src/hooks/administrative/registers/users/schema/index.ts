@@ -32,8 +32,8 @@ export const schema = z
             'A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais (@,$,!,%,*,?,&).',
         },
       ),
-    change_password: z.boolean().default(true),
-    status: z.boolean().default(true),
+    change_password: z.boolean(),
+    status: z.boolean(),
   })
   .superRefine((data, ctx) => {
     // Se não houver id (criação), a senha é obrigatória

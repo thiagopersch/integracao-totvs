@@ -2,16 +2,20 @@ import createApi from '@/lib/services/api';
 import { clientMappers } from '@/pipes/mappers';
 import { Client, FormattedClient } from '@/types/client';
 
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
 export const findAll = async (
   filters: Partial<Client> = {},
 ): Promise<FormattedClient[]> => {
   try {
     const api = createApi();
-    const response = await api.get<{
-      success: boolean;
-      message?: string;
-      data: Client[];
-    }>('/client', { params: filters });
+    const response = await api.get<ApiResponse<Client[]>>('/client', {
+      params: filters,
+    });
 
     if (!response.data.success || !response.data.data) {
       throw new Error(response.data.message || 'Failed to fetch client');
@@ -27,11 +31,7 @@ export const findAll = async (
 export const findById = async (id: string): Promise<Client> => {
   try {
     const api = createApi();
-    const response = await api.get<{
-      success: boolean;
-      data: Client;
-      message?: string;
-    }>(`/client/${id}`);
+    const response = await api.get<ApiResponse<Client>>(`/client/${id}`);
 
     if (!response.data.success || !response.data.data) {
       throw new Error(response.data.message || 'Client not found');
@@ -99,4 +99,10 @@ export const deleteClient = async (id: string): Promise<boolean> => {
     console.error(`Error deleting user ${id}:`, error);
     throw error;
   }
+};
+
+export const findActiveClients = async (): Promise<Client[]> => {
+  const api = createApi();
+  const response = await api.get<ApiResponse<Client[]>>('/client');
+  return response.data.data.filter((client) => client.status === true);
 };

@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
 import React, { ReactNode } from 'react';
+import { Separator } from '../ui/separator';
 
 type CustomModalProps = {
   title: string;
@@ -46,8 +47,8 @@ const CustomModal: React.FC<CustomModalProps> = ({
           }
         }}
       >
-        <DialogHeader className="flex flex-row items-center justify-between mb-4">
-          <DialogTitle className="text-lg font-bold text-primary">
+        <DialogHeader className="flex flex-row items-center justify-between">
+          <DialogTitle className="text-lg font-[900] text-primary">
             {title}
           </DialogTitle>
           {showCloseButton && (
@@ -62,6 +63,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
             </Button>
           )}
         </DialogHeader>
+        <Separator />
         <div>{children}</div>
       </DialogContent>
     </Dialog>

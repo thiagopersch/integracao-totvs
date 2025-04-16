@@ -100,10 +100,9 @@ const FormLabel = React.forwardRef<
   } = useFormContext();
 
   // Verifica se o campo é required no schema ou via prop
-  const isRequired =
-    required !== undefined
-      ? required
-      : !defaultValues?.[name] && getFieldState(name).invalid === false;
+  const isRequired = required
+    ? required
+    : !defaultValues?.[name] && getFieldState(name).invalid === false;
 
   return (
     <Label
@@ -113,7 +112,7 @@ const FormLabel = React.forwardRef<
       {...props}
     >
       {children}
-      {isRequired && <span className="text-red-500"> *</span>}
+      {isRequired && <span className="text-destructive"> *</span>}
     </Label>
   );
 });

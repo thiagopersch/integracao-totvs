@@ -94,7 +94,10 @@ export class ClientService {
       throw new NotFoundException('Cliente não encontrado.');
     }
 
-    return this.prisma.client.delete({ where: { id } });
+    return this.prisma.client.update({
+      where: { id },
+      data: { deleted_at: new Date() },
+    });
   }
 
   async findAllWithDeleted() {

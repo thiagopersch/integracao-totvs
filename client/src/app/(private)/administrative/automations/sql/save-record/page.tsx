@@ -1,6 +1,7 @@
 'use client';
 
 import * as S from '@/app/(private)/administrative/styles';
+
 import Loading from '@/app/loading';
 import withAuth from '@/app/withAuth';
 import { saveRecord } from '@/lib/api/totvs/saveRecord';

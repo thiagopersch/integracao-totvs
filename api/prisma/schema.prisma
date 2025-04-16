@@ -54,7 +54,7 @@ model tbc {
   client_id               String
   client                  client    @relation(fields: [client_id], references: [id])
   name                    String
-  link                    String
+  link                    String    @unique
   user                    String
   password                String
   not_required_license    Boolean   @default(true)

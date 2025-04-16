@@ -1,14 +1,15 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
 import {
-  Backdrop,
-  Button,
   Dialog,
-  DialogActions,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
-  Divider,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/system';
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 
 type ConfirmationDialogProps = {
   open: boolean;
@@ -20,12 +21,7 @@ type ConfirmationDialogProps = {
   cancelText?: string;
 };
 
-const StyledBackdrop = styled(Backdrop)({
-  backdropFilter: 'blur(0.2rem)', // Pequeno blur no fundo
-  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Leve escurecimento
-});
-
-export default function ConfirmationDialog({
+const ConfirmationDialog = ({
   open,
   title,
   message,
@@ -33,36 +29,48 @@ export default function ConfirmationDialog({
   onClose,
   confirmText = 'Confirmar',
   cancelText = 'Cancelar',
-}: ConfirmationDialogProps) {
+}: ConfirmationDialogProps) => {
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      slots={{ backdrop: StyledBackdrop }}
-      aria-labelledby="confirmation-dialog-title"
-      aria-describedby="confirmation-dialog-description"
-    >
-      <DialogTitle
-        id="confirmation-dialog-title"
-        sx={{ fontWeight: 'bold', color: 'primary.main' }}
-      >
-        {title}
-      </DialogTitle>
-      <Divider />
-      <DialogContent
-        sx={{ display: 'flex', flexDirection: 'column', padding: '3rem 1rem' }}
-      >
-        <Typography id="confirmation-dialog-description">{message}</Typography>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="sm:max-w-[500px] p-0">
+        <DialogHeader className="px-4 pt-4">
+          <DialogTitle className="text-lg md:text-base sm:text-center text-left font-bold text-primary">
+            {title}
+          </DialogTitle>
+          <DialogDescription className="sr-only">{message}</DialogDescription>
+        </DialogHeader>
+        <Separator />
+        <div className="px-4 py-6 flex flex-col">
+          <p className="text-sm text-muted-foreground">{message}</p>
+        </div>
+        <Separator />
+        <DialogFooter className="flex flex-row gap-2 p-4 md:gap-3 md:flex-col-reverse">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onClose}
+            className="w-full"
+          >
+            {cancelText}
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={onConfirm}
+            className="w-full"
+          >
+            {confirmText}
+          </Button>
+        </DialogFooter>
       </DialogContent>
-      <Divider />
-      <DialogActions sx={{ padding: '1rem' }}>
-        <Button onClick={onClose} variant="outlined" color="inherit" fullWidth>
-          {cancelText}
-        </Button>
-        <Button onClick={onConfirm} color="error" variant="contained" fullWidth>
-          {confirmText}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
-}
+};
+
+export default ConfirmationDialog;

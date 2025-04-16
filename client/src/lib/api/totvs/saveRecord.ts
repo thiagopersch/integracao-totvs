@@ -51,8 +51,6 @@ export const saveRecord = async (
 </GlbConsSql>`,
   };
 
-  console.log(data);
-
   try {
     return await axios.post(`${process.env.API_URL}/totvs/save-record`, data);
   } catch (error) {

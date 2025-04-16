@@ -1,5 +1,3 @@
-'use client';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
@@ -18,6 +16,10 @@ type CrudOptions<T, TCreate, TUpdate> = {
     confirmText?: string;
     cancelText?: string;
   };
+  queryOptions?: {
+    enabled?: boolean;
+    staleTime?: number;
+  };
 };
 
 export default function useCrud<T, TCreate = T, TUpdate = T>({
@@ -28,11 +30,12 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
   updateFn,
   deleteFn,
   deleteConfirmation = {
-    title: 'Atenção',
-    message: 'Você tem certeza que deseja excluir esse cadastro?',
+    title: 'Atenção',
+    message: 'Você tem certeza que deseja excluir esse cadastro?',
     confirmText: 'Sim',
     cancelText: 'Cancelar',
   },
+  queryOptions = {},
 }: CrudOptions<T, TCreate, TUpdate>) {
   const queryClient = useQueryClient();
   const [deleteDialog, setDeleteDialog] = useState<{
@@ -40,15 +43,14 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
     id: string | null;
   }>({ open: false, id: null });
 
-  // Listagem
   const { data, isLoading } = useQuery({
     queryKey,
     queryFn: listFn,
-    staleTime: 5 * 60 * 1000, // 5 minutos de cache (opcional)
+    staleTime: queryOptions.staleTime || 5 * 60 * 1000,
+    enabled: queryOptions.enabled !== undefined ? queryOptions.enabled : true,
   });
   const items = data || [];
 
-  // Criação
   const createMutation = useMutation({
     mutationFn: createFn,
     onSuccess: () => {
@@ -56,13 +58,19 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (error: AxiosError | any) => {
-      toast.error(
-        `Falha ao criar o cadastro: ${error?.response?.data?.message || error.message}`,
-      );
+      if (error.response?.status === 400 && error.response?.data?.message) {
+        const messages = Array.isArray(error.response.data.message)
+          ? error.response.data.message
+          : [error.response.data.message];
+        messages.forEach((msg: string) => toast.error(msg));
+      } else {
+        toast.error(
+          `Falha ao criar o cadastro: ${error?.response?.data?.message || error.message}`,
+        );
+      }
     },
   });
 
-  // Atualização
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: TUpdate }) =>
       updateFn(id, data),
@@ -71,13 +79,19 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
       queryClient.invalidateQueries({ queryKey });
     },
     onError: (error: AxiosError | any) => {
-      toast.error(
-        `Falha ao atualizar o cadastro: ${error?.response?.data?.message || error.message}`,
-      );
+      if (error.response?.status === 400 && error.response?.data?.message) {
+        const messages = Array.isArray(error.response.data.message)
+          ? error.response.data.message
+          : [error.response.data.message];
+        messages.forEach((msg: string) => toast.error(msg));
+      } else {
+        toast.error(
+          `Falha ao atualizar o cadastro: ${error?.response?.data?.message || error.message}`,
+        );
+      }
     },
   });
 
-  // Exclusão
   const deleteMutation = useMutation({
     mutationFn: deleteFn,
     onSuccess: () => {
@@ -89,7 +103,6 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
     },
   });
 
-  // Funções auxiliares
   const fetchById = async (id: string) => {
     try {
       const item = await getFn(id);

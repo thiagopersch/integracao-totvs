@@ -58,6 +58,13 @@ type DynamicTableProps<T> = {
   actions?: MenuAction[];
 };
 
+// Função para acessar propriedades aninhadas
+const getNestedValue = (obj: any, path: string): any => {
+  return path.split('.').reduce((current, key) => {
+    return current && current[key] !== undefined ? current[key] : undefined;
+  }, obj);
+};
+
 const DynamicTable = <T,>({
   columns,
   rows,
@@ -77,7 +84,7 @@ const DynamicTable = <T,>({
     return rows.filter((row) => {
       const matchesSearch = searchTerm
         ? columns.some((col) => {
-            const value = (row as any)[col.accessorKey]
+            const value = getNestedValue(row, col.accessorKey)
               ?.toString()
               .toLowerCase();
             return value?.includes(searchTerm.toLowerCase());
@@ -87,7 +94,7 @@ const DynamicTable = <T,>({
       const matchesFilters = Object.entries(filters).every(
         ([key, filterValue]) => {
           if (!filterValue) return true;
-          const value = (row as any)[key]?.toString().toLowerCase();
+          const value = getNestedValue(row, key)?.toString().toLowerCase();
           return value?.includes(filterValue.toLowerCase());
         },
       );
@@ -117,7 +124,7 @@ const DynamicTable = <T,>({
   // Obtém valores únicos para uma coluna (para o diálogo de filtro)
   const getUniqueValues = (accessorKey: string) => {
     const values = new Set(
-      rows.map((row) => (row as any)[accessorKey]?.toString()),
+      rows.map((row) => getNestedValue(row, accessorKey)?.toString()),
     );
     return Array.from(values).filter(Boolean);
   };
@@ -223,7 +230,7 @@ const DynamicTable = <T,>({
                               (value) => (
                                 <div
                                   key={value}
-                                  className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
+                                  className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white cursor-pointer"
                                   onClick={() =>
                                     setFilters((prev) => ({
                                       ...prev,
@@ -261,7 +268,7 @@ const DynamicTable = <T,>({
             paginatedRows.map((row, index) => (
               <TableRow
                 key={(row as any).id || index}
-                className="hover:bg-gray-100"
+                className="hover:bg-gray-100 dark:hover:bg-neutral-800"
               >
                 {tableColumns.map((column) => (
                   <TableCell
@@ -270,7 +277,7 @@ const DynamicTable = <T,>({
                   >
                     {column.cell
                       ? column.cell({ row: { original: row } })
-                      : (row as any)[column.accessorKey] || '-'}
+                      : getNestedValue(row, column.accessorKey) || '-'}
                   </TableCell>
                 ))}
               </TableRow>

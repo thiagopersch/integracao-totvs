@@ -18,18 +18,18 @@ const Users = () => {
     users,
     isModalOpen,
     editingUser,
+    deleteDialog,
+    isSubmitting,
     setIsModalOpen,
     handleAdd,
     handleEdit,
     handleDelete,
-    deleteDialog,
-    isSubmitting,
   } = useUsers();
 
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: 'Situação',
       width: 'auto',
       cell: (params: any) =>
         params.row.original.status === true ? (
@@ -58,7 +58,7 @@ const Users = () => {
     },
     {
       accessorKey: 'actions',
-      header: 'Ações',
+      header: '',
       width: 'auto',
       cell: (params: any) => (
         <MenuActions
@@ -93,7 +93,7 @@ const Users = () => {
         as="span"
         size="2xl"
         weight="bold"
-        color="text-zinc-600"
+        color="text-zinc-800"
         variant="title"
       >
         Usuários

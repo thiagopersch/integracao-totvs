@@ -1,19 +1,20 @@
-import * as S from '@/app/(private)/administrative/styles';
+import Column from '@/components/Columns';
+import CTA from '@/components/CTA';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import useUsers from '@/hooks/administrative/registers/users/useUsers';
 import { User } from '@/types/user';
-import {
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from '@mui/icons-material';
-import {
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from '@mui/material';
+import { Eye, EyeOff } from 'lucide-react';
 import { useEffect } from 'react';
 
 type UserFormProps = {
@@ -22,24 +23,20 @@ type UserFormProps = {
 
 const UserForm = ({ user }: UserFormProps) => {
   const {
-    errors,
     showPassword,
     isSubmitting,
-    control,
-    reset,
+    form,
     handleClickShowPassword,
     handleMouseDownPassword,
     handleSubmit,
-    register,
-    Controller,
     setIsModalOpen,
   } = useUsers();
 
   useEffect(() => {
     if (user) {
-      reset(user);
+      form.reset(user);
     } else {
-      reset({
+      form.reset({
         name: '',
         email: '',
         password: '',
@@ -47,109 +44,152 @@ const UserForm = ({ user }: UserFormProps) => {
         status: true,
       });
     }
-  }, [user, reset]);
+  }, [user, form.reset]);
 
   return (
-    <S.Form onSubmit={handleSubmit}>
-      <S.InputSentences>
-        <Controller
-          name="status"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              control={<Checkbox {...field} checked={field.value} />}
-              label={field.value ? 'Ativado' : 'Desativado'}
+    <Form {...form}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex flex-col gap-4">
+          <Column cols={2}>
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem className="flex gap-2 items-center space-x-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormLabel className="text-sm font-medium">
+                    {field.value ? 'Ativado' : 'Desativado'}
+                  </FormLabel>
+                </FormItem>
+              )}
             />
-          )}
-        />
-        <Controller
-          name="change_password"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              control={<Checkbox {...field} checked={field.value} />}
-              label="Alterar senha no primeiro login?"
+            <FormField
+              control={form.control}
+              name="change_password"
+              render={({ field }) => (
+                <FormItem className="flex gap-2 items-center space-x-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormLabel className="text-sm font-medium">
+                    Alterar senha no próximo login?
+                  </FormLabel>
+                </FormItem>
+              )}
             />
-          )}
-        />
-      </S.InputSentences>
-      <S.InputSentences>
-        <TextField
-          type="text"
-          label="Nome"
-          variant="filled"
-          {...register('name')}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-          disabled={isSubmitting}
-          fullWidth
-          required
-        />
-      </S.InputSentences>
-      <S.InputSentences>
-        <TextField
-          type="email"
-          label="E-mail"
-          variant="filled"
-          {...register('email')}
-          error={!!errors.email}
-          helperText={errors.email?.message}
-          disabled={isSubmitting}
-          fullWidth
-          required
-        />
-        <TextField
-          type={showPassword ? 'text' : 'password'}
-          id="password"
-          label="Senha"
-          variant="filled"
-          {...register('password')}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          disabled={isSubmitting}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-        />
-      </S.InputSentences>
-      <Divider />
-      <S.Actions>
-        <Button
-          variant="ghost"
-          onClick={() => setIsModalOpen(false)}
-          type="button"
-          disabled={isSubmitting}
-        >
-          Cancelar
-        </Button>
-        <Button
-          color="primary"
-          variant="default"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting
-            ? user
-              ? 'Atualizando...'
-              : 'Cadastrando...'
-            : user
-              ? 'Atualizar'
-              : 'Cadastrar'}
-        </Button>
-      </S.Actions>
-    </S.Form>
+          </Column>
+        </div>
+
+        <Column cols={1}>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="text"
+                    disabled={isSubmitting}
+                    placeholder="Jhoe Doe"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </Column>
+        <Column cols={2}>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-mail</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="email"
+                    disabled={isSubmitting}
+                    placeholder="jhoedoe@example.com"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Senha</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      type={showPassword ? 'text' : 'password'}
+                      disabled={isSubmitting}
+                      className="pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0 h-full"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      aria-label="toggle password visibility"
+                      disabled={isSubmitting}
+                    >
+                      {showPassword ? (
+                        <Eye className="h-4 w-4" />
+                      ) : (
+                        <EyeOff className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </Column>
+
+        <Separator />
+
+        <CTA>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsModalOpen(false)}
+            disabled={isSubmitting}
+          >
+            Cancelar
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting
+              ? user
+                ? 'Atualizando...'
+                : 'Cadastrando...'
+              : user
+                ? 'Atualizar'
+                : 'Cadastrar'}
+          </Button>
+        </CTA>
+      </form>
+    </Form>
   );
 };
 

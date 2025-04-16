@@ -9,7 +9,6 @@ import {
 import useUserStore from '@/stores/useUserStore';
 import { User } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useGridApiRef } from '@mui/x-data-grid';
 import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -18,7 +17,6 @@ import { schema } from './schema';
 type Schema = z.infer<typeof schema>;
 
 export default function useUsers() {
-  const apiRef = useGridApiRef();
   const {
     isModalOpen,
     editingUser,
@@ -54,13 +52,7 @@ export default function useUsers() {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<Schema>({
+  const form = useForm<Schema>({
     mode: 'all',
     criteriaMode: 'all',
     resolver: zodResolver(schema),
@@ -73,9 +65,16 @@ export default function useUsers() {
     },
   });
 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = form;
+
   useEffect(() => {
     if (editingUser) {
-      reset({
+      form.reset({
         id: editingUser.id,
         name: editingUser.name,
         email: editingUser.email,
@@ -84,7 +83,7 @@ export default function useUsers() {
         status: editingUser.status,
       });
     } else {
-      reset({
+      form.reset({
         id: '',
         name: '',
         email: '',
@@ -93,7 +92,8 @@ export default function useUsers() {
         status: true,
       });
     }
-  }, [editingUser, reset]);
+  }, [editingUser, form.reset]);
+
   const handleEdit = async (id: string) => {
     const user = await fetchById(id);
     if (user) {
@@ -120,7 +120,7 @@ export default function useUsers() {
       setEditingUser(null);
     } else {
       await create(data);
-      reset({
+      form.reset({
         id: '',
         name: '',
         email: '',
@@ -132,14 +132,6 @@ export default function useUsers() {
     }
   };
 
-  const handleExpandedTable = () => {
-    apiRef.current?.autosizeColumns({
-      includeHeaders: true,
-      includeOutliers: true,
-      expand: true,
-    });
-  };
-
   const handleAdd = () => {
     setEditingUser(null);
     setIsModalOpen(true);
@@ -149,20 +141,15 @@ export default function useUsers() {
     users,
     isModalOpen,
     editingUser,
-    apiRef,
-    control,
-    errors,
     isSubmitting: isSubmitting || isCreating || isUpdating || isDeleting,
     showPassword,
     isLoading,
-    reset,
+    form,
     Controller,
     setIsModalOpen,
     handleEdit,
     handleDelete,
-    handleExpandedTable,
     handleSubmit: handleSubmit(onSubmit),
-    register,
     handleClickShowPassword: toggleShowPassword,
     handleMouseDownPassword: (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
