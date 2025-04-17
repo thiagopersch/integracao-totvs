@@ -5,6 +5,7 @@ import ReadView from '@/app/(private)/administrative/automations/sql/read-view/p
 import SaveRecord from '@/app/(private)/administrative/automations/sql/save-record/page';
 import ExecuteSentece from '@/app/(private)/administrative/automations/sql/sentence/execute/page';
 import CustomTabs from '@/components/Tabs/Tab';
+import Wrapper from '@/components/Wrapper';
 
 const SQL = () => {
   const tabs = [
@@ -26,6 +27,10 @@ const SQL = () => {
     },
   ];
 
-  return <CustomTabs tabs={tabs} />;
+  return (
+    <Wrapper>
+      <CustomTabs tabs={tabs} />
+    </Wrapper>
+  );
 };
 export default SQL;
