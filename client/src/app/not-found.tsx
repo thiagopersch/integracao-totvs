@@ -1,18 +1,25 @@
 'use client';
 
-import { Button } from '@mui/material';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="grid content-center justify-items-center gap-8 h-screen bg-zinc-600 text-white">
-      <p className="text-4xl font-bold">Não encontrada</p>
-      <p className="text-sm">Desculpe, essa pagina não foi encontrada 🥺</p>
-      <Link href="/">
-        <Button variant="text" color="primary" className="font-bold">
-          Página inicial
-        </Button>
-      </Link>
+    <div className="h-screen overflow-hidden">
+      <div className="flex h-full flex-col items-center justify-center gap-8 bg-zinc-950 text-white">
+        <span className="text-4xl font-black">Não encontrada</span>
+        <span className="text-sm">
+          Desculpe, essa página não foi encontrada 🥺
+        </span>
+        <Link href="/">
+          <Button
+            variant="link"
+            className="border border-white font-bold text-white"
+          >
+            Página inicial
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

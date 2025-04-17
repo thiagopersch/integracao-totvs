@@ -164,7 +164,7 @@ const DynamicTable = <T,>({
             placeholder="Pesquise aqui..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-md"
+            className="w-[20rem] md:w-full"
             icon={<Search className="h-4 w-4 text-muted-foreground" />}
           />
         </div>

@@ -10,6 +10,7 @@ import {
 import useClientStore from '@/stores/useClientStore';
 import { Client } from '@/types/client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,6 +26,8 @@ export default function useClient() {
     setEditingClient,
     editingClient,
   } = useClientStore();
+
+  const queryClient = useQueryClient();
 
   const {
     items: clients,
@@ -50,6 +53,12 @@ export default function useClient() {
         'Você tem certeza que deseja excluir este cliente? Esta ação é irreversível.',
       confirmText: 'Confirmar',
       cancelText: 'Cancelar',
+    },
+    queryOptions: {
+      onSuccess: () => {
+        // Invalida a query de clientes ativos após qualquer operação
+        queryClient.invalidateQueries({ queryKey: ['listActiveClients'] });
+      },
     },
   });
 

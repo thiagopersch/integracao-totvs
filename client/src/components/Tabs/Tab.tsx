@@ -16,13 +16,11 @@ export default function CustomTabs({ tabs }: TabsProps) {
   const [value, setValue] = useState('0');
 
   return (
-    <Tabs value={value} onValueChange={setValue} className="w-full">
-      <TabsList
-        className={`grid grid-cols-4 md:grid-cols-2 gap-2 w-full h-full`}
-      >
+    <Tabs value={value} onValueChange={setValue}>
+      <TabsList className={`grid grid-cols-4 md:grid-cols-2 gap-2`}>
         {tabs.map((tab, index) => (
           <TabsTrigger
-            className="w-full border"
+            className="w-full border text-center font-bold"
             key={index}
             value={index.toString()}
           >
@@ -31,8 +29,8 @@ export default function CustomTabs({ tabs }: TabsProps) {
         ))}
       </TabsList>
       {tabs.map((tab, index) => (
-        <TabsContent key={index} value={index.toString()}>
-          <div className="p-4">{tab.content}</div>
+        <TabsContent key={index} value={index.toString()} className="pt-8">
+          {tab.content}
         </TabsContent>
       ))}
     </Tabs>

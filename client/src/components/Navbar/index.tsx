@@ -9,15 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { updatedRoutes } from '@/config/routes';
 import { cn } from '@/lib/utils';
-import {
-  ArrowDown,
-  ArrowUp,
-  Link as LinkIcon,
-  LogOut,
-  Menu,
-  User,
-  X,
-} from 'lucide-react';
+import { Link as LinkIcon, LogOut, Menu, User, User2, X } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -63,30 +55,36 @@ const Navbar = () => {
           {!isMobile ? (
             <div className="flex items-center gap-4">
               {/* Navigation Routes */}
-              {updatedRoutes.map((route) => (
-                <DropdownMenu key={route.id}>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="default"
-                      onClick={() => setCurrentSubMenu(route.id ?? '')}
-                    >
-                      {route.name}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    {route.children?.map((child) => (
-                      <DropdownMenuItem key={child.path} asChild>
-                        <Link
-                          href={child.path}
-                          onClick={() => setCurrentSubMenu(null)}
-                        >
-                          {child.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ))}
+              {updatedRoutes.map((route) =>
+                route.children && route.children.length > 0 ? (
+                  <DropdownMenu key={route.id}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="default"
+                        onClick={() => setCurrentSubMenu(route.id ?? '')}
+                      >
+                        {route.name}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {route.children.map((child) => (
+                        <DropdownMenuItem key={child.path} asChild>
+                          <Link
+                            href={child.path}
+                            onClick={() => setCurrentSubMenu(null)}
+                          >
+                            {child.name}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button key={route.id} variant="default" asChild>
+                    <Link href={route.path}>{route.name}</Link>
+                  </Button>
+                ),
+              )}
 
               {/* User Menu or Login */}
               {isAuthenticated ? (
@@ -98,11 +96,7 @@ const Navbar = () => {
                         className="flex items-center gap-2"
                       >
                         {session?.user?.name || 'Usuário'}
-                        {currentSubMenu ? (
-                          <ArrowUp className="h-4 w-4" />
-                        ) : (
-                          <ArrowDown className="h-4 w-4" />
-                        )}
+                        <User2 className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
@@ -116,7 +110,7 @@ const Navbar = () => {
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={handleLogout}
-                        className="flex items-center gap-2 text-red-600"
+                        className="flex items-center gap-2 text-red-500"
                       >
                         <LogOut className="h-4 w-4" /> Sair
                       </DropdownMenuItem>

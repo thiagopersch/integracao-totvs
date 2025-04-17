@@ -76,23 +76,6 @@ const Routes: Route[] = [
     id: 'registers',
     name: 'Cadastros',
     path: '/registers',
-    children: [
-      {
-        id: 'users',
-        path: '/users',
-        name: 'Usuários',
-      },
-      {
-        id: 'client',
-        path: '/client',
-        name: 'Clientes',
-      },
-      {
-        id: 'tbc',
-        path: '/tbc',
-        name: 'TBC',
-      },
-    ],
   },
 ];
 

@@ -19,6 +19,7 @@ type CrudOptions<T, TCreate, TUpdate> = {
   queryOptions?: {
     enabled?: boolean;
     staleTime?: number;
+    onSuccess?: () => void;
   };
 };
 
@@ -56,6 +57,7 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
     onSuccess: () => {
       toast.success('Cadastro feito com sucesso!');
       queryClient.invalidateQueries({ queryKey });
+      queryOptions.onSuccess?.();
     },
     onError: (error: AxiosError | any) => {
       if (error.response?.status === 400 && error.response?.data?.message) {
@@ -77,6 +79,7 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
     onSuccess: () => {
       toast.success('Cadastro atualizado com sucesso!');
       queryClient.invalidateQueries({ queryKey });
+      queryOptions.onSuccess?.();
     },
     onError: (error: AxiosError | any) => {
       if (error.response?.status === 400 && error.response?.data?.message) {
@@ -97,6 +100,7 @@ export default function useCrud<T, TCreate = T, TUpdate = T>({
     onSuccess: () => {
       toast.success('Cadastro excluído com sucesso!');
       queryClient.invalidateQueries({ queryKey });
+      queryOptions.onSuccess?.();
     },
     onError: (error: AxiosError | any) => {
       toast.error(`Falha ao excluir o cadastro: ${error.message}`);
