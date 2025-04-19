@@ -57,6 +57,7 @@ export const useReadView = () => {
       },
     },
   );
+
   const form = useForm<Schema>({
     criteriaMode: 'all',
     mode: 'all',
@@ -80,7 +81,6 @@ export const useReadView = () => {
       const result = await readView(dataServerName, filtro, contexto, tbcId);
 
       if (!result?.data?.NewDataSet?.GConsSql) {
-        console.warn('Dados da API estão vazios ou malformados:', result);
         form.setValue('rows', []);
         return;
       }

@@ -86,6 +86,25 @@ const ReadViewPage = () => {
           <Column cols={3}>
             <FormField
               control={form.control}
+              name="filtro"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Filtro</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={fieldState.error?.message}
+                      placeholder="Digite o filtro"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="tbcId"
               render={({ field, fieldState }) => (
                 <FormItem>
@@ -108,25 +127,6 @@ const ReadViewPage = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="filtro"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Filtro</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={form.formState.isSubmitting}
-                      error={fieldState.error?.message}
-                      placeholder="Digite o filtro"
-                    />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
