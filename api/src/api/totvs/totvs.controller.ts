@@ -8,16 +8,12 @@ export class TotvsController {
   @Get('get-schema')
   async getSchema(
     @Query('dataServerName') dataServerName: string,
-    @Query('username') username: string,
-    @Query('password') password: string,
-    @Query('tbc') tbc: string,
+    @Query('tbcId') tbcId: string,
     @Query('contexto') contexto: string,
   ) {
     const result = await this.totvsService.getSchema(
       dataServerName,
-      username,
-      password,
-      tbc,
+      tbcId,
       contexto,
     );
 
@@ -29,17 +25,13 @@ export class TotvsController {
     @Query('dataServerName') dataServerName: string,
     @Query('filtro') filtro: string,
     @Query('contexto') contexto: string,
-    @Query('username') username: string,
-    @Query('password') password: string,
-    @Query('tbc') tbc: string,
+    @Query('tbcId') tbcId: string,
   ) {
     const result = await this.totvsService.readView(
       dataServerName,
       filtro,
       contexto,
-      username,
-      password,
-      tbc,
+      tbcId,
     );
 
     return result;
@@ -50,17 +42,13 @@ export class TotvsController {
     @Query('dataServerName') dataServerName: string,
     @Query('primaryKey') primaryKey: string,
     @Query('contexto') contexto: string,
-    @Query('username') username: string,
-    @Query('password') password: string,
-    @Query('tbc') tbc: string,
+    @Query('tbcId') tbcId: string,
   ) {
     return await this.totvsService.readRecord(
       dataServerName,
       primaryKey,
       contexto,
-      username,
-      password,
-      tbc,
+      tbcId,
     );
   }
 
@@ -69,17 +57,13 @@ export class TotvsController {
     @Body('dataServerName') dataServerName: string,
     @Body('xml') xml: string,
     @Body('contexto') contexto: string,
-    @Body('username') username: string,
-    @Body('password') password: string,
-    @Body('tbc') tbc: string,
+    @Body('tbcId') tbcId: string,
   ) {
     return await this.totvsService.saveRecord(
       dataServerName,
       xml,
       contexto,
-      username,
-      password,
-      tbc,
+      tbcId,
     );
   }
 }

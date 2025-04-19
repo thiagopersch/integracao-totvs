@@ -4,16 +4,12 @@
 set -e
 
 # Aguarda o banco de dados estar disponível
-echo "Esperando o banco de dados iniciar..."
+echo "Esperando o banco de dados iniciar em $POSTGRES_HOST:$POSTGRES_PORT..."
 until pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USERNAME"; do
+  echo "Banco de dados não está pronto, tentando novamente em 2 segundos..."
   sleep 2
 done
-
-echo "Iniciando o servidor da aplicação..."
-"$@" &  # Inicia o comando padrão do CMD (yarn dev) em segundo plano
-
-# Aguarda um breve momento para garantir que o servidor foi iniciado
-sleep 5
+echo "Banco de dados está pronto!"
 
 # Executa as migrações do Prisma
 if [ "$NODE_ENV" = "production" ]; then
@@ -23,9 +19,8 @@ if [ "$NODE_ENV" = "production" ]; then
 else
   echo "Executando as migrações do Prisma em desenvolvimento..."
   npx prisma generate
-  npx prisma migrate deploy
-  #npx prisma migrate dev --name init
+  npx prisma migrate dev
 fi
 
-# Mantém o contêiner rodando com o servidor
-wait
+echo "Iniciando o servidor da aplicação..."
+exec "$@" # Substitui o processo atual pelo comando padrão (yarn dev)

@@ -95,11 +95,6 @@ export default function useTbc() {
       user: '',
       password: '',
       not_required_license: true,
-      coligate_context: 1,
-      branch_context: 1,
-      level_education_context: 1,
-      cod_system_context: 'S',
-      user_context: 'wsrubeus',
       status: true,
     },
   });
@@ -147,11 +142,6 @@ export default function useTbc() {
         user: data.user,
         password: data.password ?? '',
         not_required_license: data.not_required_license,
-        cod_system_context: data.cod_system_context,
-        coligate_context: data.coligate_context,
-        user_context: data.user_context,
-        branch_context: data.branch_context,
-        level_education_context: data.level_education_context,
         status: data.status,
       };
       await handleUpdate(data.id ?? '', updatedData);
@@ -171,11 +161,6 @@ export default function useTbc() {
         user: '',
         password: '',
         not_required_license: true,
-        coligate_context: 1,
-        branch_context: 1,
-        level_education_context: 1,
-        cod_system_context: 'S',
-        user_context: 'wsrubeus',
         status: true,
       });
       setIsModalOpen(false);

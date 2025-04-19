@@ -1,20 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import * as soap from 'soap';
 import { parseStringPromise } from 'xml2js';
+import { TbcService } from '../tbc/tbc.service';
 
 @Injectable()
 export class TotvsService {
-  private async createSoapClient(
-    tbc: string,
-    username: string,
-    password: string,
-  ) {
-    const wsdlUrl = tbc.endsWith('/')
-      ? `${tbc}wsDataServer/MEX?wsdl`
-      : `${tbc}/wsDataServer/MEX?wsdl`;
+  constructor(private tbcService: TbcService) {}
+
+  private async createSoapClient(tbcId: string) {
+    const config = await this.tbcService.findOne(tbcId);
+    const wsdlUrl = config.link.endsWith('/')
+      ? `${config.link}wsDataServer/MEX?wsdl`
+      : `${config.link}/wsDataServer/MEX?wsdl`;
     const client = await soap.createClientAsync(wsdlUrl);
     const auth =
-      'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
+      'Basic ' +
+      Buffer.from(`${config.user}:${config.password}`).toString('base64');
     client.addHttpHeader('Authorization', auth);
     return client;
   }
@@ -67,15 +68,9 @@ export class TotvsService {
       .join(';');
   }
 
-  async getSchema(
-    dataServerName: string,
-    username: string,
-    password: string,
-    tbc: string,
-    contexto: string,
-  ) {
+  async getSchema(dataServerName: string, tbcId: string, contexto: string) {
     try {
-      const client = await this.createSoapClient(tbc, username, password);
+      const client = await this.createSoapClient(tbcId);
       const args = { DataServerName: dataServerName, Contexto: contexto };
       const [result] = await client.GetSchemaAsync(args);
       const parsedResult = await parseStringPromise(result.GetSchemaResult);
@@ -101,19 +96,10 @@ export class TotvsService {
     dataServerName: string,
     filtro: string,
     contexto: string,
-    username: string,
-    password: string,
-    tbc: string,
+    tbcId: string,
   ): Promise<string> {
     try {
-      const existTbc = tbc.endsWith('/')
-        ? `${tbc}wsDataServer/MEX?wsdl`
-        : `${tbc}/wsDataServer/MEX?wsdl`;
-
-      const client = await soap.createClientAsync(existTbc);
-      const auth =
-        'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-      client.addHttpHeader('Authorization', auth);
+      const client = await this.createSoapClient(tbcId);
 
       const args = {
         DataServerName: dataServerName,
@@ -133,19 +119,10 @@ export class TotvsService {
     dataServerName: string,
     primaryKey: string,
     contexto: string,
-    username: string,
-    password: string,
-    tbc: string,
+    tbcId: string,
   ): Promise<any> {
     try {
-      const existTbc = tbc.endsWith('/')
-        ? `${tbc}wsDataServer/MEX?wsdl`
-        : `${tbc}/wsDataServer/MEX?wsdl`;
-
-      const client = await soap.createClientAsync(existTbc);
-      const auth =
-        'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-      client.addHttpHeader('Authorization', auth);
+      const client = await this.createSoapClient(tbcId);
 
       const args = {
         DataServerName: dataServerName,
@@ -165,19 +142,10 @@ export class TotvsService {
     dataServerName: string,
     xml: string,
     contexto: string,
-    username: string,
-    password: string,
-    tbc: string,
+    tbcId: string,
   ): Promise<any> {
     try {
-      const existTbc = tbc.endsWith('/')
-        ? `${tbc}wsDataServer/MEX?wsdl`
-        : `${tbc}/wsDataServer/MEX?wsdl`;
-
-      const client = await soap.createClientAsync(existTbc);
-      const auth =
-        'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-      client.addHttpHeader('Authorization', auth);
+      const client = await this.createSoapClient(tbcId);
 
       const xmlData = `<![CDATA[${xml}]]>`;
 

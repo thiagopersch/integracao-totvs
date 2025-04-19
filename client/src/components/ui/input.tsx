@@ -23,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             'disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
             icon ? 'pl-8' : '', // Adiciona padding à esquerda se houver ícone
             error
-              ? 'border-red-500 focus-visible:ring-red-500'
+              ? 'border-red-500 dark:border-red-400 focus-visible:ring-red-500 focus-visible:ring-offset-red-400'
               : 'border-input hover:border-gray-300',
             className,
           )}

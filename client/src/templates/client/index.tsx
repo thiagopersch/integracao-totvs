@@ -1,5 +1,6 @@
 import Column from '@/components/Columns';
 import CTA from '@/components/CTA';
+import StatusText from '@/components/Situations';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -50,7 +51,13 @@ const ClientForm = ({ client }: ClientFormProps) => {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormLabel>{field.value ? 'Ativado' : 'Desativado'}</FormLabel>
+                <FormLabel className="cursor-pointer">
+                  {field.value ? (
+                    <StatusText status="active">Ativado</StatusText>
+                  ) : (
+                    <StatusText status="disabled">Desativado</StatusText>
+                  )}
+                </FormLabel>
               </FormItem>
             )}
           />
@@ -61,11 +68,15 @@ const ClientForm = ({ client }: ClientFormProps) => {
             <FormField
               control={form.control}
               name="name"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Jhoe Doe" required {...field} />
+                    <Input
+                      placeholder="Jhoe Doe"
+                      error={fieldState.error?.message}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,14 +88,14 @@ const ClientForm = ({ client }: ClientFormProps) => {
             <FormField
               control={form.control}
               name="link_crm"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Link CRM</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://"
-                      required
                       type="url"
+                      error={fieldState.error?.message}
                       {...field}
                     />
                   </FormControl>
@@ -96,14 +107,14 @@ const ClientForm = ({ client }: ClientFormProps) => {
             <FormField
               control={form.control}
               name="site"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Website</FormLabel>
                   <FormControl>
                     <Input
                       type="url"
                       placeholder="https://"
-                      required
+                      error={fieldState.error?.message}
                       {...field}
                     />
                   </FormControl>

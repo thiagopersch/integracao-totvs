@@ -26,7 +26,7 @@ const Text: React.FC<TextProps> = ({
 }) => {
   const variantStyles: Record<TextVariant, string> = {
     title: cn(
-      'text-2xl font-bold tracking-tight',
+      'text-2xl font-bold tracking-tight dark:text-neutral-50',
       size || 'text-3xl',
       weight === 'normal' ? 'font-bold' : `font-${weight}`,
       color || 'text-neutral-950',

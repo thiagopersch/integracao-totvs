@@ -1,8 +1,5 @@
 import { IsBoolean } from 'class-validator';
-import {
-  IsRequiredNumber,
-  IsRequiredString,
-} from 'src/decorators/validation.decorators';
+import { IsRequiredString } from 'src/decorators/validation.decorators';
 
 export class CreateTbcDto {
   @IsRequiredString(255)
@@ -23,7 +20,7 @@ export class CreateTbcDto {
   @IsBoolean()
   not_required_license: boolean;
 
-  @IsRequiredNumber(5)
+  /* @IsRequiredNumber(5)
   coligate_context: number;
 
   @IsRequiredNumber(5)
@@ -36,7 +33,7 @@ export class CreateTbcDto {
   cod_system_context: string;
 
   @IsRequiredString(50)
-  user_context: string;
+  user_context: string; */
 
   @IsBoolean()
   status: boolean;

@@ -13,26 +13,20 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import Wrapper from '@/components/Wrapper';
 import { useReadView } from '@/hooks/administrative/automations/dataservers/read-view/useReadView';
-import {
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from '@mui/icons-material';
 import { Clipboard, Search } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const ReadViewPage = () => {
-  const {
-    handleClickShowPassword,
-    handleMouseDownPassword,
-    handleReadView,
-    rows,
-    form,
-  } = useReadView();
-
-  const passwordInputRef = useRef<HTMLInputElement>(null);
-  const [showPassword, setShowPassword] = useState(false);
+  const { handleReadView, rows, form, tbcOptions } = useReadView();
 
   const columns = [
     { accessorKey: 'id', header: 'ID', width: 'auto' },
@@ -52,7 +46,19 @@ const ReadViewPage = () => {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => sentenca && navigator.clipboard.writeText(sentenca)}
+            onClick={() => {
+              if (sentenca) {
+                navigator.clipboard.writeText(sentenca);
+                toast.success('SQL copiado para a área de transferência!', {
+                  position: 'bottom-center',
+                  autoClose: 3000,
+                  type: 'success',
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  theme: 'colored',
+                });
+              }
+            }}
             title={sentenca || 'Nenhum SQL disponível'}
             disabled={!sentenca}
           >
@@ -80,84 +86,33 @@ const ReadViewPage = () => {
           <Column cols={3}>
             <FormField
               control={form.control}
-              name="username"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Usuário</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={form.formState.isSubmitting}
-                      placeholder="Digite o usuário"
-                      error={fieldState.error?.message}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Senha</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        {...field}
-                        type={showPassword ? 'text' : 'password'}
-                        disabled={form.formState.isSubmitting}
-                        error={fieldState.error?.message}
-                        placeholder="Digite a senha"
-                        ref={passwordInputRef}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-2 top-1/2 -translate-y-1/2"
-                        onClick={() => {
-                          handleClickShowPassword(passwordInputRef);
-                          setShowPassword(!showPassword);
-                        }}
-                        onMouseDown={(event) => handleMouseDownPassword(event)}
-                      >
-                        {showPassword ? (
-                          <VisibilityOffIcon className="h-4 w-4" />
-                        ) : (
-                          <VisibilityIcon className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="tbc"
+              name="tbcId"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>TBC</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={form.formState.isSubmitting}
-                      placeholder="Digite o TBC"
-                      error={fieldState.error?.message}
-                    />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={form.formState.isSubmitting}
+                  >
+                    <FormControl>
+                      <SelectTrigger error={!!fieldState.error}>
+                        <SelectValue placeholder="Selecione um TBC" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tbcOptions.map((tbc) => (
+                        <SelectItem key={tbc.id} value={tbc.id ?? ''}>
+                          {tbc.name} - {tbc.client?.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </Column>
 
-          <Column cols={2}>
             <FormField
               control={form.control}
               name="filtro"
@@ -170,13 +125,13 @@ const ReadViewPage = () => {
                       disabled={form.formState.isSubmitting}
                       error={fieldState.error?.message}
                       placeholder="Digite o filtro"
-                      required
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="contexto"
@@ -189,7 +144,6 @@ const ReadViewPage = () => {
                       disabled={form.formState.isSubmitting}
                       error={fieldState.error?.message}
                       placeholder="Digite o contexto"
-                      required
                     />
                   </FormControl>
                   <FormMessage />

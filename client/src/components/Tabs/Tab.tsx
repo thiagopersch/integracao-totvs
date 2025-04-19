@@ -29,7 +29,7 @@ export default function CustomTabs({ tabs }: TabsProps) {
         ))}
       </TabsList>
       {tabs.map((tab, index) => (
-        <TabsContent key={index} value={index.toString()} className="pt-8">
+        <TabsContent key={index} value={index.toString()}>
           {tab.content}
         </TabsContent>
       ))}

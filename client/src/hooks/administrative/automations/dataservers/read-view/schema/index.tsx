@@ -10,15 +10,7 @@ export const schema = z.object({
     .string()
     .min(1, { message: 'Campo obrigatório' })
     .max(255, { message: 'Tamanho excedido (255).' }),
-  username: z
-    .string()
-    .min(1, { message: 'Campo obrigatório' })
-    .max(255, { message: 'Tamanho excedido (255).' }),
-  password: z
-    .string()
-    .min(1, { message: 'Campo obrigatório' })
-    .max(255, { message: 'Tamanho excedido (255).' }),
-  tbc: z
+  tbcId: z
     .string()
     .min(1, { message: 'Campo obrigatório' })
     .max(255, { message: 'Tamanho excedido (255).' }),

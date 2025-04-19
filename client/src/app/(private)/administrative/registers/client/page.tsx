@@ -19,13 +19,11 @@ export default function Client() {
   const {
     clients,
     isModalOpen,
-    apiRef,
     editingClient,
     isLoading,
     deleteDialog,
     isSubmitting,
     setIsModalOpen,
-    handleExpandedTable,
     handleAdd,
     handleEdit,
     handleDelete,

@@ -31,39 +31,8 @@ import {
   Filter,
   Search,
 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
 import MenuActions from './MenuActions';
-
-type MenuAction = {
-  label: string;
-  icon?: React.ReactNode;
-  tooltip?: string;
-  onClick: (row: any) => void;
-  color?: string;
-};
-
-type ColumnDef<T> = {
-  accessorKey: string;
-  header: string;
-  width?: string;
-  cell?: (props: { row: { original: T } }) => React.ReactNode;
-};
-
-type DynamicTableProps<T> = {
-  columns: ColumnDef<T>[];
-  rows: T[];
-  className?: string;
-  isLoading?: boolean;
-  addAction?: () => void;
-  actions?: MenuAction[];
-};
-
-// Função para acessar propriedades aninhadas
-const getNestedValue = (obj: any, path: string): any => {
-  return path.split('.').reduce((current, key) => {
-    return current && current[key] !== undefined ? current[key] : undefined;
-  }, obj);
-};
+import useTableHook, { DynamicTableProps } from './useTableHook';
 
 const DynamicTable = <T,>({
   columns,
@@ -73,63 +42,29 @@ const DynamicTable = <T,>({
   actions,
   addAction,
 }: DynamicTableProps<T>) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filters, setFilters] = useState<Record<string, string>>({});
-  const [openFilter, setOpenFilter] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const {
+    filters,
+    searchTerm,
+    openFilter,
+    page,
+    rowsPerPage,
+    filteredRows,
+    totalPages,
+    paginatedRows,
+    totalRows,
+    getNestedValue,
+    setSearchTerm,
+    setFilters,
+    setOpenFilter,
+    setPage,
+    setRowsPerPage,
+    goToFirstPage,
+    goToLastPage,
+    goToPreviousPage,
+    goToNextPage,
+    getUniqueValues,
+  } = useTableHook({ columns, rows });
 
-  // Filtra as linhas com base na busca global e nos filtros de coluna
-  const filteredRows = useMemo(() => {
-    return rows.filter((row) => {
-      const matchesSearch = searchTerm
-        ? columns.some((col) => {
-            const value = getNestedValue(row, col.accessorKey)
-              ?.toString()
-              .toLowerCase();
-            return value?.includes(searchTerm.toLowerCase());
-          })
-        : true;
-
-      const matchesFilters = Object.entries(filters).every(
-        ([key, filterValue]) => {
-          if (!filterValue) return true;
-          const value = getNestedValue(row, key)?.toString().toLowerCase();
-          return value?.includes(filterValue.toLowerCase());
-        },
-      );
-
-      return matchesSearch && matchesFilters;
-    });
-  }, [rows, searchTerm, filters, columns]);
-
-  // Calcula a paginação
-  const totalRows = filteredRows.length;
-  const totalPages = Math.ceil(totalRows / rowsPerPage);
-  const paginatedRows = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    return filteredRows.slice(start, end);
-  }, [filteredRows, page, rowsPerPage]);
-
-  // Ajusta a página se ela ficar fora do intervalo válido
-  React.useEffect(() => {
-    if (page > totalPages && totalPages > 0) {
-      setPage(totalPages);
-    } else if (page < 1) {
-      setPage(1);
-    }
-  }, [page, totalPages]);
-
-  // Obtém valores únicos para uma coluna (para o diálogo de filtro)
-  const getUniqueValues = (accessorKey: string) => {
-    const values = new Set(
-      rows.map((row) => getNestedValue(row, accessorKey)?.toString()),
-    );
-    return Array.from(values).filter(Boolean);
-  };
-
-  // Adiciona coluna de ações se prop actions for passada
   const tableColumns = actions
     ? [
         ...columns,
@@ -148,12 +83,6 @@ const DynamicTable = <T,>({
         },
       ]
     : columns;
-
-  // Funções de navegação da paginação
-  const goToFirstPage = () => setPage(1);
-  const goToPreviousPage = () => setPage((prev) => Math.max(prev - 1, 1));
-  const goToNextPage = () => setPage((prev) => Math.min(prev + 1, totalPages));
-  const goToLastPage = () => setPage(totalPages);
 
   return (
     <div className={cn('space-y-4', className)}>
@@ -191,8 +120,8 @@ const DynamicTable = <T,>({
                 className="relative group"
               >
                 {column.header ? (
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-neutral-700">
+                  <div className="flex items-center w-full">
+                    <span className="font-bold text-neutral-700 dark:text-white">
                       {column.header}
                     </span>
                     <Dialog
@@ -259,7 +188,7 @@ const DynamicTable = <T,>({
             <TableRow>
               <TableCell
                 colSpan={tableColumns.length}
-                className="text-center py-4"
+                className="text-center py-4 text-muted-foreground dark:text-neutral-50"
               >
                 Carregando...
               </TableCell>
@@ -286,7 +215,7 @@ const DynamicTable = <T,>({
             <TableRow>
               <TableCell
                 colSpan={tableColumns.length}
-                className="text-center py-4 text-muted-foreground"
+                className="text-center py-5 text-muted-foreground dark:text-neutral-50"
               >
                 Nenhum dado encontrado.
               </TableCell>
@@ -307,7 +236,7 @@ const DynamicTable = <T,>({
               value={rowsPerPage.toString()}
               onValueChange={(value) => {
                 setRowsPerPage(Number(value));
-                setPage(1); // Reseta para a primeira página ao mudar o tamanho
+                setPage(1);
               }}
             >
               <SelectTrigger className="w-20">
@@ -370,4 +299,3 @@ const DynamicTable = <T,>({
 };
 
 export default DynamicTable;
-export type { ColumnDef };

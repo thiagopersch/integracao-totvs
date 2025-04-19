@@ -7,12 +7,12 @@ import Users from './users/page';
 const RegistersPage = () => {
   const tabs = [
     {
-      label: 'TBC',
-      content: <TBCPage />,
-    },
-    {
       label: 'Clientes',
       content: <Client />,
+    },
+    {
+      label: 'TBC',
+      content: <TBCPage />,
     },
     {
       label: 'Usuários',

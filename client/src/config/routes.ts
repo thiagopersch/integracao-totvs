@@ -15,55 +15,24 @@ const Routes: Route[] = [
     prefix: 'automations',
     children: [
       {
+        id: 'filters',
+        path: '/filters',
+        name: 'Filtros',
+      },
+      {
+        id: 'totvs',
+        path: '/totvs',
+        name: 'Métodos TOTVS',
+      },
+      {
         id: 'dataservers',
         path: '/dataservers',
         name: 'DataServers',
-        children: [
-          {
-            id: 'get-schema',
-            path: '/get-schema',
-            name: 'GetSchema',
-          },
-        ],
-      },
-      {
-        id: 'sql',
-        path: '/sql',
-        name: 'Consultas SQL',
-        children: [
-          {
-            id: 'read-record',
-            path: '/read-record',
-            name: 'ReadRecord',
-          },
-          {
-            id: 'save-record',
-            path: '/save-record',
-            name: 'SaveRecord',
-          },
-          {
-            id: 'read-view',
-            path: '/read-view',
-            name: 'ReadView',
-          },
-          {
-            id: 'execute-sentence',
-            path: '/sentence/execute',
-            name: 'Execute',
-          },
-        ],
       },
       {
         id: 'workflow',
         path: '/workflow',
         name: 'Formulas Visuais',
-        children: [
-          {
-            id: 'workflow-find-wall',
-            path: '/findAll',
-            name: 'FindAll',
-          },
-        ],
       },
       {
         id: 'validator',

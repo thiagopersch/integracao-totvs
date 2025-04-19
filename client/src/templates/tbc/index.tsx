@@ -57,11 +57,6 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
         user: '',
         password: '',
         not_required_license: true,
-        coligate_context: 1,
-        branch_context: 1,
-        level_education_context: 1,
-        cod_system_context: 'S',
-        user_context: 'wsrubeus',
         status: true,
       });
     }
@@ -115,7 +110,7 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
             <FormField
               control={form.control}
               name="client_id"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Cliente</FormLabel>
                   <Popover>
@@ -125,8 +120,10 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            'w-full justify-between',
+                            'h-[3rem] w-full justify-between',
                             !field.value && 'text-muted-foreground',
+                            fieldState.error &&
+                              'border-red-500 dark:border-red-400',
                           )}
                           disabled={isSubmitting}
                         >
@@ -135,7 +132,7 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
                                 (client) => client.id === field.value,
                               )?.name
                             : 'Selecione um cliente'}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 dark:opacity-100" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -177,11 +174,16 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
             <FormField
               control={form.control}
               name="name"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isSubmitting} />
+                    <Input
+                      {...field}
+                      error={fieldState.error?.message}
+                      disabled={isSubmitting}
+                      placeholder="Nome do cliente"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -191,11 +193,16 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
             <FormField
               control={form.control}
               name="link"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Link</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isSubmitting} />
+                    <Input
+                      {...field}
+                      error={fieldState.error?.message}
+                      disabled={isSubmitting}
+                      placeholder="Link do TBC"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -207,11 +214,16 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
             <FormField
               control={form.control}
               name="user"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Usuário</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isSubmitting} />
+                    <Input
+                      {...field}
+                      error={fieldState.error?.message}
+                      disabled={isSubmitting}
+                      placeholder="Usuário do TBC"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -221,7 +233,7 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
@@ -230,7 +242,9 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
                         {...field}
                         type={showPassword ? 'text' : 'password'}
                         disabled={isSubmitting}
-                        className=" pr-10"
+                        error={fieldState.error?.message}
+                        placeholder="Senha do TBC"
+                        className="pr-10"
                       />
                       <Button
                         type="button"
@@ -249,93 +263,6 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
                         )}
                       </Button>
                     </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </Column>
-
-          <Column cols={5}>
-            <FormField
-              control={form.control}
-              name="coligate_context"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Coligada</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="branch_context"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Filial</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="level_education_context"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nível de ensino</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="cod_system_context"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cod Sistema</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isSubmitting} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="user_context"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Usuário</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

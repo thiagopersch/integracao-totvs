@@ -23,11 +23,11 @@ export class TbcService {
         client: true,
         client_id: true,
         not_required_license: true,
-        cod_system_context: true,
+        /* cod_system_context: true,
         coligate_context: true,
         branch_context: true,
         level_education_context: true,
-        user_context: true,
+        user_context: true, */
         status: true,
         created_at: true,
         updated_at: true,
@@ -39,9 +39,10 @@ export class TbcService {
     return await this.prisma.tbc.findUnique({
       select: {
         id: true,
+        client_id: true,
         name: true,
         user: true,
-        password: false,
+        password: true,
         link: true,
         client: {
           select: {
@@ -50,13 +51,7 @@ export class TbcService {
             link_crm: true,
           },
         },
-        client_id: true,
         not_required_license: true,
-        cod_system_context: true,
-        coligate_context: true,
-        branch_context: true,
-        level_education_context: true,
-        user_context: true,
         status: true,
         created_at: true,
         updated_at: true,

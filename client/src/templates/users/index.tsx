@@ -94,7 +94,7 @@ const UserForm = ({ user }: UserFormProps) => {
           <FormField
             control={form.control}
             name="name"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>Nome</FormLabel>
                 <FormControl>
@@ -103,6 +103,7 @@ const UserForm = ({ user }: UserFormProps) => {
                     type="text"
                     disabled={isSubmitting}
                     placeholder="Jhoe Doe"
+                    error={fieldState.error?.message}
                   />
                 </FormControl>
                 <FormMessage />
@@ -114,7 +115,7 @@ const UserForm = ({ user }: UserFormProps) => {
           <FormField
             control={form.control}
             name="email"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>E-mail</FormLabel>
                 <FormControl>
@@ -123,6 +124,7 @@ const UserForm = ({ user }: UserFormProps) => {
                     type="email"
                     disabled={isSubmitting}
                     placeholder="jhoedoe@example.com"
+                    error={fieldState.error?.message}
                   />
                 </FormControl>
                 <FormMessage />
@@ -132,7 +134,7 @@ const UserForm = ({ user }: UserFormProps) => {
           <FormField
             control={form.control}
             name="password"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
@@ -141,6 +143,7 @@ const UserForm = ({ user }: UserFormProps) => {
                       {...field}
                       type={showPassword ? 'text' : 'password'}
                       disabled={isSubmitting}
+                      error={fieldState.error?.message}
                       className="pr-10"
                     />
                     <Button

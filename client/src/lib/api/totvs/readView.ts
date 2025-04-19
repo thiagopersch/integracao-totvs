@@ -4,9 +4,7 @@ const readView = async (
   dataServerName: string,
   filtro: string,
   contexto: string,
-  username: string,
-  password: string,
-  tbc: string,
+  tbcId: string,
 ) => {
   try {
     const response = await axios.get(`${process.env.API_URL}/totvs/read-view`, {
@@ -14,9 +12,7 @@ const readView = async (
         dataServerName,
         filtro,
         contexto,
-        username,
-        password,
-        tbc,
+        tbcId,
       },
     });
     return response.data;
