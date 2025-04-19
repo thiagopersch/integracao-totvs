@@ -4,6 +4,7 @@ import withAuth from '@/app/withAuth';
 import Column from '@/components/Columns';
 import CTA from '@/components/CTA';
 import EditorSentenca from '@/components/EditorSentenca';
+import Text from '@/components/Text';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -30,6 +31,17 @@ const ReadRecord = () => {
 
   return (
     <Wrapper>
+      <Text
+        align="left"
+        color="text-gray-400"
+        as="span"
+        size="lg"
+        variant="description"
+        className="mb-4"
+      >
+        Para saber qual o formato da chave primária, consulte Automação |
+        Dataservers.
+      </Text>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Column cols={3}>
