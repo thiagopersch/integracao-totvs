@@ -22,17 +22,12 @@ const Routes: Route[] = [
       {
         id: 'totvs',
         path: '/totvs',
-        name: 'Métodos TOTVS',
-      },
-      {
-        id: 'workflow',
-        path: '/workflow',
-        name: 'Formulas Visuais',
+        name: 'TOTVS',
       },
       {
         id: 'validator',
         path: '/validator',
-        name: 'Validador de Código JavaScript',
+        name: 'Validador de JavaScript',
       },
     ],
   },

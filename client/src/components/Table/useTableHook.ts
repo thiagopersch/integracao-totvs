@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce';
 import { useEffect, useMemo, useState } from 'react';
 
 type MenuAction = {
@@ -29,10 +30,20 @@ export default function useTableHook({
   rows,
 }: DynamicTableProps<any>) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [openFilter, setOpenFilter] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // Debounce do searchTerm
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+    handler();
+    return () => handler.cancel();
+  }, [searchTerm]);
 
   const getNestedValue = (obj: any, path: string): any => {
     return path.split('.').reduce((current, key) => {
@@ -43,12 +54,12 @@ export default function useTableHook({
   // Filtra as linhas com base na busca global e nos filtros de coluna
   const filteredRows = useMemo(() => {
     return rows.filter((row) => {
-      const matchesSearch = searchTerm
+      const matchesSearch = debouncedSearchTerm
         ? columns.some((col) => {
             const value = getNestedValue(row, col.accessorKey)
               ?.toString()
               .toLowerCase();
-            return value?.includes(searchTerm.toLowerCase());
+            return value?.includes(debouncedSearchTerm.toLowerCase());
           })
         : true;
 
@@ -62,7 +73,7 @@ export default function useTableHook({
 
       return matchesSearch && matchesFilters;
     });
-  }, [rows, searchTerm, filters, columns]);
+  }, [rows, debouncedSearchTerm, filters, columns]);
 
   // Calcula a paginação
   const totalRows = filteredRows.length;
@@ -82,7 +93,6 @@ export default function useTableHook({
     }
   }, [page, totalPages]);
 
-  // Obtém valores únicos para uma coluna (para o diálogo de filtro)
   const getUniqueValues = (accessorKey: string) => {
     const values = new Set(
       rows.map((row) => getNestedValue(row, accessorKey)?.toString()),
@@ -90,9 +100,6 @@ export default function useTableHook({
     return Array.from(values).filter(Boolean);
   };
 
-  // Adiciona coluna de ações se prop actions for passada
-
-  // Funções de navegação da paginação
   const goToFirstPage = () => setPage(1);
   const goToPreviousPage = () => setPage((prev) => Math.max(prev - 1, 1));
   const goToNextPage = () => setPage((prev) => Math.min(prev + 1, totalPages));

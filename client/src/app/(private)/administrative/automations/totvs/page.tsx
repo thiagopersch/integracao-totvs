@@ -7,6 +7,7 @@ import ExecuteSentece from '@/app/(private)/administrative/automations/totvs/sen
 import CustomTabs from '@/components/Tabs/Tab';
 import Wrapper from '@/components/Wrapper';
 import GetSchemaPage from './dataservers/get-schema/page';
+import Workflow from './workflow/page';
 
 const SQL = () => {
   const tabs = [
@@ -30,11 +31,15 @@ const SQL = () => {
       label: 'Executar sentença',
       content: <ExecuteSentece />,
     },
+    {
+      label: 'Fórmula Visual',
+      content: <Workflow />,
+    },
   ];
 
   return (
     <Wrapper>
-      <CustomTabs cols={5} tabs={tabs} />
+      <CustomTabs cols={6} tabs={tabs} />
     </Wrapper>
   );
 };

@@ -1,282 +1,183 @@
 'use client';
 
-import * as S from '@/app/(private)/administrative/styles';
-import performSentence from '@/lib/api/sentence/executeSentence';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  IconButton,
-  InputAdornment,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { GridColDef, useGridApiRef } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { schema } from './schema';
+import { FormLabel } from '@mui/material';
 
-import withAuth from '@/app/withAuth';
+import CTA from '@/components/CTA';
+import Column from '@/components/Columns';
+import DynamicTable from '@/components/Table';
+import Text from '@/components/Text';
+import Wrapper from '@/components/Wrapper';
+import { Button } from '@/components/ui/button';
 import {
-  Sync as SyncIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from '@mui/icons-material';
-
-type Schema = z.infer<typeof schema> & {
-  rows: any[];
-};
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import useExecute from '@/hooks/administrative/automations/totvs/sentence/useExecute';
+import { Loader2, RefreshCcw } from 'lucide-react';
 
 const ExecuteSentece = () => {
-  const apiRef = useGridApiRef();
-  const [showPassword, setShowPassword] = useState(false);
-  const [columns, setColumns] = useState<GridColDef[]>([]);
-  const {
-    register,
-    watch,
-    setValue,
-    handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted },
-  } = useForm<Schema>({
-    criteriaMode: 'all',
-    mode: 'all',
-    resolver: zodResolver(schema),
-    defaultValues: {
-      codColigada: '',
-      codSistema: '',
-      codSentenca: '',
-      parameters: '',
-      username: '',
-      password: '',
-      tbc: '',
-      rows: [],
-    },
-  });
-
-  const rows = watch('rows');
-
-  const handleExpandedTable = () => {
-    apiRef.current.autosizeColumns({
-      includeHeaders: true,
-      includeOutliers: true,
-      expand: true,
-    });
-  };
-
-  useEffect(() => {
-    handleExpandedTable;
-  }, [handleExpandedTable]);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleSubmitForm: SubmitHandler<Schema> = async (
-    formData: PerformSentenceProps,
-  ) => {
-    try {
-      const result = await performSentence(formData);
-
-      let resultTable;
-      if (Array.isArray(result)) {
-        if (Array.isArray(result[0])) {
-          resultTable = result.flat().map((item: any, index: number) => ({
-            id: index,
-            ...item,
-          }));
-        } else {
-          resultTable = result.map((item: any, index: number) => ({
-            id: index,
-            ...item,
-          }));
-        }
-      } else {
-        resultTable = [result].map((item: any, index: number) => ({
-          id: index,
-          ...item,
-        }));
-      }
-
-      if (resultTable.length > 0) {
-        const cols = Object.keys(resultTable[0]).map((key) => ({
-          field: key !== '' ? key : 'NULL',
-          renderHeader: () => (
-            <Tooltip title={key} arrow>
-              <Typography
-                color="primary"
-                variant="caption"
-                sx={{ fontWeight: 'bold' }}
-              >
-                {key}
-              </Typography>
-            </Tooltip>
-          ),
-          //headerName: key,
-          renderCell(params: any) {
-            return (
-              <Tooltip title={params.value} arrow>
-                <Typography variant="caption" noWrap>
-                  {params.value}
-                </Typography>
-              </Tooltip>
-            );
-          },
-        }));
-        setColumns(cols);
-      }
-
-      setValue('rows', resultTable);
-      return result;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { form, tbcOptions, rows, columns, handleExecute, message } =
+    useExecute();
 
   return (
-    <S.Wrapper>
-      <S.Form onSubmit={handleSubmit(handleSubmitForm)}>
-        <S.InputSentences>
-          <TextField
-            type="text"
-            label="Código da coligada"
-            {...register('codColigada')}
-            variant="filled"
-            error={!!errors.codColigada}
-            helperText={errors.codColigada?.message}
-            disabled={isSubmitting}
-            fullWidth
-            required
-          />
-          <TextField
-            type="text"
-            label="Código do Sistema"
-            {...register('codSistema')}
-            error={!!errors.codSistema}
-            helperText={errors.codSistema?.message}
-            variant="filled"
-            disabled={isSubmitting}
-            fullWidth
-            required
-          />
-          <TextField
-            type="text"
-            label="Código da sentença"
-            {...register('codSentenca')}
-            error={!!errors.codSentenca}
-            helperText={errors.codSentenca?.message}
-            variant="filled"
-            disabled={isSubmitting}
-            fullWidth
-            required
-          />
+    <Wrapper>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleExecute)}>
+          <Column cols={3}>
+            <FormField
+              control={form.control}
+              name="codColigada"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Código da coligada</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={!!fieldState.error}
+                      placeholder="Ex: 0"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="codSistema"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Código do Sistema</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={!!fieldState.error}
+                      placeholder="Ex: S"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="codSentenca"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Código da sentenca</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={!!fieldState.error}
+                      placeholder="Ex: RB.PS.IM.005"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Column>
 
-          <TextField
-            type="text"
-            label="Parâmetros"
-            {...register('parameters')}
-            error={!!errors.parameters}
-            helperText="Ex: PARAM=VALUE"
-            variant="filled"
-            disabled={isSubmitting}
-            fullWidth
-          />
-        </S.InputSentences>
-        <S.InputSentences>
-          <TextField
-            type="text"
-            label="Usuário"
-            {...register('username')}
-            error={!!errors.username}
-            helperText={errors.username?.message}
-            variant="filled"
-            disabled={isSubmitting}
-            fullWidth
-            required
-          />
-          <TextField
-            type={showPassword ? 'text' : 'password'}
-            label="Senha"
-            {...register('password')}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            variant="filled"
-            disabled={isSubmitting}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Mostrar senha"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
+          <Column cols={2}>
+            <FormField
+              control={form.control}
+              name="parameters"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Parâmetros</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={!!fieldState.error}
+                      placeholder="FIELD1=VALUE1;FIELD2=VALUE2"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tbcId"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>TBC</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={form.formState.isSubmitting}
                   >
-                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            required
+                    <FormControl>
+                      <SelectTrigger error={!!fieldState.error}>
+                        <SelectValue placeholder="Selecione um TBC" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tbcOptions.map((tbc) => (
+                        <SelectItem key={tbc.id} value={tbc.id ?? ''}>
+                          {tbc.name} - {tbc.client?.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Column>
+
+          <CTA className="mt-4">
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="mx-auto"
+              variant="default"
+              size="lg"
+            >
+              <RefreshCcw className="mr-2 h-4 w-4" />
+              Executar
+            </Button>
+          </CTA>
+        </form>
+
+        {form.formState.isSubmitting && (
+          <div className="flex justify-center items-center mt-10">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span className="ml-2">Carregando...</span>
+          </div>
+        )}
+
+        {rows && rows.length > 0 && (
+          <DynamicTable
+            rows={rows}
+            columns={columns ?? []}
+            isLoading={form.formState.isSubmitting}
+            className="mt-4"
           />
-          <TextField
-            type="text"
-            label="TBC"
-            error={!!errors.tbc}
-            helperText={errors.tbc?.message}
-            {...register('tbc')}
-            variant="filled"
-            disabled={isSubmitting}
-            fullWidth
-            required
-          />
-        </S.InputSentences>
-        <S.Actions>
-          <S.CTA
-            variant="contained"
-            color="primary"
-            type="submit"
-            size="large"
-            disabled={isSubmitting}
-            startIcon={<SyncIcon />}
-          >
-            Executar
-          </S.CTA>
-        </S.Actions>
-      </S.Form>
-      {/* {rows && isSubmitted && (
-        <Table
-          rows={rows}
-          columns={columns}
-          isLoading={isSubmitting}
-          apiRef={apiRef}
-          onClick={handleExpandedTable}
-          density="compact"
-          autoHeight
-          sortingField="name"
-          label="Ajustar colunas"
-          icon={<TuneIcon />}
-        />
-      )} */}
-      {!rows && !isSubmitted && (
-        <Typography
-          sx={{
-            color: 'red',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignContent: 'center',
-            fontWeight: 'bold',
-          }}
-        >
-          Algo deu errado
-        </Typography>
-      )}
-    </S.Wrapper>
+        )}
+
+        {message && (
+          <Text className="mt-4 text-center text-sm font-bold text-red-600">
+            {message || ''}
+          </Text>
+        )}
+      </Form>
+    </Wrapper>
   );
 };
 
-export default withAuth(ExecuteSentece);
+export default ExecuteSentece;

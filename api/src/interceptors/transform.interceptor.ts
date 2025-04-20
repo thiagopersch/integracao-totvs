@@ -4,8 +4,8 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class TransformInterceptor implements NestInterceptor {
@@ -16,6 +16,13 @@ export class TransformInterceptor implements NestInterceptor {
         message: data.message || 'Operação realizada com sucesso',
         data: data.result || data,
       })),
+      catchError((err) => {
+        return throwError(() => ({
+          success: false,
+          message: err.message || 'An unexpected error occurred',
+          statusCode: err.status || 500,
+        }));
+      }),
     );
   }
 }

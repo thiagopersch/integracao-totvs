@@ -1,29 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import * as soap from 'soap';
+import { TbcService } from 'src/api/tbc/tbc.service';
 import * as xml2js from 'xml2js';
 
 @Injectable()
 export class ExecuteSentenceService {
+  constructor(private tbcService: TbcService) {}
+
+  private async createSoapClient(tbcId: string) {
+    const config = await this.tbcService.findOne(tbcId);
+    const wsdlUrl = config.link.endsWith('/')
+      ? `${config.link}wsConsultaSQL/MEX?wsdl`
+      : `${config.link}/wsConsultaSQL/MEX?wsdl`;
+    const client = await soap.createClientAsync(wsdlUrl);
+    const auth =
+      'Basic ' +
+      Buffer.from(`${config.user}:${config.password}`).toString('base64');
+    client.addHttpHeader('Authorization', auth);
+    return client;
+  }
+
   async performSentence(
     codColigada: string,
     codSistema: string,
     codSentenca: string,
     parameters: string,
-    username: string,
-    password: string,
-    tbc: string,
+    tbcId: string,
   ): Promise<any> {
     try {
       const parser = new xml2js.Parser();
-      const existTbc = tbc.endsWith('/')
-        ? `${tbc}wsConsultaSQL/MEX?wsdl`
-        : `${tbc}/wsConsultaSQL/MEX?wsdl`;
-
-      const client = await soap.createClientAsync(existTbc);
-
-      const auth =
-        'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
-      client.addHttpHeader('Authorization', auth);
+      const client = await this.createSoapClient(tbcId);
 
       const args = {
         codSentenca,

@@ -1,5 +1,14 @@
 import axios from 'axios';
 
+type PerformSentenceProps = Partial<{
+  codColigada: string;
+  codSistema: string;
+  codSentenca: string;
+  parameters?: string;
+  result?: string;
+  tbcId: string;
+}>;
+
 const performSentence = async (formData: PerformSentenceProps) => {
   try {
     const response = await axios.get(

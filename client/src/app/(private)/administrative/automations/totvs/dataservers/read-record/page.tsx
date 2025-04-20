@@ -136,9 +136,9 @@ const ReadRecord = () => {
       )}
 
       {form.formState.errors.sentenca && (
-        <p className="mt-4 text-center text-sm font-bold text-red-600">
+        <Text className="mt-4 text-center text-sm font-bold text-red-600">
           {form.formState.errors.sentenca.message}
-        </p>
+        </Text>
       )}
     </Wrapper>
   );

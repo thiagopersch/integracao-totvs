@@ -13,18 +13,14 @@ export class ExecuteSentenceController {
     @Query('codSistema') codSistema: string,
     @Query('codSentenca') codSentenca: string,
     @Query('parameters') parameters: string,
-    @Query('username') username: string,
-    @Query('password') password: string,
-    @Query('tbc') tbc: string,
+    @Query('tbcId') tbcId: string,
   ) {
     return await this.executeSentenceService.performSentence(
       codColigada,
       codSistema,
       codSentenca,
       parameters,
-      username,
-      password,
-      tbc,
+      tbcId,
     );
   }
 }
