@@ -2,7 +2,7 @@
 
 import * as S from '@/app/(private)/administrative/styles';
 import withAuth from '@/app/withAuth';
-import useWorkflow from '@/hooks/administrative/automations/workflow/useWorkflow';
+import useWorkflow from '@/hooks/administrative/automations/totvs/workflow/useWorkflow';
 import {
   CheckCircle,
   Close,

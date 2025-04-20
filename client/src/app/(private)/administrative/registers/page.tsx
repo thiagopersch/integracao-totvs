@@ -21,7 +21,7 @@ const RegistersPage = () => {
   ];
   return (
     <Wrapper>
-      <CustomTabs tabs={tabs} />
+      <CustomTabs cols={3} tabs={tabs} />
     </Wrapper>
   );
 };

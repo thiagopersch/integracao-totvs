@@ -1,11 +1,12 @@
 'use client';
 
-import ReadRecord from '@/app/(private)/administrative/automations/totvs/read-record/page';
-import ReadView from '@/app/(private)/administrative/automations/totvs/read-view/page';
-import SaveRecord from '@/app/(private)/administrative/automations/totvs/save-record/page';
+import ReadRecord from '@/app/(private)/administrative/automations/totvs/dataservers/read-record/page';
+import ReadView from '@/app/(private)/administrative/automations/totvs/dataservers/read-view/page';
+import SaveRecord from '@/app/(private)/administrative/automations/totvs/dataservers/save-record/page';
 import ExecuteSentece from '@/app/(private)/administrative/automations/totvs/sentence/execute/page';
 import CustomTabs from '@/components/Tabs/Tab';
 import Wrapper from '@/components/Wrapper';
+import GetSchemaPage from './dataservers/get-schema/page';
 
 const SQL = () => {
   const tabs = [
@@ -22,6 +23,10 @@ const SQL = () => {
       content: <SaveRecord />,
     },
     {
+      label: 'Obter esquema',
+      content: <GetSchemaPage />,
+    },
+    {
       label: 'Executar sentença',
       content: <ExecuteSentece />,
     },
@@ -29,7 +34,7 @@ const SQL = () => {
 
   return (
     <Wrapper>
-      <CustomTabs tabs={tabs} />
+      <CustomTabs cols={5} tabs={tabs} />
     </Wrapper>
   );
 };

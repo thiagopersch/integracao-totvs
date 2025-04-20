@@ -25,11 +25,6 @@ const Routes: Route[] = [
         name: 'Métodos TOTVS',
       },
       {
-        id: 'dataservers',
-        path: '/dataservers',
-        name: 'DataServers',
-      },
-      {
         id: 'workflow',
         path: '/workflow',
         name: 'Formulas Visuais',

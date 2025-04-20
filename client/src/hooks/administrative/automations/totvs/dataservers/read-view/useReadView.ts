@@ -3,7 +3,6 @@ import { findAll } from '@/lib/api/registers/tbc';
 import readView from '@/lib/api/totvs/readView';
 import { TBC } from '@/types/tbc';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,9 +24,6 @@ type Schema = z.infer<typeof schema> & {
 };
 
 export const useReadView = () => {
-  const queryClient = useQueryClient();
-
-  // Use useCrud to fetch active TBCs
   const { items: tbcOptions, isLoading: isLoadingTbc } = useCrud<TBC, TBC, TBC>(
     {
       queryKey: ['listTbc'],

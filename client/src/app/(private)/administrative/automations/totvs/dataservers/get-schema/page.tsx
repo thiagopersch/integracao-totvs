@@ -1,8 +1,7 @@
 'use client';
 
 import * as S from '@/app/(private)/administrative/styles';
-import withAuth from '@/app/withAuth';
-import useGetSchema from '@/hooks/administrative/automations/dataservers/GetSchema/useGetSchema';
+import useGetSchema from '@/hooks/administrative/automations/totvs/dataservers/get-schema/useGetSchema';
 import {
   Search as SearchIcon,
   Visibility as VisibilityIcon,
@@ -256,4 +255,4 @@ const GetSchemaPage = () => {
   );
 };
 
-export default withAuth(GetSchemaPage);
+export default GetSchemaPage;

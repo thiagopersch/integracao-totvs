@@ -10,14 +10,15 @@ type TabItem = {
 
 type TabsProps = {
   tabs: TabItem[];
+  cols: number;
 };
 
-export default function CustomTabs({ tabs }: TabsProps) {
+export default function CustomTabs({ tabs, cols }: TabsProps) {
   const [value, setValue] = useState('0');
 
   return (
     <Tabs value={value} onValueChange={setValue}>
-      <TabsList className={`grid grid-cols-4 md:grid-cols-2 gap-2`}>
+      <TabsList className={`grid grid-cols-${cols} md:grid-cols-2 gap-2`}>
         {tabs.map((tab, index) => (
           <TabsTrigger
             className="w-full border text-center font-bold"

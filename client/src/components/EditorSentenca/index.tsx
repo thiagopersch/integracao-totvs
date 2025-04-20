@@ -5,6 +5,7 @@ type EditorSentencaProps = {
   value: string | undefined;
   language?: string;
   height?: string;
+  readOnly?: boolean;
   onChange?: (value: string) => void;
 } & EditorProps;
 
@@ -13,6 +14,7 @@ const EditorSentenca = ({
   onChange,
   language = 'sql',
   height = '55vh',
+  readOnly = true,
   ...props
 }: EditorSentencaProps) => {
   return (
@@ -25,7 +27,7 @@ const EditorSentenca = ({
       value={value}
       {...props}
       options={{
-        readOnly: true,
+        readOnly: readOnly,
         minimap: { enabled: true },
         fontSize: 14,
         fontFamily: 'JetBrains Mono, monospace',

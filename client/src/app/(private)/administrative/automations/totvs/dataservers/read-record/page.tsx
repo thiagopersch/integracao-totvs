@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import Wrapper from '@/components/Wrapper';
-import useReadRecord from '@/hooks/administrative/automations/dataservers/read-record/useReadRecord';
+import useReadRecord from '@/hooks/administrative/automations/totvs/dataservers/read-record/useReadRecord';
 import { Search } from 'lucide-react';
 
 const ReadRecord = () => {
@@ -39,8 +39,8 @@ const ReadRecord = () => {
         variant="description"
         className="mb-4"
       >
-        Para saber qual o formato da chave primária, consulte Automação |
-        Dataservers.
+        Para saber qual o formato da chave primária, consulte a aba Obter
+        esquema.
       </Text>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
