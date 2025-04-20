@@ -152,7 +152,7 @@ const TbcForm = ({ tbc }: TbcFormProps) => {
                               {client.name}
                               <CheckIcon
                                 className={cn(
-                                  'ml-auto h-4 w-4',
+                                  'h-4 w-4',
                                   field.value === client.id
                                     ? 'opacity-100'
                                     : 'opacity-0',

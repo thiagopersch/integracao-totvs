@@ -1,258 +1,230 @@
 'use client';
 
-import * as S from '@/app/(private)/administrative/styles';
-import useGetSchema from '@/hooks/administrative/automations/totvs/dataservers/get-schema/useGetSchema';
+import Column from '@/components/Columns';
+import CTA from '@/components/CTA';
+import DynamicTable from '@/components/Table';
+import Text from '@/components/Text';
+import { Button } from '@/components/ui/button';
 import {
-  Search as SearchIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from '@mui/icons-material';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import {
-  Autocomplete,
-  Box,
+  Form,
   FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
   Select,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { Controller } from 'react-hook-form';
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import Wrapper from '@/components/Wrapper';
+import useGetSchema from '@/hooks/administrative/automations/totvs/dataservers/get-schema/useGetSchema';
+import { cn } from '@/lib/utils';
+import { Check, ChevronsUpDown, Search } from 'lucide-react';
+import { useState } from 'react';
 
-const GetSchemaPage = () => {
+export default function GetSchemaPage() {
   const {
-    apiRef,
-    columns,
-    control,
-    errors,
     filteredOptions,
     tables,
-    isSubmitted,
-    isSubmitting,
     primaryKeys,
-    rows,
     selectedTable,
-    showPassword,
-    handleClickShowPassword,
-    handleExpandedTable,
-    handleMouseDownPassword,
-    handleSubmit,
     handleTableChange,
     onSubmit,
-    register,
-    setSearchTerm,
+    tbcOptions,
+    form,
+    isLoadingTbc,
+    rows,
   } = useGetSchema();
 
-  return (
-    <S.Wrapper>
-      <S.Form onSubmit={handleSubmit(onSubmit)}>
-        <S.InputSentences>
-          <Controller
-            name="dataServerName"
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth required variant="filled">
-                <Autocomplete
-                  id="dataServerName"
-                  disablePortal
-                  options={filteredOptions.map((option, index) => ({
-                    ...option,
-                    key: option.code || `option-${index}`,
-                  }))}
-                  getOptionLabel={(option) => option.name}
-                  isOptionEqualToValue={(option, value) =>
-                    option.code === value.code
-                  }
-                  value={
-                    filteredOptions.find(
-                      (option) => option.code === field.value,
-                    ) || null
-                  }
-                  onChange={(_event, newValue) => {
-                    if (newValue) {
-                      field.onChange(newValue.code);
-                      setSearchTerm(newValue.name);
-                    } else {
-                      field.onChange('');
-                    }
-                  }}
-                  onInputChange={(_event, newInputValue) =>
-                    setSearchTerm(newInputValue)
-                  }
-                  renderOption={(props, option) => (
-                    <Box
-                      component="li"
-                      {...props}
-                      sx={{
-                        display: 'flex',
-                        flexDirection: {
-                          xs: 'column',
-                          sm: 'row',
-                        },
-                        justifyContent: {
-                          xs: 'center !important',
-                          sm: 'normal !important',
-                        },
-                        alignItems: 'normal !important',
-                      }}
-                    >
-                      <Typography color="inherit" sx={{ fontWeight: 'bold' }}>
-                        {option.label}
-                      </Typography>
-                    </Box>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Dataserver"
-                      variant="filled"
-                      error={errors.dataServerName !== undefined}
-                      helperText={errors.dataServerName?.message}
-                      required
-                      disabled={isSubmitting}
-                    />
-                  )}
-                />
-              </FormControl>
-            )}
-          />
-          <TextField
-            type="text"
-            id="contexto"
-            label="Contexto"
-            variant="filled"
-            {...register('contexto')}
-            disabled={isSubmitting}
-            helperText={errors.contexto?.message}
-            error={errors.contexto !== undefined}
-            required
-            fullWidth
-          />
-        </S.InputSentences>
-        <S.InputSentences>
-          <TextField
-            type="text"
-            id="username"
-            label="Usuário"
-            variant="filled"
-            {...register('username')}
-            disabled={isSubmitting}
-            helperText={errors.username?.message}
-            error={errors.username !== undefined}
-            required
-            fullWidth
-          />
-          <TextField
-            type={showPassword ? 'text' : 'password'}
-            id="password"
-            label="Senha"
-            variant="filled"
-            {...register('password')}
-            disabled={isSubmitting}
-            helperText={errors.password?.message}
-            error={errors.password !== undefined}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            required
-            fullWidth
-          />
-          <TextField
-            type="text"
-            id="tbc"
-            label="TBC"
-            variant="filled"
-            disabled={isSubmitting}
-            helperText={errors.tbc?.message}
-            error={errors.tbc !== undefined}
-            {...register('tbc')}
-            required
-            fullWidth
-          />
-        </S.InputSentences>
-        <S.Actions>
-          <S.CTA
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={isSubmitting}
-            startIcon={<SearchIcon />}
-          >
-            Buscar
-          </S.CTA>
-        </S.Actions>
-      </S.Form>
-      {tables.length > 0 && isSubmitted && (
-        <>
-          <Box
-            sx={{
-              my: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-              gap: '1rem',
-            }}
-          >
-            <FormControl variant="filled" sx={{ width: '30rem' }}>
-              <InputLabel id="table-select-label">Tabela(s)</InputLabel>
-              <Select
-                labelId="table-select-label"
-                value={selectedTable}
-                onChange={handleTableChange}
-                label="Tabela(s)"
-              >
-                {tables.map((table) => (
-                  <MenuItem key={table.tableName} value={table.tableName}>
-                    {table.tableName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Typography
-              variant="button"
-              color="primary"
-              sx={{ fontWeight: 'bold' }}
-            >
-              Chaves primárias do dataserver:{' '}
-              <Typography
-                variant="caption"
-                color="primary.dark"
-                sx={{ fontWeight: 'bold' }}
-              >
-                {primaryKeys}
-              </Typography>
-            </Typography>
-          </Box>
-          {/* <Table
-            rows={rows}
-            columns={columns}
-            isLoading={isSubmitting}
-            apiRef={apiRef}
-            onClick={handleExpandedTable}
-            density="compact"
-            autoHeight
-            sortingField="name"
-            label="Ajustar colunas"
-            icon={<TuneIcon />}
-          /> */}
-        </>
-      )}
-    </S.Wrapper>
-  );
-};
+  const [open, setOpen] = useState(false);
 
-export default GetSchemaPage;
+  const columns = [
+    { accessorKey: 'name', header: 'Nome do campo no DB', width: 'auto' },
+    { accessorKey: 'caption', header: 'Nome do campo no TOTVS', width: 'auto' },
+    { accessorKey: 'type', header: 'Tipo do campo', width: 'auto' },
+    { accessorKey: 'default', header: 'Valor default', width: 'auto' },
+  ];
+
+  return (
+    <Wrapper>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Column cols={3}>
+            <FormField
+              control={form.control}
+              name="dataServerName"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Dataserver</FormLabel>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'h-[3rem] w-full justify-between',
+                            !field.value && 'text-muted-foreground',
+                            fieldState.error &&
+                              'border-red-500 dark:border-red-400',
+                          )}
+                        >
+                          {field.value
+                            ? filteredOptions.find(
+                                (option) => option.code === field.value,
+                              )?.name
+                            : 'Selecione um dataserver'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 dark:opacity-100" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Pesquisar..." />
+                        <CommandList>
+                          <CommandEmpty className="text-center p-10 text-sm text-muted-foreground font-normal">
+                            Nenhum resultado encontrado.
+                          </CommandEmpty>
+                          <CommandGroup className="w-full">
+                            {filteredOptions.map((option) => (
+                              <CommandItem
+                                key={option.code}
+                                value={option.name}
+                                onSelect={() => {
+                                  field.onChange(option.code);
+                                  setOpen(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    'h-4 w-4',
+                                    field.value === option.code
+                                      ? 'opacity-100'
+                                      : 'opacity-0',
+                                  )}
+                                />
+                                {option.code} - {option.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tbcId"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>TBC</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={form.formState.isSubmitting}
+                  >
+                    <FormControl>
+                      <SelectTrigger error={!!fieldState.error}>
+                        <SelectValue placeholder="Selecione um TBC" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tbcOptions.map((tbc) => (
+                        <SelectItem key={tbc.id} value={tbc.id ?? ''}>
+                          {tbc.name} - {tbc.client?.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="contexto"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Contexto</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                      error={!!fieldState.error}
+                      placeholder="Contexto"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Column>
+
+          <CTA className="mt-4">
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="mx-auto"
+              variant="default"
+              size="lg"
+            >
+              <Search className="mr-2 h-4 w-4" />
+              Consultar
+            </Button>
+          </CTA>
+        </form>
+      </Form>
+
+      {tables.length > 0 && form.formState.isSubmitted && (
+        <div className="mt-8">
+          <div className="flex flex-row items-center md:flex-col md:justify-center md:text-center gap-4 mb-4">
+            <Select value={selectedTable} onValueChange={handleTableChange}>
+              <SelectTrigger className="w-[30dvw] md:w-full">
+                <SelectValue placeholder="Selecione a tabela" />
+              </SelectTrigger>
+              <SelectContent>
+                {tables.map((table) => (
+                  <SelectItem key={table.tableName} value={table.tableName}>
+                    {table.tableName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div>
+              <Text className="font-semibold">Chaves Primárias: </Text>
+              <Text className="text-muted-foreground">{primaryKeys}</Text>
+            </div>
+          </div>
+          <DynamicTable
+            columns={columns}
+            rows={rows ?? []}
+            isLoading={form.formState.isSubmitting}
+          />
+        </div>
+      )}
+    </Wrapper>
+  );
+}

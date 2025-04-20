@@ -21,7 +21,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import Wrapper from '@/components/Wrapper';
-import { useReadView } from '@/hooks/administrative/automations/totvs/dataservers/read-view/useReadView';
+import useReadView from '@/hooks/administrative/automations/totvs/dataservers/read-view/useReadView';
+
 import { Clipboard, Search } from 'lucide-react';
 import { toast } from 'react-toastify';
 

@@ -1,87 +1,79 @@
+import useCrud from '@/hooks/useCrud';
+import { findAll } from '@/lib/api/registers/tbc';
 import getSchema from '@/lib/api/totvs/getSchema';
+import { TBC } from '@/types/tbc';
 import { dataservers } from '@/utils/dataservers';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SelectChangeEvent } from '@mui/material';
-import { GridColDef, useGridApiRef } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { schema } from './schema';
 
 type Schema = z.infer<typeof schema> & {
-  rows: any[];
+  rows?: Array<{
+    name: string;
+    caption: string;
+    type: string;
+    default: string;
+  }>;
 };
 
 export default function useGetSchema() {
-  const apiRef = useGridApiRef();
-  const [columns, setColumns] = useState<GridColDef[]>([
-    { field: 'name', headerName: 'Nome do campo no DB', width: 150 },
-    { field: 'caption', headerName: 'Nome do campo no TOTVS', width: 150 },
-    { field: 'type', headerName: 'Tipo do campo', width: 150 },
-    { field: 'default', headerName: 'Valor default', width: 150 },
-  ]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [primaryKeys, setPrimaryKeys] = useState<string>('');
   const [tables, setTables] = useState<any[]>([]);
   const [selectedTable, setSelectedTable] = useState<string>('');
-  const {
-    formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
-    control,
-    register,
-    watch,
-    setValue,
-    handleSubmit,
-  } = useForm<Schema>({
+  const form = useForm<Schema>({
     criteriaMode: 'all',
     mode: 'all',
     resolver: zodResolver(schema),
     defaultValues: {
-      dataServerName: '',
-      username: '',
-      password: '',
-      tbc: '',
       contexto: 'CODCOLIGADA=1',
-      rows: [],
+      dataServerName: '',
+      tbcId: '',
     },
   });
 
-  const rows = watch('rows');
+  const { items: tbcOptions, isLoading: isLoadingTbc } = useCrud<TBC, TBC, TBC>(
+    {
+      queryKey: ['listTbc'],
+      listFn: async () => {
+        const tbcs = await findAll();
+        return tbcs.filter((tbc) => tbc.status); // Filter for active TBCs
+      },
+      getFn: async (id: string) => {
+        throw new Error('Not implemented');
+      },
+      createFn: async (data: TBC) => {
+        throw new Error('Not implemented');
+      },
+      updateFn: async (id: string, data: TBC) => {
+        throw new Error('Not implemented');
+      },
+      deleteFn: async (id: string) => {
+        throw new Error('Not implemented');
+      },
+      deleteConfirmation: {
+        title: '',
+        message: '',
+      },
+      queryOptions: {
+        enabled: true,
+        staleTime: 5 * 60 * 1000, // 5 minutes cache
+      },
+    },
+  );
 
-  const handleExpandedTable = () => {
-    apiRef.current.autosizeColumns({
-      includeHeaders: true,
-      includeOutliers: true,
-      expand: true,
-    });
-  };
-
-  useEffect(() => {
-    handleExpandedTable;
-  }, [handleExpandedTable]);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
+  const rows = form.watch('rows');
 
   const onSubmit = async (data: Schema) => {
-    const { dataServerName, username, password, tbc, contexto } = data;
+    const { dataServerName, tbcId, contexto } = data;
     const dataServerCode = dataServerName;
 
     try {
-      const result = await getSchema(
-        dataServerCode,
-        username,
-        password,
-        tbc,
-        contexto,
-      );
+      const result = await getSchema(dataServerCode, tbcId, contexto);
 
-      const { extractedData, primaryKeys } = result;
+      const { extractedData, primaryKeys } = result.data;
 
       setTables(extractedData);
       setPrimaryKeys(primaryKeys);
@@ -96,7 +88,7 @@ export default function useGetSchema() {
           default: field.default,
         }));
 
-        setValue('rows', newRows);
+        form.setValue('rows', newRows);
         setSelectedTable(firstTable.tableName);
       }
     } catch (error) {
@@ -104,8 +96,7 @@ export default function useGetSchema() {
     }
   };
 
-  const handleTableChange = (event: SelectChangeEvent<string>) => {
-    const tableName = event.target.value as string;
+  const handleTableChange = (tableName: string) => {
     const selectedTable = tables.find((table) => table.tableName === tableName);
 
     if (selectedTable) {
@@ -117,14 +108,9 @@ export default function useGetSchema() {
         default: field.default,
       }));
 
-      setValue('rows', newRows);
+      form.setValue('rows', newRows);
       setSelectedTable(tableName);
     }
-  };
-
-  const handleDataserverChange = (event: SelectChangeEvent<string>) => {
-    const dataServerName = event.target.value as string;
-    setValue('dataServerName', dataServerName);
   };
 
   const filteredOptions = dataservers.filter(
@@ -136,31 +122,17 @@ export default function useGetSchema() {
   );
 
   return {
-    apiRef,
-    columns,
     rows,
-    isSubmitting,
-    isSubmitted,
-    isSubmitSuccessful,
     filteredOptions,
     selectedTable,
     searchTerm,
-    showPassword,
     primaryKeys,
     tables,
-    control,
-    errors,
+    tbcOptions,
+    isLoadingTbc,
+    form,
     setSearchTerm,
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    setShowPassword,
-    handleExpandedTable,
-    handleClickShowPassword,
-    handleMouseDownPassword,
     onSubmit,
     handleTableChange,
-    handleDataserverChange,
   };
 }

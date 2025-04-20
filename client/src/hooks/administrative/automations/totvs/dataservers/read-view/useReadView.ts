@@ -23,7 +23,7 @@ type Schema = z.infer<typeof schema> & {
   }>;
 };
 
-export const useReadView = () => {
+export default function useReadView() {
   const { items: tbcOptions, isLoading: isLoadingTbc } = useCrud<TBC, TBC, TBC>(
     {
       queryKey: ['listTbc'],
@@ -112,4 +112,4 @@ export const useReadView = () => {
     tbcOptions,
     isLoadingTbc,
   };
-};
+}
