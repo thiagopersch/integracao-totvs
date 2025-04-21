@@ -1,19 +1,11 @@
 'use client';
 
-import { Box, CircularProgress } from '@mui/material';
+import { Loader2 } from 'lucide-react';
 
 export default function Loading() {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100dvh',
-        maxHeight: '100%',
-      }}
-    >
-      <CircularProgress />
-    </Box>
+    <div className="flex justify-center items-center h-screen max-h-full">
+      <Loader2 className="h-12 w-12 animate-spin text-primary" />
+    </div>
   );
 }

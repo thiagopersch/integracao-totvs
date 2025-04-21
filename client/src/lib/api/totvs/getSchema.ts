@@ -2,9 +2,7 @@ import axios from 'axios';
 
 const getSchema = async (
   dataServerName: string,
-  username: string,
-  password: string,
-  tbc: string,
+  tbcId: string,
   contexto: string,
 ) => {
   try {
@@ -13,9 +11,7 @@ const getSchema = async (
       {
         params: {
           dataServerName,
-          username,
-          password,
-          tbc,
+          tbcId,
           contexto,
         },
       },

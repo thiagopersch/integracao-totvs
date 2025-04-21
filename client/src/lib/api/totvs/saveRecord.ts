@@ -28,30 +28,24 @@ export const saveRecord = async (
   sentenca: string,
   dataServerName: string,
   contexto: string,
-  username: string,
-  password: string,
-  tbc: string,
+  tbcId: string,
 ) => {
   const cleanSentenca = encodeSpecialChars(sentenca);
 
   const data = {
     dataServerName: dataServerName,
     contexto: contexto,
-    username: username,
-    password: password,
-    tbc: tbc,
+    tbc: tbcId,
     xml: `<GlbConsSql>
-  <GConsSql>
-    <CODCOLIGADA>${codColigada}</CODCOLIGADA>
-    <APLICACAO>${codSistema}</APLICACAO>
-    <CODSENTENCA>${codSentenca}</CODSENTENCA>
-    <TITULO>${nameSentenca}</TITULO>
-    <SENTENCA>${cleanSentenca}</SENTENCA>
-  </GConsSql>
-</GlbConsSql>`,
+            <GConsSql>
+              <CODCOLIGADA>${codColigada}</CODCOLIGADA>
+              <APLICACAO>${codSistema}</APLICACAO>
+              <CODSENTENCA>${codSentenca}</CODSENTENCA>
+              <TITULO>${nameSentenca}</TITULO>
+              <SENTENCA>${cleanSentenca}</SENTENCA>
+            </GConsSql>
+          </GlbConsSql>`,
   };
-
-  console.log(data);
 
   try {
     return await axios.post(`${process.env.API_URL}/totvs/save-record`, data);

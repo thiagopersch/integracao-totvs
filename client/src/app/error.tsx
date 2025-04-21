@@ -1,25 +1,16 @@
 'use client';
 
-import { Alert, Stack } from '@mui/material';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-const Error = () => {
+export default function Error() {
   return (
-    <Stack
-      sx={{
-        width: '100%',
-        height: '100dvh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-      spacing={2}
-    >
-      <Alert severity="error">
-        Aconteceu algum erro crítico, por favor entre em contato com o
-        administrador!
+    <div className="flex h-screen w-full items-center justify-center">
+      <Alert variant="destructive" className="max-w-md">
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          A critical error occurred. Please contact the administrator!
+        </AlertDescription>
       </Alert>
-    </Stack>
+    </div>
   );
-};
-
-export default Error;
+}

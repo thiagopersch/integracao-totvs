@@ -1,11 +1,10 @@
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import RootProvider from '@/providers/RootProvider';
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
-import { ToastContainer } from 'react-toastify';
+import { Montserrat } from 'next/font/google';
 import 'react-toastify/dist/ReactToastify.css';
-import ThemeProviderPage from './themeProvider';
+import '../styles/globals.css';
 
-const roboto = Roboto({ subsets: ['latin'], weight: '400' });
+const monteserrat = Montserrat({ subsets: ['latin'], weight: '400' });
 
 export const metadata: Metadata = {
   title: 'Integração com TOTVS RM',
@@ -18,16 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br">
+    <html lang="pt-br" suppressHydrationWarning>
       <body
-        className={`${roboto.className} flex flex-col min-h-full min-w-full`}
+        className={`${monteserrat.className} antialiasing flex flex-col min-h-full min-w-full`}
       >
-        <AppRouterCacheProvider>
-          <ThemeProviderPage>
-            {children}
-            <ToastContainer />
-          </ThemeProviderPage>
-        </AppRouterCacheProvider>
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );

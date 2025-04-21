@@ -1,6 +1,7 @@
-import { Box, Tab, Tabs } from '@mui/material';
+'use client';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
-import { a11yProps, CustomTabPanel } from './CustomTabs';
 
 type TabItem = {
   label: string;
@@ -9,36 +10,30 @@ type TabItem = {
 
 type TabsProps = {
   tabs: TabItem[];
+  cols: number;
 };
 
-export default function CustomTabs({ tabs }: TabsProps) {
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+export default function CustomTabs({ tabs, cols }: TabsProps) {
+  const [value, setValue] = useState('0');
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          variant="scrollable"
-          scrollButtons="auto"
-          allowScrollButtonsMobile
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          {tabs.map((tab, index) => (
-            <Tab key={index} label={tab.label} {...a11yProps(index)} />
-          ))}
-        </Tabs>
-      </Box>
+    <Tabs value={value} onValueChange={setValue}>
+      <TabsList className={`grid grid-cols-${cols} md:grid-cols-2 gap-2`}>
+        {tabs.map((tab, index) => (
+          <TabsTrigger
+            className="w-full border dark:border-muted-foreground text-center font-bold"
+            key={index}
+            value={index.toString()}
+          >
+            {tab.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
       {tabs.map((tab, index) => (
-        <CustomTabPanel key={index} value={value} index={index}>
+        <TabsContent key={index} value={index.toString()}>
           {tab.content}
-        </CustomTabPanel>
+        </TabsContent>
       ))}
-    </Box>
+    </Tabs>
   );
 }

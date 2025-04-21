@@ -1,41 +1,58 @@
-'use client';
-
-import UserService from '@/lib/api/registers/users';
+import useCrud from '@/hooks/useCrud';
+import {
+  addUser,
+  deleteUser,
+  getUserById,
+  listUsers,
+  updateUser,
+} from '@/lib/api/registers/users';
+import useUserStore from '@/stores/useUserStore';
 import { User } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useGridApiRef } from '@mui/x-data-grid';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { Session } from 'next-auth';
-import { useCallback, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { schema } from './schema';
 
 type Schema = z.infer<typeof schema>;
 
-export default function useUsers(session?: Session) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const apiRef = useGridApiRef();
-
-  const userService = new UserService(session);
-  const queryClient = useQueryClient();
-
-  const { data: users, refetch } = useQuery({
+export default function useUsers() {
+  const {
+    isModalOpen,
+    editingUser,
+    showPassword,
+    setIsModalOpen,
+    setEditingUser,
+    toggleShowPassword,
+  } = useUserStore();
+  const {
+    items: users,
+    isLoading,
+    create,
+    handleUpdate,
+    remove,
+    fetchById,
+    isCreating,
+    isUpdating,
+    isDeleting,
+    deleteDialog,
+  } = useCrud<User, User, User>({
     queryKey: ['listUsers'],
-    queryFn: () => userService.listUsers(),
+    listFn: listUsers,
+    getFn: getUserById,
+    createFn: addUser,
+    updateFn: updateUser,
+    deleteFn: deleteUser,
+    deleteConfirmation: {
+      title: 'Atenção - Exclusão de Usuário',
+      message:
+        'Você tem certeza que deseja excluir este usuário? Esta ação é irreversível.',
+      confirmText: 'Confirmar',
+      cancelText: 'Cancelar',
+    },
   });
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<Schema>({
+  const form = useForm<Schema>({
     mode: 'all',
     criteriaMode: 'all',
     resolver: zodResolver(schema),
@@ -48,95 +65,72 @@ export default function useUsers(session?: Session) {
     },
   });
 
-  const addUserMutation = useMutation({
-    mutationFn: (userData: User) => userService.addUser(userData),
-    onSuccess: (newUser) => {
-      toast.success('Usuário salvo com sucesso!');
-      queryClient.setQueryData(
-        ['listUsers'],
-        (oldUsers: User[] | undefined) => {
-          if (!oldUsers) return [newUser];
-          return editingUser
-            ? oldUsers.map((user) => (user.id === newUser.id ? newUser : user))
-            : [...oldUsers, newUser];
-        },
-      );
-      reset();
-      setIsModalOpen(false);
-    },
-    onError: (error: AxiosError | any) => {
-      toast.error(
-        `Falha ao salvar o usuário: ${error?.response?.data?.message}`,
-      );
-    },
-  });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = form;
 
-  const deleteUserMutation = useMutation({
-    mutationFn: (id: string) => userService.deleteUser(id),
-    onSuccess: (_, id) => {
-      toast.success('Usuário excluído com sucesso!');
-      queryClient.setQueryData(
-        ['listUsers'],
-        (oldUsers: User[] | undefined) => {
-          if (!oldUsers) return [];
-          return oldUsers.filter((user) => user.id !== id);
-        },
-      );
-    },
-    onError: (error) => {
-      toast.error(`Falha ao excluir o usuário: ${error.message}`);
-    },
-  });
+  useEffect(() => {
+    if (editingUser) {
+      form.reset({
+        id: editingUser.id,
+        name: editingUser.name,
+        email: editingUser.email,
+        password: '',
+        change_password: editingUser.change_password,
+        status: editingUser.status,
+      });
+    } else {
+      form.reset({
+        id: '',
+        name: '',
+        email: '',
+        password: '',
+        change_password: true,
+        status: true,
+      });
+    }
+  }, [editingUser, form.reset]);
 
-  const handleExpandedTable = useCallback(() => {
-    apiRef.current?.autosizeColumns({
-      includeHeaders: true,
-      includeOutliers: true,
-      expand: true,
-    });
-  }, [apiRef]);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
+  const handleEdit = async (id: string) => {
+    const user = await fetchById(id);
+    if (user) {
+      setEditingUser(user);
+      setIsModalOpen(true);
+    }
   };
 
-  const handleEdit = useCallback(
-    async (id: string) => {
-      try {
-        const user = await userService.getUserById(id);
-        if (user) {
-          setEditingUser(user);
-          setIsModalOpen(true);
-        }
-      } catch (error: any) {
-        toast.error(`Falha ao editar usuário: ${error.message}`);
-      }
-    },
-    [reset, userService],
-  );
+  const handleDelete = async (id: string) => {
+    await remove(id);
+  };
 
-  const handleDelete = useCallback(
-    async (id: string) => {
-      try {
-        await deleteUserMutation.mutateAsync(id);
-      } catch (error: any) {
-        toast.error(`Falha ao excluir o usuário, motivo: ${error.message}`);
-      }
-    },
-    [deleteUserMutation],
-  );
-
-  const onSubmit: SubmitHandler<Schema> = useCallback(
-    async (data) => {
-      if (data) {
-        await addUserMutation.mutateAsync(data);
-      }
-    },
-    [addUserMutation],
-  );
+  const onSubmit: SubmitHandler<Schema> = async (data) => {
+    if (editingUser) {
+      const updatedData = {
+        name: data.name,
+        email: data.email,
+        change_password: data.change_password,
+        status: data.status,
+        password: data.password || undefined,
+      };
+      await handleUpdate(data.id ?? '', updatedData);
+      setIsModalOpen(false);
+      setEditingUser(null);
+    } else {
+      await create(data);
+      form.reset({
+        id: '',
+        name: '',
+        email: '',
+        password: '',
+        change_password: true,
+        status: true,
+      });
+      setIsModalOpen(false);
+    }
+  };
 
   const handleAdd = () => {
     setEditingUser(null);
@@ -147,21 +141,20 @@ export default function useUsers(session?: Session) {
     users,
     isModalOpen,
     editingUser,
-    apiRef,
-    control,
-    errors,
-    isSubmitting,
+    isSubmitting: isSubmitting || isCreating || isUpdating || isDeleting,
     showPassword,
-    reset,
+    isLoading,
+    form,
     Controller,
     setIsModalOpen,
     handleEdit,
     handleDelete,
-    handleExpandedTable,
     handleSubmit: handleSubmit(onSubmit),
-    register,
-    handleClickShowPassword,
-    handleMouseDownPassword,
+    handleClickShowPassword: toggleShowPassword,
+    handleMouseDownPassword: (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+    },
     handleAdd,
+    deleteDialog,
   };
 }

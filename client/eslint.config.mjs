@@ -26,6 +26,7 @@ const eslintConfig = [
       'plugin:@typescript-eslint/recommended',
       'plugin:prettier/recommended',
       'plugin:react/recommended',
+      'plugin:react-hooks/recommended',
     ],
     settings: {
       babel: {
@@ -98,6 +99,14 @@ const eslintConfig = [
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
       'prettier/prettier': 'error',
+      'react/sort-prop-types': [
+        'error',
+        {
+          callbacksLast: true,
+          requiredFirst: true,
+          sortShapeProp: true,
+        },
+      ],
     },
   },
 ];

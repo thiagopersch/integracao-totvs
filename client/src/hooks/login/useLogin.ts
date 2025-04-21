@@ -1,11 +1,10 @@
-import { useAuth } from '@/app/AuthContext';
-import { login } from '@/lib/api/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useCallback, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { schema } from './schema';
+import { signIn } from 'next-auth/react';
 
 type Schema = z.infer<typeof schema>;
 
@@ -25,7 +24,7 @@ export default function useLogin() {
     resolver: zodResolver(schema),
     defaultValues: {
       email: 'administrador@gmail.com',
-      password: '#mpresaPC10',
+      password: '@mpresaPC10',
     },
   });
 
@@ -35,25 +34,39 @@ export default function useLogin() {
   ) => {
     event.preventDefault();
   };
-  const { setAuthState } = useAuth();
 
-  const onSubmit = async (data: Schema) => {
-    try {
-      const { token, user } = await login(data.email, data.password);
-      setAuthState(user, token);
-      router.push('/home');
-    } catch (err: string | any) {
-      setErrorMessage(err.response.data.message);
-    }
-  };
+  const onSubmit: SubmitHandler<Schema> = useCallback(
+    async (data: Schema) => {
+      try {
+        const result = await signIn('credentials', {
+          redirect: false,
+          email: data.email,
+          password: data.password,
+        });
+
+        if (result?.error) {
+          setErrorMessage(
+            result.error === 'CredentialsSignin'
+              ? 'Credenciais inválidas'
+              : result.error,
+          );
+        } else {
+          router.push('/');
+        }
+      } catch (error: any) {
+        setErrorMessage('Erro ao realizar login. Tente novamente mais tarde.');
+      }
+    },
+    [router],
+  );
 
   return {
     handleClickShowPassword,
     handleMouseDownPassword,
+    onSubmit,
     handleSubmit,
     register,
     setValue,
-    onSubmit,
     showPassword,
     errors,
     isSubmitting,

@@ -5,10 +5,10 @@ declare module 'next-auth' {
     user: {
       id: string;
       name: string;
-      login: string;
+      email: string;
       token: string;
-      changePassword: boolean;
-      status: boolean;
+      changePassword?: boolean;
+      status?: boolean;
     };
     token: string;
     id: string;
@@ -17,8 +17,10 @@ declare module 'next-auth' {
   interface User extends User {
     id: string;
     name: string;
-    login: string;
+    email: string;
     token: string;
+    changePassword?: boolean;
+    status?: boolean;
   }
 }
 
@@ -26,10 +28,10 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     name: string;
-    login: string;
+    email: string;
     token: string;
-    change_password: boolean;
-    status: boolean;
+    change_password?: boolean;
+    status?: boolean;
     sessionId?: string;
   }
 }

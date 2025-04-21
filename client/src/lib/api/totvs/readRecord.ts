@@ -4,9 +4,7 @@ const readRecord = async (
   dataServerName: string,
   primaryKey: string,
   contexto: string,
-  username: string,
-  password: string,
-  tbc: string,
+  tbcId: string,
 ) => {
   try {
     const response = await axios.get(
@@ -16,9 +14,7 @@ const readRecord = async (
           dataServerName,
           primaryKey,
           contexto,
-          username,
-          password,
-          tbc,
+          tbcId,
         },
       },
     );
