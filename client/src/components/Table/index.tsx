@@ -36,7 +36,6 @@ import React from 'react';
 import MenuActions from './MenuActions';
 import useTableHook, { DynamicTableProps } from './useTableHook';
 
-// Memoização do componente para evitar re-renderizações desnecessárias
 const DynamicTable = React.memo(
   <T,>({
     columns,
@@ -69,7 +68,6 @@ const DynamicTable = React.memo(
       getUniqueValues,
     } = useTableHook({ columns, rows });
 
-    // Configuração das colunas, incluindo a coluna de ações, se fornecida
     const tableColumns = actions
       ? [
           ...columns,
