@@ -1,6 +1,15 @@
-const Wrapper = ({ children }: { children: React.ReactNode }) => {
+import { cn } from '@/lib/utils';
+
+type WrapperProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const Wrapper = ({ children, className }: WrapperProps) => {
   return (
-    <div className="flex flex-col flex-[1_1_100%] m-10 md:m-4">{children}</div>
+    <div className={cn('flex flex-col flex-[1_1_100%] m-10 md:m-4', className)}>
+      {children}
+    </div>
   );
 };
 

@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { createRandomClients } from './seeder/client';
 import { createRandomTbc } from './seeder/tbc';
+import { createRandomUsers } from './seeder/users';
 
 const prisma = new PrismaClient();
 
@@ -17,8 +19,8 @@ async function main() {
       password: hashedPassword,
     },
   });
-  //createRandomClients();
-  //createRandomUsers();
+  createRandomClients();
+  createRandomUsers();
   createRandomTbc();
   console.log('Seed completed successfully');
 }

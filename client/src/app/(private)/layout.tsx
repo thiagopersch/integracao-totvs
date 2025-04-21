@@ -1,4 +1,5 @@
 import { nextAuthOptions } from '@/auth/nextAuthOptions';
+import RootProvider from '@/providers/RootProvider';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
@@ -11,5 +12,5 @@ export default async function PrivateLayout({ children }: PrivateLayoutProps) {
   if (!session) {
     redirect('/signIn');
   }
-  return <>{children}</>;
+  return <RootProvider>{children}</RootProvider>;
 }

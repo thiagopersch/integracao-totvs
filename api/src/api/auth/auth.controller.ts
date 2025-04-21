@@ -26,6 +26,7 @@ export class AuthController {
         id: user.id,
         name: user.name,
         email: user.email,
+        change_password: user.change_password,
       },
       token: access_token,
     };

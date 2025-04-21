@@ -16,7 +16,7 @@ export default function NotFound() {
             variant="link"
             className="border border-white font-bold text-white"
           >
-            Página inicial
+            Voltar
           </Button>
         </Link>
       </div>

@@ -8,6 +8,8 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
+  id?: string;
+
   @IsNotEmpty({ message: 'O nome é obrigatório.' })
   @IsString({ message: 'O nome deve ser uma string.' })
   @MaxLength(255, { message: 'O nome deve ter no máximo 255 caracteres.' })
@@ -25,6 +27,7 @@ export class CreateUserDto {
 
   @IsBoolean({ message: 'O status deve ser um verdadeiro ou falso.' })
   change_password: boolean;
+
   @IsBoolean({ message: 'O status deve ser um verdadeiro ou falso.' })
   status: boolean;
 }
