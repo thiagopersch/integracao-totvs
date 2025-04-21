@@ -3,13 +3,13 @@
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
 import StatusText from '@/components/Situations';
-import DynamicTable, { ColumnDef } from '@/components/Table';
+import DynamicTable from '@/components/Table';
 import MenuActions from '@/components/Table/MenuActions';
+import { ColumnDef } from '@/components/Table/useTableHook';
 import Text from '@/components/Text';
 import Wrapper from '@/components/Wrapper';
 import useClient from '@/hooks/administrative/registers/client/useClient';
 import ClientForm from '@/templates/client';
-import { Client as ClientModel } from '@/types/client';
 import { Edit, Trash2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
@@ -29,7 +29,7 @@ export default function Client() {
     handleDelete,
   } = useClient();
 
-  const columnDefinitions: ColumnDef<ClientModel>[] = [
+  const columns: ColumnDef<any>[] = [
     {
       accessorKey: 'status',
       header: 'Status',
@@ -86,8 +86,8 @@ export default function Client() {
         Clientes
       </Text>
       <DynamicTable
-        columns={columnDefinitions}
-        rows={clients || []}
+        columns={columns ?? []}
+        rows={clients ?? []}
         isLoading={isSubmitting}
         addAction={handleAdd}
       />

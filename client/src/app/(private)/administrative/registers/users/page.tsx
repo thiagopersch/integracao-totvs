@@ -3,14 +3,13 @@
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
 import StatusText from '@/components/Situations';
-import type { ColumnDef } from '@/components/Table';
 import DynamicTable from '@/components/Table';
 import MenuActions from '@/components/Table/MenuActions';
+import { ColumnDef } from '@/components/Table/useTableHook';
 import Text from '@/components/Text';
 import Wrapper from '@/components/Wrapper';
 import useUsers from '@/hooks/administrative/registers/users/useUsers';
 import UserForm from '@/templates/users';
-import { User } from '@/types/user';
 import { Edit, Trash2 } from 'lucide-react';
 
 const Users = () => {
@@ -26,7 +25,7 @@ const Users = () => {
     handleDelete,
   } = useUsers();
 
-  const columns: ColumnDef<User>[] = [
+  const columns: ColumnDef<any>[] = [
     {
       accessorKey: 'status',
       header: 'Situação',
@@ -99,8 +98,8 @@ const Users = () => {
         Usuários
       </Text>
       <DynamicTable
-        columns={columns}
-        rows={users || []}
+        columns={columns ?? []}
+        rows={users ?? []}
         isLoading={isSubmitting}
         addAction={handleAdd}
       />

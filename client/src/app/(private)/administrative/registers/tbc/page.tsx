@@ -3,13 +3,13 @@
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
 import StatusText from '@/components/Situations';
-import DynamicTable, { ColumnDef } from '@/components/Table';
+import DynamicTable from '@/components/Table';
 import MenuActions from '@/components/Table/MenuActions';
+import { ColumnDef } from '@/components/Table/useTableHook';
 import Text from '@/components/Text';
 import Wrapper from '@/components/Wrapper';
 import useTbc from '@/hooks/administrative/registers/tbc/useTbc';
 import TbcForm from '@/templates/tbc';
-import { TBC } from '@/types/tbc';
 import { Edit, Trash2 } from 'lucide-react';
 
 export default function TBCPage() {
@@ -26,7 +26,7 @@ export default function TBCPage() {
     handleDelete,
   } = useTbc();
 
-  const columns: ColumnDef<TBC>[] = [
+  const columns: ColumnDef<any>[] = [
     {
       accessorKey: 'status',
       header: 'Situação',
