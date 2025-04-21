@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 export const createRandomUsers = async (): Promise<void> => {
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 50; i++) {
     const passwordHash = await bcrypt.hash(faker.internet.password(), 10);
     await prisma.user.upsert({
       create: {
