@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { schema } from './schema';
-import { signIn } from 'next-auth/react';
 
 type Schema = z.infer<typeof schema>;
 
@@ -23,8 +23,8 @@ export default function useLogin() {
     mode: 'all',
     resolver: zodResolver(schema),
     defaultValues: {
-      email: 'administrador@gmail.com',
-      password: '@mpresaPC10',
+      email: '',
+      password: '',
     },
   });
 
