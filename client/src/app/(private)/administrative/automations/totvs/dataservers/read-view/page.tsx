@@ -3,6 +3,7 @@
 import Column from '@/components/Columns';
 import CTA from '@/components/CTA';
 import DynamicTable from '@/components/Table';
+import { ColumnDef } from '@/components/Table/useTableHook';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -29,7 +30,7 @@ import { toast } from 'react-toastify';
 const ReadViewPage = () => {
   const { handleReadView, rows, form, tbcOptions } = useReadView();
 
-  const columns = [
+  const columns: ColumnDef<any>[] = [
     { accessorKey: 'id', header: 'ID', width: 'auto' },
     { accessorKey: 'APLICACAO', header: 'Sistema', width: 'auto' },
     { accessorKey: 'NOMESISTEMA', header: 'Nome do sistema', width: 'auto' },

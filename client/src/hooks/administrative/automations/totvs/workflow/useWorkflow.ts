@@ -1,80 +1,75 @@
+import useCrud from '@/hooks/useCrud';
+import { findAll } from '@/lib/api/registers/tbc';
 import readView from '@/lib/api/totvs/readView';
+import { TBC } from '@/types/tbc';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useGridApiRef } from '@mui/x-data-grid';
-import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { schema } from './schema';
 
 type Schema = z.infer<typeof schema> & {
-  rows: any[];
+  rows?: any[];
+  message?: string;
 };
 
 export default function useWorkflow() {
-  const apiRef = useGridApiRef();
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting, isSubmitted, isLoading },
-  } = useForm<Schema>({
+  const form = useForm<Schema>({
     criteriaMode: 'all',
     mode: 'all',
     resolver: zodResolver(schema),
     defaultValues: {
-      filtro: `CODCOLIGADA = 0`,
+      filtro: 'CODCOLIGADA = 0',
       contexto:
         'CODCOLIGADA=1;CODFILIAL=1;CODSISTEMA=S;CODTIPOCURSO=1;CODUSUARIO=rubeus',
       dataServerName: 'GlbWorkflowData',
-      username: '',
-      password: '',
-      tbc: '',
+      tbcId: '',
       rows: [],
     },
   });
 
-  const rows = watch('rows');
-  const handleExpandedTable = () => {
-    apiRef.current.autosizeColumns({
-      includeHeaders: true,
-      includeOutliers: true,
-      expand: true,
-    });
-  };
+  const { items: tbcOptions, isLoading: isLoadingTbc } = useCrud<TBC, TBC, TBC>(
+    {
+      queryKey: ['listTbc'],
+      listFn: async () => {
+        const tbcs = await findAll();
+        return tbcs.filter((tbc) => tbc.status); // Filter for active TBCs
+      },
+      getFn: async (id: string) => {
+        throw new Error('Not implemented');
+      },
+      createFn: async (data: TBC) => {
+        throw new Error('Not implemented');
+      },
+      updateFn: async (id: string, data: TBC) => {
+        throw new Error('Not implemented');
+      },
+      deleteFn: async (id: string) => {
+        throw new Error('Not implemented');
+      },
+      deleteConfirmation: {
+        title: '',
+        message: '',
+      },
+      queryOptions: {
+        enabled: true,
+        staleTime: 5 * 60 * 1000, // 5 minutes cache
+      },
+    },
+  );
 
-  useEffect(() => {
-    handleExpandedTable;
-  }, [handleExpandedTable]);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
+  const rows = form.watch('rows');
+  const message = form.watch('message');
 
   const isArray = (value: any): value is any[] => Array.isArray(value);
 
   const handleReadView: SubmitHandler<Schema> = async (formData: Schema) => {
-    const { filtro, contexto, dataServerName, username, password, tbc } =
-      formData;
+    const { filtro, contexto, dataServerName, tbcId } = formData;
 
     try {
-      const result = await readView(
-        dataServerName,
-        filtro,
-        contexto,
-        username,
-        password,
-        tbc,
-      );
+      form.setValue('message', '');
+      const result = await readView(dataServerName, filtro, contexto, tbcId);
 
-      const workflowData = result?.NewDataSet?.GWORKFLOW;
+      const workflowData = result?.data?.NewDataSet?.GWORKFLOW;
 
       if (!isArray(workflowData)) {
         console.error('GWORKFLOW não é um array ou está indefinido');
@@ -93,26 +88,24 @@ export default function useWorkflow() {
         XOMLDATA: isArray(item.XOMLDATA) ? item.XOMLDATA[0] : item.XOMLDATA,
       }));
 
-      setValue('rows', formattedData);
+      form.setValue('rows', formattedData);
     } catch (error) {
       console.error(error);
+      form.setValue('rows', []);
+
+      form.setValue(
+        'message',
+        'Falha na busca das fórmulas visuais. Por favor, tente novamente.',
+      );
     }
   };
 
   return {
-    handleClickShowPassword,
-    handleMouseDownPassword,
     handleReadView,
-    handleSubmit,
-    register,
-    setValue,
-    handleExpandedTable,
-    apiRef,
     rows,
-    showPassword,
-    errors,
-    isSubmitting,
-    isSubmitted,
-    isLoading,
+    form,
+    tbcOptions,
+    isLoadingTbc,
+    message,
   };
 }

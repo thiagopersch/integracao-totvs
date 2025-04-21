@@ -1,7 +1,5 @@
 'use client';
 
-import { FormLabel } from '@mui/material';
-
 import CTA from '@/components/CTA';
 import Column from '@/components/Columns';
 import DynamicTable from '@/components/Table';
@@ -13,6 +11,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
