@@ -3,9 +3,9 @@
 import ConfirmationDialog from '@/components/ConfirmationDialog';
 import CustomModal from '@/components/CustomModal';
 import StatusText from '@/components/Situations';
-import type { ColumnDef } from '@/components/Table';
 import DynamicTable from '@/components/Table';
 import MenuActions from '@/components/Table/MenuActions';
+import { ColumnDef } from '@/components/Table/useTableHook';
 import Text from '@/components/Text';
 import Wrapper from '@/components/Wrapper';
 import useUsers from '@/hooks/administrative/registers/users/useUsers';

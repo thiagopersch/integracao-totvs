@@ -309,7 +309,4 @@ const DynamicTable = React.memo(
   },
 );
 
-// Definir displayName para facilitar depuração
-DynamicTable.displayName = 'DynamicTable';
-
 export default DynamicTable;
