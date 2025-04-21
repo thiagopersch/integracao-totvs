@@ -7,7 +7,7 @@ const createApi = (session?: Session | null) => {
   const api = axios.create({
     baseURL: process.env.API_URL,
     withCredentials: true,
-    timeout: 60000,
+    timeout: 30000,
     headers: {
       authorization:
         jwt && typeof jwt === 'string' ? `Bearer ${jwt}` : undefined,

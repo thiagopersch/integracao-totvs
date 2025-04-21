@@ -1,4 +1,4 @@
-import RootProvider from '@/providers/RootProvider';
+import RootProviderWithoutLogin from '@/providers/RootProviderWithoutLogin';
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body
         className={`${monteserrat.className} antialiasing flex flex-col min-h-full min-w-full`}
       >
-        <RootProvider>{children}</RootProvider>
+        <RootProviderWithoutLogin>{children}</RootProviderWithoutLogin>
       </body>
     </html>
   );

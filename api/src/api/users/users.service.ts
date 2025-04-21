@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
@@ -135,6 +136,50 @@ export class UsersService {
     }
 
     return this.prisma.user.delete({ where: { id } });
+  }
+
+  async changePassword(
+    id: string,
+    data: { currentPassword?: string; newPassword: string },
+  ) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true, password: true, change_password: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+
+    // Verifica a senha atual apenas se for fornecida (opcional para primeiro login)
+    if (data.currentPassword) {
+      const isValidPassword = await bcrypt.compare(
+        data.currentPassword,
+        user.password,
+      );
+      if (!isValidPassword) {
+        throw new UnauthorizedException('Senha atual inválida.');
+      }
+    }
+
+    const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        password: hashedPassword,
+        change_password: false,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        change_password: true,
+        status: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
   async findAllWithDeleted() {

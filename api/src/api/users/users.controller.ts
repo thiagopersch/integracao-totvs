@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-users.dto';
 import { UpdateUserDto } from './dto/update-users.dto';
 import { UsersService } from './users.service';
@@ -43,5 +44,13 @@ export class UsersController {
   @Get('with-deleted')
   findAllWithDeleted() {
     return this.usersService.findAllWithDeleted();
+  }
+
+  @Post(':id/change-password')
+  async changePassword(
+    @Param('id') id: string,
+    @Body() body: ChangePasswordDto,
+  ) {
+    return this.usersService.changePassword(id, body);
   }
 }

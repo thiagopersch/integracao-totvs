@@ -44,7 +44,7 @@ async function bootstrap() {
               )?.[1];
               return `${field}: O valor deve ser menor ou igual a ${max}.`;
             }
-            return constraints[key]; // Fallback para mensagens não mapeadas
+            return constraints[key];
           });
           return messages.join(', ');
         });

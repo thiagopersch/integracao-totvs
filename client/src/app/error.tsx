@@ -6,7 +6,7 @@ export default function Error() {
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <Alert variant="destructive" className="max-w-md">
-        <AlertTitle>Error</AlertTitle>
+        <AlertTitle>Erro</AlertTitle>
         <AlertDescription>
           A critical error occurred. Please contact the administrator!
         </AlertDescription>

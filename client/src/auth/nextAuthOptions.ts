@@ -46,21 +46,27 @@ export const nextAuthOptions: NextAuthOptions = {
   },
   cookies: {
     sessionToken: {
-      name: `__Secure-next-auth.session-token`,
+      name:
+        process.env.NODE_ENV === 'production'
+          ? `__Secure-next-auth.session-token`
+          : `next-auth.session-token`, // Remove o prefixo __Secure- em desenvolvimento
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production', // HTTPS apenas em produção
       },
     },
     csrfToken: {
-      name: `__Host-next-auth.csrf-token`,
+      name:
+        process.env.NODE_ENV === 'production'
+          ? `__Host-next-auth.csrf-token`
+          : `next-auth.csrf-token`, // Remove o prefixo __Host- em desenvolvimento
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production', // HTTPS apenas em produção
       },
     },
   },
